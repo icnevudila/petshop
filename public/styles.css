@@ -1,0 +1,677 @@
+/* ==================== RESET & LAYOUT (NEW) ==================== */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.full-width-section {
+  width: 100%;
+  position: relative;
+  /* overflow: hidden; optional, handled by body */
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  width: 100%;
+}
+
+/* Background Colors */
+.bg-white-section {
+  background-color: #ffffff;
+}
+
+.bg-gray-section {
+  background-color: #f9f9f9;
+}
+
+.bg-dark-section {
+  background-color: #2d3436;
+}
+
+/* ==================== MIGRATED FROM INDEX.HTML ==================== */
+/* ==================== CSS VARİABLES - GLOBAL THEME ==================== */
+:root {
+  --ana-turuncu: #FF8C00;
+  --turuncu-light: #fff7ed;
+  --turuncu-soft: #ffedd5;
+  --arka-plan: #FFFFFF;
+  --kart-arka-plan: #ffffff;
+  --yazi-koyu: #2D2D2D;
+  --yazi-gri: #757575;
+  --border-radius-lg: 30px;
+  --border-radius-md: 20px;
+  --border-radius-sm: 15px;
+  --soft-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  --hover-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+
+  /* Merged from original styles.css */
+  --color-primary: #FF7A30;
+  --color-secondary: #2D3436;
+  --color-brand: #FF7A30;
+  --color-bg: #FCFBFA;
+}
+
+/* ==================== GLOBAL BODY STYLES (Merged) ==================== */
+body {
+  background-color: var(--arka-plan);
+  color: var(--yazi-koyu);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  position: relative;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 25c-2.5 0-4.5 2-4.5 4.5s2 4.5 4.5 4.5 4.5-2 4.5-4.5-2-4.5-4.5-4.5zm-8-4c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7zm16 0c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7zm-12 8c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7zm8 0c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7z' fill='%23ea580c' fill-opacity='0.03'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+}
+
+/* ==================== SCROLL ANİMASYONLARI ==================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Scroll Reveal Sınıfları */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.scroll-reveal-left {
+  opacity: 0;
+  animation: fadeInLeft 0.8s ease forwards;
+}
+
+.scroll-reveal-right {
+  opacity: 0;
+  animation: fadeInRight 0.8s ease forwards;
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+.pulse-animation {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Hover animasyonları */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Shimmer efekti */
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ==================== GLASSMORPHISM EFFECTS ==================== */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: var(--soft-shadow);
+}
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+/* ==================== CATEGORY CARDS - SOFT UI ==================== */
+.kategori-kart {
+  background: var(--kart-arka-plan);
+  border-radius: var(--border-radius-lg);
+  padding: 24px;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: var(--card-shadow);
+  border: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.kategori-kart:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--hover-shadow);
+  border-color: var(--ana-turuncu);
+}
+
+.kategori-kart:hover .kategori-img {
+  transform: scale(1.1);
+}
+
+.kategori-kart:hover .kesfet-text {
+  opacity: 1;
+}
+
+.kategori-img {
+  transition: transform 0.4s ease;
+}
+
+.kesfet-text {
+  color: var(--ana-turuncu);
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* ==================== HERO SLIDER ==================== */
+.hero-slide {
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+}
+
+.hero-content {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+.hero-content>* {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.hero-content>*:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.hero-content>*:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.hero-content>*:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.hero-content>*:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+/* ==================== BUTTON STYLES ==================== */
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-glow:hover::before {
+  left: 100%;
+}
+
+.btn-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(234, 88, 12, 0.4);
+}
+
+.btn-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-smooth:hover {
+  transform: translateY(-2px);
+}
+
+/* ==================== SCROLL REVEAL ANIMATIONS ==================== */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ==================== SVG WAVE SECTION DIVIDER ==================== */
+.wave-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.wave-divider svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 80px;
+}
+
+.wave-divider .shape-fill {
+  fill: var(--arka-plan);
+}
+
+/* ==================== TYPOGRAPHY ==================== */
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-body {
+  font-family: 'Inter', sans-serif;
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==================== SCROLLBAR ==================== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--ana-turuncu);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c2410c;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  /* scrollbar-width: none; */
+}
+
+.bg-pattern-dot {
+  background-image: radial-gradient(#f1f5f9 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* ==================== PRODUCT CARD HOVER ==================== */
+.product-card {
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--hover-shadow);
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+/* ==================== SMOOTH IMAGE LOADING ==================== */
+img {
+  transition: all 0.4s ease;
+}
+
+/* ==================== KEYFRAME ANIMATIONS ==================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ==================== PREVIOUS STYLES.CSS CONTENT ==================== */
+/* Custom Animations for Petshop */
+/* Marquee animation for brand carousel */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-33.33%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  animation: marquee 30s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Hide scrollbar utility */
+/* (Duplicate removed) */
+
+/* Soft shadow utility */
+.shadow-soft {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ========================================
+   CLASSIC BANNER SYSTEM
+   ======================================== */
+.banner-section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.banner-section img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  min-height: 400px;
+}
+
+.banner-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-content-inner {
+  width: 100%;
+  max-width: 1200px;
+  /* Constrain text to 1200px */
+  padding: 0 1rem;
+  margin: 0 auto;
+}
+
+/* Typography Re-use */
+.banner-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fff;
+  /* White text for overlay */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  /* Shadow for readability */
+  line-height: 1.1;
+  font-size: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 1rem;
+}
+
+.banner-subtitle {
+  font-family: 'Quicksand', sans-serif;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: #fff;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+  margin-bottom: 2rem;
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+/* Alignments */
+.text-left {
+  text-align: left;
+  align-items: flex-start;
+}
+
+.text-right {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.text-center {
+  text-align: center;
+  align-items: center;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .banner-section img {
+    height: 500px;
+    object-position: center;
+  }
+
+  .banner-content-inner {
+    text-align: center !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center !important;
+  }
+}
+
+/* ========================================
+   SECTION SPACING
+   ======================================== */
+.section-spacing {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.section-spacing-lg {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+/* Section Title Decorator */
+.section-title-decorator {
+  position: relative;
+  display: inline-block;
+}
+
+.section-title-decorator::after {
+  content: '';
+  position: absolute;
+  bottom: -0.75rem;
+  left: 0;
+  width: 3rem;
+  height: 4px;
+  background: linear-gradient(90deg, #f97316, #fb923c);
+  border-radius: 2px;
+}
+
+.section-title-decorator.center::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ========================================
+   COUNTDOWN TIMER - Soft Orange Theme
+   ======================================== */
+.countdown-box {
+  background: linear-gradient(135deg, #FF7A30, #e86a20);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  text-align: center;
+  min-width: 4rem;
+  box-shadow: 0 4px 15px rgba(255, 122, 48, 0.3);
+}
+
+.countdown-number {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.countdown-label {
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.8;
+  margin-top: 0.25rem;
+}
+
+/* ========================================
+   PRODUCT CARD - Modern Shadows
+   ======================================== */
+.product-card-modern {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.product-card-modern:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(-4px);
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+@media (max-width: 768px) {
+  .banner-title {
+    font-size: clamp(1.25rem, 5vw, 2rem);
+  }
+
+  .banner-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .banner-cta {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.75rem;
+  }
+
+  .section-spacing {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}

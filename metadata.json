@@ -1,0 +1,7 @@
+{
+  "name": "PATİDÜKKAN - Profesyonel Pet Shop E-Ticaret",
+  "description": "Türkiye'nin en detaylı pet shop klonu. Gelişmiş filtreleme, mega menü ve admin paneli içerir.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
