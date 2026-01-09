@@ -329,8 +329,8 @@ const AdminPage: React.FC = () => {
                   {filteredProducts.slice(0, 20).map(product => (
                     <tr key={product.id} className="border-b border-gray-50 hover:bg-gray-50 transition-colors">
                       <td className="py-4 px-4"><div className="flex items-center gap-3">
-                        <img src={product.images[0]} alt={product.name} className="w-12 h-12 object-cover rounded-lg" />
-                        <div><p className="font-bold text-secondary text-sm">{product.name.substring(0, 35)}...</p><p className="text-xs text-gray-500">{product.category_id}</p></div>
+                        <img src={product.images?.[0] || 'https://via.placeholder.com/50'} alt={product.name} className="w-12 h-12 object-cover rounded-lg bg-gray-100" />
+                        <div><p className="font-bold text-secondary text-sm">{(product.name || 'İsimsiz Ürün').substring(0, 35)}...</p><p className="text-xs text-gray-500">{product.category_id}</p></div>
                       </div></td>
                       <td className="py-4 px-4"><span className="text-sm font-medium text-gray-700">{product.brand_name}</span></td>
                       <td className="py-4 px-4"><div>
