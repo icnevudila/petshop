@@ -692,114 +692,113 @@ const AdminPage: React.FC = () => {
                     <input type="number" value={productForm.stock} onChange={(e) => setProductForm({ ...productForm, stock: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
                   <div><label className="block text-sm font-bold text-gray-700 mb-2">Açıklama</label>
                     <textarea value={productForm.description} onChange={(e) => setProductForm({ ...productForm, description: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl h-24 resize-none" /></div>
-                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Görseller (URL)</label>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Görseller</label>
-                      <div className="flex gap-2 mb-2">
-                        <input type="text" value={newImage} onChange={(e) => setNewImage(e.target.value)} placeholder="Görsel URL yapıştır" className="flex-1 px-4 py-2 border border-gray-200 rounded-xl" />
-                        <label className="px-4 py-2 bg-gray-100 rounded-xl font-bold text-sm cursor-pointer hover:bg-gray-200 transition-colors flex items-center gap-2">
-                          <Upload size={16} /> Yükle
-                          <input type="file" accept="image/*" className="hidden" onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              const reader = new FileReader();
-                              reader.onloadend = () => {
-                                if (typeof reader.result === 'string') {
-                                  setProductForm(prev => ({ ...prev, images: [...prev.images, reader.result as string] }));
-                                }
-                              };
-                              reader.readAsDataURL(file);
-                            }
-                          }} />
-                        </label>
-                        <button onClick={addImageHandler} className="px-4 py-2 bg-primary text-white rounded-xl font-bold text-sm">Ekle</button>
-                      </div>
-                      <div className="flex flex-wrap gap-2">{productForm.images.map((img, i) => (
-                        <div key={i} className="relative group"><img src={img} className="w-16 h-16 object-cover rounded-lg bg-gray-50 border border-gray-100" />
-                          <button onClick={() => setProductForm({ ...productForm, images: productForm.images.filter((_, idx) => idx !== i) })} className="absolute -top-2 -right-2 w-6 h-6 bg-white border border-gray-200 text-red-500 rounded-full flex items-center justify-center shadow-sm hover:bg-red-50 transition-colors"><X size={12} /></button></div>
-                      ))}</div></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Etiketler</label>
-                      <div className="flex gap-2 mb-2"><input type="text" value={newTag} onChange={(e) => setNewTag(e.target.value)} placeholder="Etiket ekle" className="flex-1 px-4 py-2 border border-gray-200 rounded-xl" />
-                        <button onClick={addTagHandler} className="px-4 py-2 bg-gray-100 rounded-xl font-bold text-sm">Ekle</button></div>
-                      <div className="flex flex-wrap gap-2">{productForm.tags.map(tag => (
-                        <span key={tag} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm flex items-center gap-1">{tag}
-                          <button onClick={() => setProductForm({ ...productForm, tags: productForm.tags.filter(t => t !== tag) })} className="text-primary">×</button></span>
-                      ))}</div></div>
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" checked={productForm.isActive} onChange={(e) => setProductForm({ ...productForm, isActive: e.target.checked })} className="w-5 h-5" />
-                      <label className="font-bold text-gray-700">Aktif</label></div>
-                  </>)}
-
-                  {modalType === 'campaign' && (<>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Banner Başlığı</label>
-                      <input type="text" value={campaignForm.title} onChange={(e) => setCampaignForm({ ...campaignForm, title: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Görsel URL</label>
-                      <input type="text" value={campaignForm.image_url} onChange={(e) => setCampaignForm({ ...campaignForm, image_url: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
-                      {campaignForm.image_url && <img src={campaignForm.image_url} className="mt-2 w-full h-32 object-cover rounded-xl" />}</div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Hedef Link</label>
-                      <input type="text" value={campaignForm.target_url} onChange={(e) => setCampaignForm({ ...campaignForm, target_url: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Konum</label>
-                      <select value={campaignForm.location} onChange={(e) => setCampaignForm({ ...campaignForm, location: e.target.value as any })} className="w-full px-4 py-3 border border-gray-200 rounded-xl">
-                        <option value="slider">Ana Slider</option><option value="banner1">Banner 1</option><option value="banner2">Banner 2</option><option value="category">Kategori</option><option value="blog">Blog</option></select></div>
-                  </>)}
-
-                  {modalType === 'brand' && (<>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Marka Adı</label>
-                      <input type="text" value={brandForm.name} onChange={(e) => setBrandForm({ ...brandForm, name: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Slug</label>
-                      <input type="text" value={brandForm.slug} onChange={(e) => setBrandForm({ ...brandForm, slug: e.target.value })} placeholder="marka-adi" className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Logo URL</label>
-                      <input type="text" value={brandForm.logo_url} onChange={(e) => setBrandForm({ ...brandForm, logo_url: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
-                      {brandForm.logo_url && <img src={brandForm.logo_url} className="mt-2 h-16 object-contain" />}</div>
-                  </>)}
-
-                  {modalType === 'category' && (<>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Kategori Adı</label>
-                      <input type="text" value={categoryForm.name} onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Slug</label>
-                      <input type="text" value={categoryForm.slug} onChange={(e) => setCategoryForm({ ...categoryForm, slug: e.target.value })} placeholder="kategori-adi" className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Üst Kategori</label>
-                      <select value={categoryForm.parent_id} onChange={(e) => setCategoryForm({ ...categoryForm, parent_id: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl">
-                        <option value="">Ana Kategori (Yok)</option>{categories.filter(c => !c.parent_id).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
-                  </>)}
-
-                  {modalType === 'blog' && (<>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Yazı Başlığı</label>
-                      <input type="text" value={blogForm.title} onChange={(e) => setBlogForm({ ...blogForm, title: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">İçerik</label>
-                      <textarea value={blogForm.content} onChange={(e) => setBlogForm({ ...blogForm, content: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl h-32 resize-none" /></div>
-                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Kapak Görseli URL</label>
-                      <input type="text" value={blogForm.img} onChange={(e) => setBlogForm({ ...blogForm, img: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
-                      {blogForm.img && <img src={blogForm.img} className="mt-2 w-full h-32 object-cover rounded-xl" />}</div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div><label className="block text-sm font-bold text-gray-700 mb-2">Kategori</label>
-                        <input type="text" value={blogForm.category} onChange={(e) => setBlogForm({ ...blogForm, category: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
-                      <div><label className="block text-sm font-bold text-gray-700 mb-2">Yazar</label>
-                        <input type="text" value={blogForm.author} onChange={(e) => setBlogForm({ ...blogForm, author: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Görseller</label>
+                    <div className="flex gap-2 mb-2">
+                      <input type="text" value={newImage} onChange={(e) => setNewImage(e.target.value)} placeholder="Görsel URL yapıştır" className="flex-1 px-4 py-2 border border-gray-200 rounded-xl" />
+                      <label className="px-4 py-2 bg-gray-100 rounded-xl font-bold text-sm cursor-pointer hover:bg-gray-200 transition-colors flex items-center gap-2">
+                        <Upload size={16} /> Yükle
+                        <input type="file" accept="image/*" className="hidden" onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              if (typeof reader.result === 'string') {
+                                setProductForm(prev => ({ ...prev, images: [...prev.images, reader.result as string] }));
+                              }
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }} />
+                      </label>
+                      <button onClick={addImageHandler} className="px-4 py-2 bg-primary text-white rounded-xl font-bold text-sm">Ekle</button>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <input type="checkbox" checked={blogForm.is_published} onChange={(e) => setBlogForm({ ...blogForm, is_published: e.target.checked })} className="w-5 h-5" />
-                      <label className="font-bold text-gray-700">Yayınla</label></div>
-                  </>)}
+                    <div className="flex flex-wrap gap-2">{productForm.images.map((img, i) => (
+                      <div key={i} className="relative group"><img src={img} className="w-16 h-16 object-cover rounded-lg bg-gray-50 border border-gray-100" />
+                        <button onClick={() => setProductForm({ ...productForm, images: productForm.images.filter((_, idx) => idx !== i) })} className="absolute -top-2 -right-2 w-6 h-6 bg-white border border-gray-200 text-red-500 rounded-full flex items-center justify-center shadow-sm hover:bg-red-50 transition-colors"><X size={12} /></button></div>
+                    ))}</div></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Etiketler</label>
+                    <div className="flex gap-2 mb-2"><input type="text" value={newTag} onChange={(e) => setNewTag(e.target.value)} placeholder="Etiket ekle" className="flex-1 px-4 py-2 border border-gray-200 rounded-xl" />
+                      <button onClick={addTagHandler} className="px-4 py-2 bg-gray-100 rounded-xl font-bold text-sm">Ekle</button></div>
+                    <div className="flex flex-wrap gap-2">{productForm.tags.map(tag => (
+                      <span key={tag} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm flex items-center gap-1">{tag}
+                        <button onClick={() => setProductForm({ ...productForm, tags: productForm.tags.filter(t => t !== tag) })} className="text-primary">×</button></span>
+                    ))}</div></div>
+                  <div className="flex items-center gap-2">
+                    <input type="checkbox" checked={productForm.isActive} onChange={(e) => setProductForm({ ...productForm, isActive: e.target.checked })} className="w-5 h-5" />
+                    <label className="font-bold text-gray-700">Aktif</label></div>
+                </>)}
 
-                  <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
-                    <button onClick={() => setIsModalOpen(false)} className="px-6 py-3 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50">İptal</button>
-                    <button onClick={() => {
-                      if (modalType === 'product') handleSaveProduct();
-                      else if (modalType === 'campaign') handleSaveCampaign();
-                      else if (modalType === 'brand') handleSaveBrand();
-                      else if (modalType === 'category') handleSaveCategory();
-                      else if (modalType === 'blog') handleSaveBlog();
-                    }} className="px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary-hover flex items-center gap-2">
-                      <Save size={18} /> Kaydet
-                    </button>
+                {modalType === 'campaign' && (<>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Banner Başlığı</label>
+                    <input type="text" value={campaignForm.title} onChange={(e) => setCampaignForm({ ...campaignForm, title: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Görsel URL</label>
+                    <input type="text" value={campaignForm.image_url} onChange={(e) => setCampaignForm({ ...campaignForm, image_url: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    {campaignForm.image_url && <img src={campaignForm.image_url} className="mt-2 w-full h-32 object-cover rounded-xl" />}</div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Hedef Link</label>
+                    <input type="text" value={campaignForm.target_url} onChange={(e) => setCampaignForm({ ...campaignForm, target_url: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Konum</label>
+                    <select value={campaignForm.location} onChange={(e) => setCampaignForm({ ...campaignForm, location: e.target.value as any })} className="w-full px-4 py-3 border border-gray-200 rounded-xl">
+                      <option value="slider">Ana Slider</option><option value="banner1">Banner 1</option><option value="banner2">Banner 2</option><option value="category">Kategori</option><option value="blog">Blog</option></select></div>
+                </>)}
+
+                {modalType === 'brand' && (<>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Marka Adı</label>
+                    <input type="text" value={brandForm.name} onChange={(e) => setBrandForm({ ...brandForm, name: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Slug</label>
+                    <input type="text" value={brandForm.slug} onChange={(e) => setBrandForm({ ...brandForm, slug: e.target.value })} placeholder="marka-adi" className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Logo URL</label>
+                    <input type="text" value={brandForm.logo_url} onChange={(e) => setBrandForm({ ...brandForm, logo_url: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    {brandForm.logo_url && <img src={brandForm.logo_url} className="mt-2 h-16 object-contain" />}</div>
+                </>)}
+
+                {modalType === 'category' && (<>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Kategori Adı</label>
+                    <input type="text" value={categoryForm.name} onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Slug</label>
+                    <input type="text" value={categoryForm.slug} onChange={(e) => setCategoryForm({ ...categoryForm, slug: e.target.value })} placeholder="kategori-adi" className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Üst Kategori</label>
+                    <select value={categoryForm.parent_id} onChange={(e) => setCategoryForm({ ...categoryForm, parent_id: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl">
+                      <option value="">Ana Kategori (Yok)</option>{categories.filter(c => !c.parent_id).map(c => <option key={c.id} value={c.id}>{c.name}</option>)}</select></div>
+                </>)}
+
+                {modalType === 'blog' && (<>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Yazı Başlığı</label>
+                    <input type="text" value={blogForm.title} onChange={(e) => setBlogForm({ ...blogForm, title: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">İçerik</label>
+                    <textarea value={blogForm.content} onChange={(e) => setBlogForm({ ...blogForm, content: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl h-32 resize-none" /></div>
+                  <div><label className="block text-sm font-bold text-gray-700 mb-2">Kapak Görseli URL</label>
+                    <input type="text" value={blogForm.img} onChange={(e) => setBlogForm({ ...blogForm, img: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    {blogForm.img && <img src={blogForm.img} className="mt-2 w-full h-32 object-cover rounded-xl" />}</div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Kategori</label>
+                      <input type="text" value={blogForm.category} onChange={(e) => setBlogForm({ ...blogForm, category: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
+                    <div><label className="block text-sm font-bold text-gray-700 mb-2">Yazar</label>
+                      <input type="text" value={blogForm.author} onChange={(e) => setBlogForm({ ...blogForm, author: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" /></div>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <input type="checkbox" checked={blogForm.is_published} onChange={(e) => setBlogForm({ ...blogForm, is_published: e.target.checked })} className="w-5 h-5" />
+                    <label className="font-bold text-gray-700">Yayınla</label></div>
+                </>)}
+
+                <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+                  <button onClick={() => setIsModalOpen(false)} className="px-6 py-3 border border-gray-200 rounded-xl font-bold text-gray-600 hover:bg-gray-50">İptal</button>
+                  <button onClick={() => {
+                    if (modalType === 'product') handleSaveProduct();
+                    else if (modalType === 'campaign') handleSaveCampaign();
+                    else if (modalType === 'brand') handleSaveBrand();
+                    else if (modalType === 'category') handleSaveCategory();
+                    else if (modalType === 'blog') handleSaveBlog();
+                  }} className="px-6 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary-hover flex items-center gap-2">
+                    <Save size={18} /> Kaydet
+                  </button>
                 </div>
               </div>
             </div>
-        )}
           </div>
+        )}
+      </div>
     </div>
-      );
+  );
 };
 
-      export default AdminPage;
+export default AdminPage;
