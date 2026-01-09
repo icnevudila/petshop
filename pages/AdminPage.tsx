@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useProducts } from '../ProductContext';
 import ProductCard from '../components/ProductCard';
 import {
@@ -78,6 +78,61 @@ const AdminPage: React.FC = () => {
   const [modalType, setModalType] = useState<string>('');
   const [editingItem, setEditingItem] = useState<any>(null);
   const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+
+  // Auth State
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [loginError, setLoginError] = useState(false);
+
+  useEffect(() => {
+    const isAuth = sessionStorage.getItem('isAdminAuth');
+    if (isAuth === 'true') setIsAuthenticated(true);
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput === 'aliduvenci12@') {
+      setIsAuthenticated(true);
+      sessionStorage.setItem('isAdminAuth', 'true');
+      setLoginError(false);
+    } else {
+      setLoginError(true);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary">
+              <ShieldCheck size={32} />
+            </div>
+            <h1 className="text-2xl font-black text-secondary">Yönetici Girişi</h1>
+            <p className="text-gray-500 text-sm mt-2">Devam etmek için lütfen şifrenizi girin.</p>
+          </div>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                placeholder="Şifre"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+              />
+            </div>
+            {loginError && <p className="text-red-500 text-sm font-bold">Hatalı şifre!</p>}
+            <button
+              type="submit"
+              className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20"
+            >
+              Giriş Yap
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   // Form states
   const [productForm, setProductForm] = useState({

@@ -8,6 +8,7 @@ import SEO from '../components/SEO';
 import SubCategoryStrip from '../components/SubCategoryStrip';
 import BrandMarquee from '../components/BrandMarquee';
 import WelcomePopup from '../components/WelcomePopup';
+import FadeInSection from '../components/FadeInSection';
 import {
    ChevronLeft, ChevronRight, Zap, ArrowRight, ArrowLeft, Star, ShieldCheck,
    Truck, Headphones, Gift, Quote, Sparkles, Tag,
@@ -493,7 +494,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
 
             <div className="container mx-auto px-4 relative z-10">
                <div className="flex flex-col items-center text-center mb-12 gap-8">
-                  <div className="max-w-3xl">
+                  <FadeInSection className="max-w-3xl">
                      <div className="flex items-center justify-center gap-2 text-brand animate-pulse mb-4">
                         <Zap size={24} fill="currentColor" />
                         <span className="font-bold text-sm uppercase tracking-[0.3em]">Sınırlı Süre Fırsatı</span>
@@ -505,7 +506,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                         </span>
                      </h2>
                      <p className="text-gray-500 font-medium text-lg">Seçili ürünlerde <span className="font-bold text-brand">%50'ye varan</span> indirimleri kaçırmayın.</p>
-                  </div>
+                  </FadeInSection>
 
                   {/* Animated Timer */}
                   <CountdownTimer />
@@ -562,7 +563,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
 
          {/* 6. VISUAL CATEGORIES - Soft UI Cards - Gray Background */}
          <section className="w-full bg-[#FAFAFA] py-20">
-            <div className="container mx-auto px-4">
+            <FadeInSection className="container mx-auto px-4">
                {/* Slim Mid Banner */}
                <div className="relative h-[300px] md:h-[350px] rounded-3xl overflow-hidden shadow-2xl group cursor-pointer mb-20">
                   <img src="/banners/mid_banner_slim.png" alt="Doğal Beslenme" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
@@ -621,7 +622,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                      ))}
                   </div>
                </div>
-            </div>
+            </FadeInSection>
          </section>
 
          {/* 7. PROMO BANNER - Container içinde */}
@@ -706,7 +707,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
 
          {/* 9. WALL OF LOVE - Full Width - Gray Background */}
          <section className="full-width-section bg-[#F5F5F7] py-20 relative overflow-hidden mt-0">
-            <div className="container relative z-10">
+            <FadeInSection className="container relative z-10">
                <div className="flex flex-col md:flex-row gap-12">
                   {/* Sol - Başlık */}
                   <div className="md:w-1/3 flex flex-col justify-center">
@@ -753,14 +754,14 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                      </div>
                   </div>
                </div>
-            </div>
+            </FadeInSection>
          </section>
 
 
 
          {/* 11. BLOG POSTS - Zebra Stripe Section */}
          <section className="full-width-section bg-[#FAFAFA] py-24">
-            <div className="container">
+            <FadeInSection className="container">
                <div className="flex justify-between items-end mb-12">
                   <div><span className="text-gray-400 font-bold text-xs uppercase tracking-widest">Rehber</span><h2 className="text-3xl font-black text-secondary">Pati Magazin</h2></div>
                   <Link to="/blog" className="text-sm font-bold text-primary underline underline-offset-4">Tüm Yazılar</Link>
@@ -777,7 +778,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                      </div>
                   ))}
                </div>
-            </div>
+            </FadeInSection>
          </section>
       </div>
    );
