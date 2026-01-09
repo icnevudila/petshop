@@ -16,56 +16,58 @@ import {
 
 // Auto-scroll hook for horizontal container
 // Auto-scroll + Drag Scroll Hook
-function useDraggableScroll(ref: React.RefObject<HTMLDivElement>, options: { autoScroll?: boolean, speed?: number } = {}) {
+interface ScrollOptions {
+   autoScroll?: boolean;
+   speed?: number;
+}
+
+function useDraggableScroll(ref: React.RefObject<HTMLDivElement>, options: ScrollOptions = {}) {
    useEffect(() => {
       const element = ref.current;
       if (!element) return;
 
-      // Auto Scroll Logic
+      const { autoScroll = false, speed = 0.5 } = options;
       let animationId: number;
-      let autoScrollAmount = 0;
-      const step = 1;
       let isDragging = false;
-      let startX = 0;
-      let scrollLeft = 0;
+      let isHovering = false;
+      let startX: number;
+      let scrollLeft: number;
 
-      const autoScroll = () => {
-         if (document.activeElement === element) return; // Don't scroll if focused
-         if (isDragging) return;
-
-         autoScrollAmount += step;
-         if (autoScrollAmount >= element.scrollWidth - element.clientWidth) {
-            autoScrollAmount = 0;
-            element.scrollTo({ left: 0, behavior: 'auto' });
-         } else {
-            element.scrollLeft += step;
+      // Auto Scroll Animation Loop
+      const animate = () => {
+         // Pause if dragging, hovering, or tab inactive
+         if (!isDragging && !isHovering && autoScroll) {
+            if (element.scrollLeft >= (element.scrollWidth - element.clientWidth - 1)) {
+               // If reached end, reset to start smoothly
+               element.scrollLeft = 0;
+            } else {
+               element.scrollLeft += speed;
+            }
          }
-         if (options.autoScroll) animationId = requestAnimationFrame(autoScroll);
+         animationId = requestAnimationFrame(animate);
       };
 
-      if (options.autoScroll) {
-         // Start auto scroll logic
-         // Disabling auto-scroll for now as user specifically asked for mouse drag, 
-         // and auto-scroll often fights with drag. 
-         // I'll keep the generic structure but maybe default autoScroll to false or handle it carefully.
-         // Actually user didn't ask to remove auto-scroll, just add drag.
-         // But drag + auto-scroll is complex. Let's prioritize Drag as requested.
+      if (autoScroll) {
+         animationId = requestAnimationFrame(animate);
       }
 
-      // Drag Logic
       const onMouseDown = (e: MouseEvent) => {
          isDragging = true;
          startX = e.pageX - element.offsetLeft;
          scrollLeft = element.scrollLeft;
          element.style.cursor = 'grabbing';
          element.style.userSelect = 'none';
-         cancelAnimationFrame(animationId);
       };
 
       const onMouseLeave = () => {
          isDragging = false;
+         isHovering = false; // Reset hover on leave
          element.style.cursor = 'grab';
          element.style.removeProperty('user-select');
+      };
+
+      const onMouseEnter = () => {
+         isHovering = true;
       };
 
       const onMouseUp = () => {
@@ -78,26 +80,27 @@ function useDraggableScroll(ref: React.RefObject<HTMLDivElement>, options: { aut
          if (!isDragging) return;
          e.preventDefault();
          const x = e.pageX - element.offsetLeft;
-         const walk = (x - startX) * 2; // Scroll-fast
+         const walk = (x - startX) * 2;
          element.scrollLeft = scrollLeft - walk;
       };
 
       element.addEventListener('mousedown', onMouseDown);
       element.addEventListener('mouseleave', onMouseLeave);
+      element.addEventListener('mouseenter', onMouseEnter);
       element.addEventListener('mouseup', onMouseUp);
       element.addEventListener('mousemove', onMouseMove);
 
-      // Initial cursor
       element.style.cursor = 'grab';
 
       return () => {
          cancelAnimationFrame(animationId);
          element.removeEventListener('mousedown', onMouseDown);
          element.removeEventListener('mouseleave', onMouseLeave);
+         element.removeEventListener('mouseenter', onMouseEnter);
          element.removeEventListener('mouseup', onMouseUp);
          element.removeEventListener('mousemove', onMouseMove);
       };
-   }, [ref]);
+   }, [ref, options.autoScroll, options.speed]);
 }
 
 interface HomePageProps {
@@ -109,13 +112,13 @@ interface HomePageProps {
 
 const iconMap: { [key: string]: any } = { Truck, ShieldCheck, Headphones, Gift };
 
-const RenderSectionCarousel = ({ title, subtitle, products, scrollRef, icon: Icon, addToCart, toggleWishlist, wishlist, openQuickView, sectionClassName = "bg-white" }: any) => {
+const RenderSectionCarousel = ({ title, subtitle, products, scrollRef, icon: Icon, addToCart, toggleWishlist, wishlist, openQuickView, sectionClassName = "bg-white", autoScroll = false, speed = 0.5 }: any) => {
    if (!products || products.length === 0) return null;
    const scroll = (ref: any, direction: 'left' | 'right') => {
       if (ref.current) { ref.current.scrollBy({ left: direction === 'left' ? -300 : 300, behavior: 'smooth' }); }
    };
-   // Use draggable scroll internally if ref is provided, or rely on parent
-   useDraggableScroll(scrollRef);
+
+   useDraggableScroll(scrollRef, { autoScroll, speed });
 
    return (
       <section className={`w-full py-20 ${sectionClassName}`}>
@@ -248,6 +251,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
    const scrollKittenRef = useRef<HTMLDivElement>(null);
    const scrollNewRef = useRef<HTMLDivElement>(null);
    const scrollFeaturedRef = useRef<HTMLDivElement>(null);
+   const scrollCategoryRef = useRef<HTMLDivElement>(null);
 
    const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
    const [activeCategory, setActiveCategory] = useState(0);
@@ -260,11 +264,10 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
       return () => clearInterval(timer);
    }, [heroCampaigns.length]);
 
-   useDraggableScroll(scrollFlashRef);
-   useDraggableScroll(scrollBrandRef);
-   useDraggableScroll(scrollKittenRef);
-   useDraggableScroll(scrollNewRef);
-   useDraggableScroll(scrollFeaturedRef);
+   // Only keep the static category carousel hook here
+   useDraggableScroll(scrollCategoryRef, { autoScroll: true, speed: 0.5 });
+   // Re-add Flash Deals hook as it is an inline section
+   useDraggableScroll(scrollFlashRef, { autoScroll: true, speed: 1.0 });
 
 
 
@@ -285,13 +288,13 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
             {heroCampaigns.length > 0 && (<>
                {/* Tüm slide'lar üst üste, sadece aktif olan görünür */}
                {heroCampaigns.map((campaign, index) => (
-                  <div
+                  <Link
                      key={campaign.id}
-                     className={`absolute inset-0 cursor-pointer transition-all duration-1000 ease-in-out ${currentHeroSlide === index
+                     to={campaign.target_url || '#'}
+                     className={`absolute inset-0 cursor-pointer block transition-all duration-1000 ease-in-out ${currentHeroSlide === index
                         ? 'opacity-100 scale-100 blur-0 z-10'
                         : 'opacity-0 scale-105 blur-sm z-0'
                         }`}
-                     onClick={() => navigate(campaign.target_url)}
                   >
                      {/* Arka plan - tam ekran görsel */}
                      <div className="absolute inset-0">
@@ -356,9 +359,9 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                                     <p className="text-gray-300 text-lg md:text-xl font-medium mb-8 max-w-lg">
                                        Nazik içerikler ve premium tariflerle her gün doğru dengeyi sunun.
                                     </p>
-                                    <button className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider transition-all shadow-xl flex items-center gap-3">
+                                    <Link to="/kategori/kedi-mamasi" className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider transition-all shadow-xl flex items-center gap-3 inline-flex">
                                        Koleksiyonu Gör <ArrowRight size={18} />
-                                    </button>
+                                    </Link>
                                  </>
                               )}
                               {index > 2 && (
@@ -366,15 +369,15 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                                     <h1 className="text-4xl md:text-6xl font-black text-white leading-tight mb-6 font-display">
                                        {campaign.title}
                                     </h1>
-                                    <button className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider transition-all">
+                                    <Link to={campaign.target_url || '/'} className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-4 rounded-xl font-bold text-sm uppercase tracking-wider transition-all inline-flex items-center gap-3">
                                        Keşfet <ArrowRight size={18} />
-                                    </button>
+                                    </Link>
                                  </>
                               )}
                            </div>
                         </div>
                      </div>
-                  </div>
+                  </Link>
                ))}
                {/* Sol ok */}
                <button
@@ -446,16 +449,17 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                         <img
                            src={item.img}
                            alt={item.title}
-                           className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+                           className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-all duration-500 group-hover:from-black/60" />
-                        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-center">
-                           <h3 className="text-white font-bold text-sm md:text-lg tracking-wide mb-2">
+                        {/* Subtle gradient for depth, but much lighter than before */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent transition-all duration-500" />
+
+                        {/* Glassmorphism Label - Bottom Left */}
+                        <div className="absolute bottom-4 left-4 glass-label px-5 py-3 transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg">
+                           <h3 className="font-black text-sm md:text-base tracking-widest uppercase text-secondary mb-0 flex items-center gap-2">
                               {item.title}
+                              <span className="w-0 overflow-hidden group-hover:w-4 transition-all duration-300 opacity-0 group-hover:opacity-100 text-brand">→</span>
                            </h3>
-                           <span className="text-primary text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                              Keşfet →
-                           </span>
                         </div>
                      </Link>
                   ))}
@@ -464,15 +468,17 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                {/* Sub Categories */}
                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                   {[
-                     { t: 'Kedi Mamaları', i: Box, l: '/kategori/kedi-mamasi' },
-                     { t: 'Köpek Mamaları', i: List, l: '/kategori/kopek-mamasi' },
-                     { t: 'Kedi Kumu', i: ShoppingBag, l: '/kategori/kedi-kumu' },
-                     { t: 'Kedi Oyuncak', i: Star, l: '/kategori/kedi-oyuncak' },
-                     { t: 'Köpek Oyuncak', i: Heart, l: '/kategori/kopek-oyuncak' },
-                     { t: 'Tasma', i: Tag, l: '/kategori/kopek-tasma' },
+                     { t: 'Kedi Mamaları', img: '/menu_images/menu_sterilized_cat_food_1767813803082.png', l: '/kategori/kedi-mamasi' },
+                     { t: 'Köpek Mamaları', img: '/menu_images/menu_adult_dog_food_1767814113679.png', l: '/kategori/kopek-mamasi' },
+                     { t: 'Kedi Kumu', img: '/menu_images/menu_clumping_litter_1767813876271.png', l: '/kategori/kedi-kumu' },
+                     { t: 'Kedi Oyuncak', img: '/menu_images/menu_cat_toys_1767814037624.png', l: '/kategori/kedi-oyuncak' },
+                     { t: 'Köpek Oyuncak', img: '/trendyol köpek maması/1_org_zoom (8).jpg', l: '/kategori/kopek-oyuncak' },
+                     { t: 'Tasma', img: '/menu_images/menu_cat_collar_1767814084204.png', l: '/kategori/kopek-tasma' },
                   ].map((item, idx) => (
                      <Link key={idx} to={item.l} className="flex items-center gap-3 p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-gray-300 hover:shadow-md hover:bg-gray-50 transition-all duration-300 group">
-                        <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 group-hover:bg-white group-hover:text-primary transition-colors"><item.i size={20} /></div>
+                        <div className="w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center p-1 border border-gray-100 group-hover:border-brand/20">
+                           <img src={item.img} alt={item.t} className="w-full h-full object-contain mix-blend-multiply" />
+                        </div>
                         <span className="font-bold text-gray-600 text-sm group-hover:text-primary">{item.t}</span>
                      </Link>
                   ))}
@@ -550,6 +556,8 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
             scrollRef={scrollKittenRef} icon={Sparkles}
             addToCart={addToCart} toggleWishlist={toggleWishlist} wishlist={wishlist} openQuickView={openQuickView}
             sectionClassName="bg-white"
+            autoScroll={true}
+            speed={0.6}
          />
 
          {/* 6. VISUAL CATEGORIES - Soft UI Cards - Gray Background */}
@@ -575,38 +583,43 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                   <span className="text-primary font-black text-xs uppercase tracking-[0.3em]">İhtiyacın Olan Her Şey</span>
                   <h2 className="text-4xl font-black text-secondary mt-2">Kategorileri Keşfet</h2>
                </div>
-               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-                  {[
-                     { name: "Kedi Maması", img: "/menu_images/menu_sterilized_cat_food_1767813803082.png", slug: "kedi-mamasi" },
-                     { name: "Köpek Maması", img: "/menu_images/menu_adult_dog_food_1767814113679.png", slug: "kopek-mamasi" },
-                     { name: "Kedi Kumu", img: "/menu_images/menu_clumping_litter_1767813876271.png", slug: "kedi-kumu" },
-                     { name: "Ödül Mama", img: "/menu_images/menu_cat_treats_1767813860288.png", slug: "kedi-odul" },
-                     { name: "Tasmalar", img: "/menu_images/menu_cat_collar_1767814084204.png", slug: "kopek-tasma" },
-                     { name: "Yatak", img: "/menu_images/menu_cat_bed_1767813993596.png", slug: "kedi-yatak" },
-                     { name: "Taşıma", img: "/menu_images/menu_carrier_bag_1767814022868.png", slug: "kedi-tasima" },
-                     { name: "Bakım", img: "/menu_images/menu_hygiene_products_1767813964699.png", slug: "kopek-bakim" },
-                  ].map((cat, i) => (
-                     <Link
-                        to={`/kategori/${cat.slug}`}
-                        key={i}
-                        className="kategori-kart group"
-                     >
-                        {/* Image */}
-                        <div className="w-20 h-20 mb-4 relative">
-                           <img
-                              src={cat.img}
-                              alt={cat.name}
-                              className="kategori-img w-full h-full object-contain drop-shadow-md"
-                           />
+               <div className="relative group/cat">
+                  <div ref={scrollCategoryRef} className="flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth w-full snap-x cursor-grab active:cursor-grabbing pb-8 px-1">
+                     {[
+                        { name: "Kedi Maması", img: "/menu_images/menu_sterilized_cat_food_1767813803082.png", slug: "kedi-mamasi" },
+                        { name: "Köpek Maması", img: "/menu_images/menu_adult_dog_food_1767814113679.png", slug: "kopek-mamasi" },
+                        { name: "Kedi Kumu", img: "/menu_images/menu_clumping_litter_1767813876271.png", slug: "kedi-kumu" },
+                        { name: "Ödül Mama", img: "/menu_images/menu_cat_treats_1767813860288.png", slug: "kedi-odul" },
+                        { name: "Tasmalar", img: "/menu_images/menu_cat_collar_1767814084204.png", slug: "kopek-tasma" },
+                        { name: "Yatak", img: "/menu_images/menu_cat_bed_1767813993596.png", slug: "kedi-yatak" },
+                        { name: "Taşıma", img: "/menu_images/menu_carrier_bag_1767814022868.png", slug: "kedi-tasima" },
+                        { name: "Bakım", img: "/menu_images/menu_hygiene_products_1767813964699.png", slug: "kopek-bakim" },
+                        { name: "Kedi Oyuncak", img: "/menu_images/menu_cat_toys_1767814037624.png", slug: "kedi-oyuncak" },
+                        { name: "Mama Kabı", img: "/menu_images/menu_food_bowls_1767814051605.png", slug: "mama-kabi" },
+                     ].map((cat, i) => (
+                        <div key={i} className="flex-shrink-0 w-[140px] md:w-[160px] snap-center">
+                           <Link
+                              to={`/kategori/${cat.slug}`}
+                              className="kategori-kart group flex flex-col items-center p-4 bg-white rounded-2xl shadow-sm hover:shadow-xl border border-gray-100 dark:border-gray-800 transition-all duration-300 hover:-translate-y-2 h-full"
+                           >
+                              {/* Image */}
+                              <div className="w-24 h-24 mb-4 relative p-2 bg-gray-50 rounded-full group-hover:bg-primary/5 transition-colors">
+                                 <img
+                                    src={cat.img}
+                                    alt={cat.name}
+                                    className="kategori-img w-full h-full object-contain drop-shadow-md"
+                                 />
+                              </div>
+
+                              {/* Label */}
+                              <h4 className="font-bold text-gray-700 text-sm text-center group-hover:text-primary transition-colors line-clamp-1">{cat.name}</h4>
+
+                              {/* Keşfet Text */}
+                              <span className="kesfet-text mt-3 text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0">İncele →</span>
+                           </Link>
                         </div>
-
-                        {/* Label */}
-                        <h4 className="font-bold text-gray-700 text-sm text-center group-hover:text-primary transition-colors">{cat.name}</h4>
-
-                        {/* Keşfet Text */}
-                        <span className="kesfet-text mt-2">Keşfet →</span>
-                     </Link>
-                  ))}
+                     ))}
+                  </div>
                </div>
             </div>
          </section>
@@ -617,7 +630,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                {(() => {
                   const currentPromo = PROMO_ITEMS[promoIndex % PROMO_ITEMS.length];
                   return (
-                     <div className="relative h-[500px] md:h-[550px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-xl" onClick={() => navigate(currentPromo.link)}>
+                     <Link to={currentPromo.link} className="relative block h-[500px] md:h-[550px] rounded-[2rem] overflow-hidden group cursor-pointer shadow-xl">
                         <img
                            src={currentPromo.image}
                            alt={currentPromo.badge}
@@ -654,7 +667,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                               />
                            ))}
                         </div>
-                     </div>
+                     </Link>
                   );
                })()}
             </div>
@@ -667,6 +680,8 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
             scrollRef={scrollNewRef} icon={Tag}
             addToCart={addToCart} toggleWishlist={toggleWishlist} wishlist={wishlist} openQuickView={openQuickView}
             sectionClassName="bg-[#FAFAFA]"
+            autoScroll={true}
+            speed={0.9}
          />
 
          {/* 8.5. ÖNE ÇIKAN ÜRÜNLER GRİD'İ */}
@@ -677,6 +692,8 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
             scrollRef={scrollFeaturedRef} icon={Star}
             addToCart={addToCart} toggleWishlist={toggleWishlist} wishlist={wishlist} openQuickView={openQuickView}
             sectionClassName="bg-white"
+            autoScroll={true}
+            speed={0.7}
          />
          <div className="w-full bg-white pb-20 text-center">
             <Link
@@ -739,26 +756,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
             </div>
          </section>
 
-         {/* 10. FOOTER BANNER - Full Width Background Section */}
-         <section className="full-width-section bg-white py-16">
-            <div className="container">
-               <div className="relative h-[250px] md:h-[300px] rounded-3xl overflow-hidden shadow-xl flex items-center justify-center text-center group">
-                  <img src="/banners/footer_banner_v2.png" alt="Mutlu Patiler" className="absolute inset-0 w-full h-full object-cover brightness-75 transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors"></div>
-                  <div className="relative z-10 p-8 max-w-3xl mx-auto">
-                     <h2 className="text-3xl md:text-5xl font-black text-white px-4 leading-tight mb-4 drop-shadow-xl font-display">
-                        Mutluluğun Adresi 🐾
-                     </h2>
-                     <p className="text-white/90 text-lg font-medium mb-8 max-w-xl mx-auto drop-shadow-md">
-                        Onların mutluluğu için çalışıyoruz. Mobil uygulamamızı indirerek bu geniş aileye katılın.
-                     </p>
-                     <a href="/uygulama" className="inline-block bg-primary hover:bg-orange-600 text-white px-8 py-3 rounded-full font-bold shadow-2xl transition-all transform hover:scale-105 active:scale-95 btn-glow">
-                        Uygulamayı İndir
-                     </a>
-                  </div>
-               </div>
-            </div>
-         </section>
+
 
          {/* 11. BLOG POSTS - Zebra Stripe Section */}
          <section className="full-width-section bg-[#FAFAFA] py-24">

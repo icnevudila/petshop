@@ -64,8 +64,64 @@ body {
   scroll-behavior: smooth;
   overflow-x: hidden;
   position: relative;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 25c-2.5 0-4.5 2-4.5 4.5s2 4.5 4.5 4.5 4.5-2 4.5-4.5-2-4.5-4.5-4.5zm-8-4c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7zm16 0c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7zm-12 8c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7zm8 0c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7z' fill='%23ea580c' fill-opacity='0.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 25c-2.5 0-4.5 2-4.5 4.5s2 4.5 4.5 4.5 4.5-2 4.5-4.5-2-4.5-4.5-4.5zm-8-4c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7zm16 0c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7zm-12 8c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7zm8 0c-1.5 0-2.7 1.2-2.7 2.7s1.2 2.7 2.7 2.7 2.7-1.2 2.7-2.7-1.2-2.7-2.7-2.7z' fill='%23ea580c' fill-opacity='0.05'/%3E%3C/svg%3E");
   background-attachment: fixed;
+}
+
+/* ==================== ORGANIC BLOBS ==================== */
+.shape-blob {
+  position: absolute;
+  filter: blur(50px);
+  z-index: -1;
+  opacity: 0.6;
+  animation: float 10s ease-in-out infinite;
+}
+
+.shape-blob.one {
+  top: 10%;
+  left: 5%;
+  width: 300px;
+  height: 300px;
+  background: #ffedd5;
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+}
+
+.shape-blob.two {
+  bottom: 20%;
+  right: 5%;
+  width: 400px;
+  height: 400px;
+  background: #fef3c7;
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+  animation-delay: -5s;
+}
+
+/* ==================== EASTER EGG: TAIL WAG ==================== */
+@keyframes tailWag {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(20deg);
+  }
+
+  50% {
+    transform: rotate(0deg);
+  }
+
+  75% {
+    transform: rotate(-20deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.hover-tail-wag:hover .tail-icon {
+  animation: tailWag 0.5s ease-in-out infinite;
+  transform-origin: bottom center;
 }
 
 /* ==================== SCROLL ANİMASYONLARI ==================== */
@@ -195,6 +251,18 @@ body {
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
+
+.glass-label {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  color: #2D3436;
+  /* Dark text for contrast against light glass */
+}
+
 
 /* ==================== CATEGORY CARDS - SOFT UI ==================== */
 .kategori-kart {

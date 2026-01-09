@@ -28,15 +28,20 @@ const DEFAULT_HOME_FEATURES: HomeFeature[] = [
 
 const DEFAULT_HOME_CATEGORIES: HomeCategory[] = [
     { id: 'hc1', title: 'KEDİ', img: '/menu_images/menu_sterilized_cat_food_1767813803082.png', link: '/kategori/kedi', order: 1 },
-    { id: 'hc2', title: 'YAVRU KEDİ', img: '/menu_images/menu_kitten_food_1767813788837.png', link: '/kategori/kedi/yavru', order: 2 },
+    { id: 'hc2', title: 'YAVRU KEDİ', img: '/menu_images/menu_kitten_food_1767813788837.png', link: '/kategori/yavru-kedi', order: 2 },
     { id: 'hc3', title: 'KÖPEK', img: '/menu_images/menu_adult_dog_food_1767814113679.png', link: '/kategori/kopek', order: 3 },
-    { id: 'hc4', title: 'YAVRU KÖPEK', img: '/menu_images/menu_puppy_food_1767814099784.png', link: '/kategori/kopek/yavru', order: 4 }
+    { id: 'hc4', title: 'YAVRU KÖPEK', img: '/menu_images/menu_puppy_food_1767814099784.png', link: '/kategori/yavru-kopek', order: 4 }
 ];
 
 const DEFAULT_CUSTOMER_REVIEWS: CustomerReview[] = [
-    { id: 'cr1', user: 'Elif Demir', pet: 'Pamuk', message: 'Paketleme o kadar özenliydi ki, açarken kendimi özel hissettim. Ürünler de harika!', img: 'https://i.pravatar.cc/150?u=a042581f4e29026024d' },
-    { id: 'cr2', user: 'Caner Yılmaz', pet: 'Rocky', message: 'Hızlı kargo ve orijinal ürün garantisi. Patidükkan favori sitem oldu.', img: 'https://i.pravatar.cc/150?u=a042581f4e29026704d' },
-    { id: 'cr3', user: 'Selin Kaya', pet: 'Mia', message: 'Müşteri hizmetlerinin ilgisi çok iyiydi. Yanlış aldığım ürünü hemen değiştirdiler.', img: 'https://i.pravatar.cc/150?u=a04258114e29026302d' }
+    { id: 'cr1', user: 'Zeynep Yılmaz', pet: 'Mırnav', message: 'Kedim mama konusunda çok seçici, N&D\'nin bu serisine bayıldı. Paketleme her zamanki gibi çok sağlamdı.', img: 'https://i.pravatar.cc/150?u=a042581f4e29026024d' },
+    { id: 'cr2', user: 'Murat Kaya', pet: 'Zeus', message: 'Sipariş verdiğim gün kargoya verildi. Ertesi gün elimdeydi. Küçük hediyeleriniz için teşekkürler, köpeğim çok sevdi :)', img: 'https://i.pravatar.cc/150?u=a042581f4e29026704d' },
+    { id: 'cr3', user: 'Ayşe Demir', pet: 'Limon', message: 'Kuşumun yemini hep buradan alıyorum. Hem taze hem de piyasaya göre çok uygun. Güvenilir esnaf.', img: 'https://i.pravatar.cc/150?u=a04258114e29026302d' },
+    { id: 'cr4', user: 'Burak Şahin', pet: 'Max', message: 'Büyük ırk köpeğim için dayanıklı oyuncak bulamıyordum, aldığım halat oyuncak 3 aydır sapasağlam.', img: 'https://i.pravatar.cc/150?u=a042581f4e29026024e' },
+    { id: 'cr5', user: 'Selin Çelik', pet: 'Mia', message: 'Kum siparişi verirken tedirgindim ama paketleme harikaydı, hiç dökülmeden geldi. Teşekkürler PatiDükkan.', img: 'https://i.pravatar.cc/150?u=a042581f4e290260250' },
+    { id: 'cr6', user: 'Emre Koç', pet: 'Poyraz', message: 'Müşteri hizmetleri çok ilgili. Yanlış ürün sipariş etmişim, hemen değişim için yardımcı oldular. Artık favori sitem.', img: 'https://i.pravatar.cc/150?u=a042581f4e290260251' },
+    { id: 'cr7', user: 'Gamze Öztürk', pet: 'Gölge', message: 'Ürünlerin son kullanma tarihleri epey ileri, güvenle stok yapabiliyorum. Kedi multivitaminleri çok işe yaradı.', img: 'https://i.pravatar.cc/150?u=a042581f4e290260252' },
+    { id: 'cr8', user: 'Volkan Arslan', pet: 'Duman', message: 'Akvaryum bitkilerim çok sağlıklı geldi, formları bozulmamış. Canlı desteğin tavsiyeleri için de ayrıca teşekkürler.', img: 'https://i.pravatar.cc/150?u=a042581f4e290260253' }
 ];
 
 interface ProductContextType {

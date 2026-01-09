@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Phone, MapPin, Truck, Gift, Headphones, Package, Mail, Instagram, Facebook, Twitter, Youtube } from 'lucide-react';
+import { Phone, MapPin, Truck, Gift, Headphones, Package, Mail, Instagram, Facebook, Twitter, Youtube, Cat } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
@@ -16,8 +16,8 @@ const Footer: React.FC = () => {
               { icon: Headphones, title: "Canlı Destek", sub: "Hergün 09:00 - 24:00" },
               { icon: Gift, title: "Sürpriz Hediyeler", sub: "Her siparişte sürpriz" },
             ].map((item, i) => (
-              <div key={i} className="flex flex-col md:flex-row items-center gap-4 group justify-center text-center md:text-left">
-                <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors shrink-0">
+              <div key={i} className="flex flex-col md:flex-row items-center gap-4 group justify-center text-center md:text-left hover:-translate-y-1 transition-transform duration-300">
+                <div className="w-14 h-14 rounded-2xl bg-gray-50 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors shrink-0 shadow-sm">
                   <item.icon size={24} className="text-primary group-hover:text-white transition-colors" />
                 </div>
                 <div>
@@ -31,12 +31,18 @@ const Footer: React.FC = () => {
       </section>
 
       {/* Ana Footer */}
-      <footer className="bg-white pt-16 pb-8 border-t border-gray-100">
+      <footer className="bg-white pt-16 pb-8 border-t border-gray-100 relative overflow-hidden">
+        {/* Decorative Background Elements */}
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-100 via-orange-300 to-orange-100"></div>
+
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 mb-16 text-center">
 
             <div className="lg:col-span-3 space-y-6 flex flex-col items-center lg:items-start lg:text-left">
-              <img src="/logopng.png" alt="Pati Dükkan" className="h-40 w-auto object-contain mx-auto lg:mx-0" />
+              <div className="relative group hover-tail-wag cursor-pointer">
+                <img src="/logopng.png" alt="Pati Dükkan" className="h-40 w-auto object-contain mx-auto lg:mx-0 relative z-10" />
+                <Cat className="absolute -right-2 bottom-4 text-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-8 h-8 tail-icon" />
+              </div>
               <p className="text-gray-500 text-sm leading-relaxed max-w-sm font-medium mx-auto lg:mx-0">
                 PatiDükkan olarak, minik dostlarınızın sağlığı ve mutluluğu için en kaliteli ürünleri sunuyoruz.
               </p>
@@ -97,7 +103,7 @@ const Footer: React.FC = () => {
               <h4 className="text-xs font-black text-secondary uppercase tracking-widest mb-6 border-b-2 border-primary/20 pb-2 inline-block text-center lg:text-right">Mağazamıza Gelin</h4>
               <div className="w-full h-48 rounded-2xl overflow-hidden shadow-md border border-gray-200">
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3060.0!2d29.0!3d40.0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDYnNTkuMSJOIDI5wrA1NSc1OS4xIkU!5e0!3m2!1str!2str!4v1635780000000!5m2!1str!2str"
+                  src="https://maps.google.com/maps?q=Ertu%C4%9Frulgazi%20mahallesi%20Kozluca%20Bulvar%C4%B1%20No:29%20%C4%B0neg%C3%B6l%20Bursa&t=&z=15&ie=UTF8&iwloc=&output=embed"
                   width="100%"
                   height="100%"
                   className="border-0"

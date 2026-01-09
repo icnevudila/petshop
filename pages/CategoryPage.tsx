@@ -52,7 +52,11 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
         'kemirgen': ['kemirgen-yemi', 'kemirgen-kafes', 'kemirgen-bakim']
       };
 
-      if (categoryMappings[slug]) {
+      if (slug === 'yavru-kedi') {
+        result = result.filter(p => p.category_id.startsWith('kedi') && (p.tags.includes('Yavru') || p.name.toLowerCase().includes('yavru') || p.name.toLowerCase().includes('kitten')));
+      } else if (slug === 'yavru-kopek') {
+        result = result.filter(p => p.category_id.startsWith('kopek') && (p.tags.includes('Yavru') || p.name.toLowerCase().includes('yavru') || p.name.toLowerCase().includes('puppy')));
+      } else if (categoryMappings[slug]) {
         result = result.filter(p => categoryMappings[slug].includes(p.category_id));
       } else {
         result = result.filter(p => p.category_id === slug);
@@ -163,6 +167,9 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
 
     const category = CATEGORY_DATA.find(c => c.slug === slug);
     if (category) return category.name;
+
+    if (slug === 'yavru-kedi') return 'Yavru Kedi Ürünleri';
+    if (slug === 'yavru-kopek') return 'Yavru Köpek Ürünleri';
 
     return slug ? slug.charAt(0).toUpperCase() + slug.slice(1) : 'Tüm Ürünler';
   };

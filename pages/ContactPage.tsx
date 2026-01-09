@@ -49,8 +49,8 @@ const ContactPage: React.FC = () => {
                             </div>
                             <h3 className="text-xl font-black text-secondary mb-2">Telefon</h3>
                             <p className="text-gray-500 mb-4">Hafta içi 09:00 - 18:00</p>
-                            <a href="tel:+902120000000" className="text-lg font-bold text-primary hover:text-orange-700 transition-colors">
-                                +90 (212) 000 00 00
+                            <a href="tel:+905551234567" className="text-lg font-bold text-primary hover:text-orange-700 transition-colors">
+                                +90 (555) 123 45 67
                             </a>
                         </div>
 
@@ -71,7 +71,7 @@ const ContactPage: React.FC = () => {
                             </div>
                             <h3 className="text-xl font-black text-secondary mb-2">Ofisimiz</h3>
                             <p className="text-gray-500 font-medium">
-                                Levent Mah. Patili Sok. No: 1 <br /> Beşiktaş, İstanbul
+                                Ertuğrulgazi mahallesi Kozluca Bulvarı<br /> No:29 (Şımarık AVM yanı) <br /> İnegöl / BURSA
                             </p>
                         </div>
                     </div>
@@ -152,7 +152,7 @@ const ContactPage: React.FC = () => {
                     <div className="bg-gray-200 rounded-[3rem] h-[400px] w-full overflow-hidden shadow-inner grayscale hover:grayscale-0 transition-all duration-700">
                         {/* Placeholder for map */}
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3008.9633698339308!2d28.9730!3d41.0450!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAyJzQyLjAiTiAyOMKwNTgnMjIuOCJF!5e0!3m2!1sen!2str!4v1635835824000!5m2!1sen!2str"
+                            src="https://maps.google.com/maps?q=Ertu%C4%9Frulgazi%20mahallesi%20Kozluca%20Bulvar%C4%B1%20No:29%20%C4%B0neg%C3%B6l%20Bursa&t=&z=15&ie=UTF8&iwloc=&output=embed"
                             width="100%"
                             height="100%"
                             loading="lazy"
@@ -162,7 +162,7 @@ const ContactPage: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

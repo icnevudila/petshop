@@ -1,8 +1,8 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from "react-router-dom";
-import { ShoppingCart, Heart, Star } from 'lucide-react';
+import { ShoppingCart, Heart, Star, Eye } from 'lucide-react';
 import { Product } from '../types';
+import { triggerConfetti } from '../utils/confetti';
 
 interface ProductCardProps {
   product: Product;
@@ -14,6 +14,31 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, toggleWishlist, isWishlisted, onQuickView }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -10;
+    const rotateY = ((x - centerX) / centerX) * 10;
+    setRotation({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setRotation({ x: 0, y: 0 });
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onAddToCart(product, 1);
+    triggerConfetti();
+  };
   const hasDiscount = product.discounted_price !== null;
   const discountRate = hasDiscount && product.discounted_price
     ? Math.round(((product.price - product.discounted_price) / product.price) * 100)
@@ -24,12 +49,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, toggleW
 
   return (
     <div
-      className="group bg-white rounded-lg border border-gray-100 hover:border-orange-200 transition-all duration-300 hover:shadow-lg flex flex-col h-full relative"
+      ref={cardRef}
+      className="group bg-white rounded-2xl border border-gray-100 hover:border-orange-200 flex flex-col h-full relative overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transform: `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+        transition: 'transform 0.1s ease-out, box-shadow 0.3s ease',
+        boxShadow: isHovered ? '0 20px 40px rgba(0,0,0,0.1)' : '0 2px 10px rgba(0,0,0,0.05)'
+      }}
     >
       {/* Image Area */}
-      <div className="relative aspect-[3/4] p-4 overflow-hidden">
+      <div className="relative aspect-[3/4] p-4 overflow-hidden bg-gray-50/50">
         <Link to={`/urun/${product.slug}`} className="block h-full w-full relative z-10">
           <div className="absolute inset-0 flex items-center justify-center">
             <img
@@ -46,28 +78,47 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, toggleW
             )}
           </div>
         </Link>
-
         {/* Badges - Top Left */}
-        <div className="absolute top-2 left-2 flex flex-col gap-1 z-20 pointer-events-none">
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-20 pointer-events-none">
+          {hasDiscount && (
+            <div className="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-sm">
+              %{discountRate} İndirim
+            </div>
+          )}
           {isFreeShipping && (
-            <div className="bg-gray-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-[4px] flex items-center gap-1 shadow-sm">
-              <div className="w-2 h-2 rounded-full bg-green-400"></div> Kargo Bedava
+            <div className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm">
+              Kargo Bedava
             </div>
           )}
           {product.review_count > 100 && (
-            <div className="bg-yellow-400/20 text-yellow-700 border border-yellow-400/30 text-[9px] font-bold px-1.5 py-0.5 rounded-[4px]">
+            <div className="bg-amber-400 text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-sm">
               Çok Satan
             </div>
           )}
         </div>
 
-        {/* Wishlist - Top Right */}
-        <button
-          onClick={(e) => { e.preventDefault(); toggleWishlist && toggleWishlist(product.id); }}
-          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center text-gray-400 hover:text-orange-500 transition-colors z-20 border border-gray-100"
-        >
-          <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} />
-        </button>
+        {/* Action Buttons - Right Side (Slide in on hover) */}
+        <div className="absolute top-3 right-3 flex flex-col gap-2 z-20 translate-x-12 group-hover:translate-x-0 transition-transform duration-300">
+          {/* Wishlist Button */}
+          <button
+            onClick={(e) => { e.preventDefault(); toggleWishlist && toggleWishlist(product.id); }}
+            className="w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all border border-gray-100"
+            title="Favorilere Ekle"
+          >
+            <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} className={isWishlisted ? "text-red-500" : ""} />
+          </button>
+
+          {/* Quick View Button */}
+          {onQuickView && (
+            <button
+              onClick={(e) => { e.preventDefault(); onQuickView(product); }}
+              className="w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center text-gray-400 hover:text-blue-500 hover:bg-blue-50 transition-all border border-gray-100"
+              title="Hızlı Bakış"
+            >
+              <Eye size={18} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Info Content */}
@@ -78,7 +129,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, toggleW
             {product.name}
           </h3>
         </Link>
-
         <div className="mt-auto">
           {/* Rating */}
           {product.rating && (
@@ -106,8 +156,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, toggleW
 
           {/* Add to Cart Button - Explicit Orange */}
           <button
-            onClick={(e) => { e.preventDefault(); onAddToCart(product, 1); }}
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2 rounded-md transition-all shadow-sm flex items-center justify-center gap-1 opacity-100 translate-y-0 lg:opacity-0 lg:group-hover:opacity-100 lg:translate-y-2 lg:group-hover:translate-y-0 duration-200"
+            onClick={handleAddToCart}
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2 rounded-md transition-all shadow-sm flex items-center justify-center gap-1 opacity-100 translate-y-0 lg:opacity-0 lg:group-hover:opacity-100 lg:translate-y-2 lg:group-hover:translate-y-0 duration-200 btn-glow"
           >
             Sepete Ekle
           </button>

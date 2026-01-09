@@ -36,6 +36,7 @@ const App: React.FC = () => {
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [lastAddedProduct, setLastAddedProduct] = useState<Product | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+
   const cartCount = cart.reduce((sum, entry) => sum + entry.quantity, 0);
 
   // Load cart and wishlist from local storage
@@ -126,11 +127,19 @@ const App: React.FC = () => {
     <AuthProvider>
       <ProductProvider>
         <HashRouter>
-          <div className="flex flex-col min-h-screen font-sans selection:bg-primary selection:text-white bg-white">
+          <div className="flex flex-col min-h-screen font-sans selection:bg-primary selection:text-white relative overflow-hidden bg-transparent">
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+              <div className="shape-blob one mix-blend-multiply filter blur-3xl opacity-60"></div>
+              <div className="shape-blob two mix-blend-multiply filter blur-3xl opacity-60"></div>
+            </div>
             <ScrollToTop />
-            <Header cartCount={cartCount} wishlistCount={wishlist.length} />
+            {/* Hide Header on Admin Pages */}
+            <Routes>
+              <Route path="/admin" element={null} />
+              <Route path="*" element={<Header cartCount={cartCount} wishlistCount={wishlist.length} />} />
+            </Routes>
 
-            <main className="flex-grow pb-16 lg:pb-0">
+            <main className="flex-grow pb-16 lg:pb-0 relative z-10">
               <Routes>
                 <Route path="/" element={
                   <HomePage

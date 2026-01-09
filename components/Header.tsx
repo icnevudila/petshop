@@ -21,7 +21,17 @@ const PatiDukkanLogo = () => (
    />
 );
 
+const placeholders = [
+   "Kedi maması...",
+   "Köpek oyuncağı...",
+   "Kuş yemi...",
+   "Akvaryum filtresi...",
+   "Tasma ve kayış..."
+];
+
 const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
+   const navigate = useNavigate();
+   const searchRef = useRef<HTMLDivElement>(null);
    const { currentUser, logout } = useAuth();
    const { products, siteSettings } = useProducts();
    const [isScrolled, setIsScrolled] = useState(false);
@@ -29,27 +39,47 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
    const [searchQuery, setSearchQuery] = useState('');
    const [searchResults, setSearchResults] = useState<Product[]>([]);
    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
-   const searchRef = useRef<HTMLDivElement>(null);
-   const navigate = useNavigate();
+   const [displayText, setDisplayText] = useState('');
+   const [isDeleting, setIsDeleting] = useState(false);
+   const [loopNum, setLoopNum] = useState(0);
+   const [typingSpeed, setTypingSpeed] = useState(300);
 
-   // Typewriter placeholder texts
-   const placeholders = [
-      "Kedi maması arıyor musunuz?",
-      "Köpek oyuncağı mı arıyorsunuz?",
-      "Kuş yemi mi arıyorsunuz?",
-      "Akvaryum aksesuarları?",
-      "Kedi kumu arıyor musunuz?",
-      "Tasma ve kayış mı?"
-   ];
+   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const query = e.target.value;
+      setSearchQuery(query);
 
-   // Typewriter effect
+      if (query.length > 1) {
+         const lowerQ = query.toLowerCase();
+         const filtered = products.filter(p => p.name.toLowerCase().includes(lowerQ)).slice(0, 4);
+         setSearchResults(filtered);
+      } else {
+         setSearchResults([]);
+      }
+   };
+
    useEffect(() => {
-      const interval = setInterval(() => {
-         setCurrentPlaceholder(prev => (prev + 1) % placeholders.length);
-      }, 3000);
-      return () => clearInterval(interval);
-   }, []);
+      const handleTyping = () => {
+         const i = loopNum % placeholders.length;
+         const fullText = placeholders[i];
+
+         setDisplayText(isDeleting
+            ? fullText.substring(0, displayText.length - 1)
+            : fullText.substring(0, displayText.length + 1)
+         );
+
+         setTypingSpeed(isDeleting ? 30 : 150);
+
+         if (!isDeleting && displayText === fullText) {
+            setTimeout(() => setIsDeleting(true), 1000);
+         } else if (isDeleting && displayText === '') {
+            setIsDeleting(false);
+            setLoopNum(loopNum + 1);
+         }
+      };
+
+      const timer = setTimeout(handleTyping, typingSpeed);
+      return () => clearTimeout(timer);
+   }, [displayText, isDeleting, loopNum, typingSpeed]);
 
    useEffect(() => {
       const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -74,18 +104,15 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
       navigate(`/kategori/${slug}`);
    };
 
-   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const query = e.target.value;
-      setSearchQuery(query);
+   const [isCartAnimating, setIsCartAnimating] = useState(false);
 
-      if (query.length > 1) {
-         const lowerQ = query.toLowerCase();
-         const filtered = products.filter(p => p.name.toLowerCase().includes(lowerQ)).slice(0, 4);
-         setSearchResults(filtered);
-      } else {
-         setSearchResults([]);
+   useEffect(() => {
+      if (cartCount > 0) {
+         setIsCartAnimating(true);
+         const timer = setTimeout(() => setIsCartAnimating(false), 500); // 500ms match animation duration
+         return () => clearTimeout(timer);
       }
-   };
+   }, [cartCount]);
 
    return (
       <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}>
@@ -121,7 +148,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                         type="text"
                         value={searchQuery}
                         onChange={handleSearch}
-                        placeholder={placeholders[currentPlaceholder]}
+                        placeholder={displayText}
                         className="w-full bg-[#f4f4f4] hover:bg-[#ebebeb] focus:bg-white border border-gray-200 focus:border-brand/40 rounded-full pl-11 pr-20 py-2.5 text-sm font-medium outline-none transition-all placeholder:text-gray-400 text-secondary"
                      />
                      <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand transition-colors" />
@@ -195,7 +222,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                      {wishlistCount > 0 && <span className="absolute top-0 right-0 w-2 h-2 bg-brand rounded-full ring-1 ring-white"></span>}
                   </Link>
 
-                  <Link to="/sepet" className="flex items-center gap-1.5 bg-primary text-white px-4 py-2 rounded-full shadow-md hover:bg-primary-hover transition-all">
+                  <Link to="/sepet" className={`flex items-center gap-1.5 bg-primary text-white px-4 py-2 rounded-full shadow-md hover:bg-primary-hover transition-all ${isCartAnimating ? 'animate-shake' : ''}`}>
                      <ShoppingCart size={16} />
                      <span className="text-[11px] font-bold">Sepetim ({cartCount})</span>
                   </Link>
