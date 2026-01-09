@@ -50,7 +50,8 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
 
       if (query.length > 1) {
          const lowerQ = query.toLowerCase();
-         const filtered = products.filter(p => p.name.toLowerCase().includes(lowerQ)).slice(0, 4);
+         // Safely filter products, checking if name exists
+         const filtered = (products || []).filter(p => p && p.name && p.name.toLowerCase().includes(lowerQ)).slice(0, 4);
          setSearchResults(filtered);
       } else {
          setSearchResults([]);
