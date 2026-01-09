@@ -4,7 +4,7 @@ import ProductCard from '../components/ProductCard';
 import {
   LayoutDashboard, Package, Plus, Search, Edit3, Trash2,
   X, Save, ChevronDown, Settings, Star, Upload,
-  Image, Tag, Folder, FileText, Home, Check, ShoppingBag
+  Image, Tag, Folder, FileText, Home, Check, ShoppingBag, ShieldCheck
 } from 'lucide-react';
 import { Product, Campaign, Brand, Category, BlogPost, SiteSettings } from '../types';
 
