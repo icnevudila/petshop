@@ -1,7 +1,10 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Product, Campaign, Brand, Category, BlogPost, SiteSettings, HomeFeature, HomeCategory, CustomerReview } from './types';
 import { supabase } from './supabaseClient';
 import { PRODUCTS as INITIAL_PRODUCTS, CAMPAIGNS as INITIAL_CAMPAIGNS, BRANDS as INITIAL_BRANDS, CATEGORY_DATA as INITIAL_CATEGORIES, BLOG_POSTS as INITIAL_BLOG_POSTS } from './constants';
+import { getCampaigns, addCampaign as addCampaignService, updateCampaign as updateCampaignService, deleteCampaign as deleteCampaignService } from './services/campaignService';
+import { getBlogPosts, addBlogPost as addBlogPostService, updateBlogPost as updateBlogPostService, deleteBlogPost as deleteBlogPostService } from './services/blogService';
 
 // Default values as fallback
 const DEFAULT_SITE_SETTINGS: SiteSettings = {
@@ -122,243 +125,204 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
     const [customerReviews, setCustomerReviews] = useState<CustomerReview[]>(DEFAULT_CUSTOMER_REVIEWS);
     const [loading, setLoading] = useState(true);
 
-    // Initialize data from LocalStorage or Constants
-    const initializeData = () => {
-        setLoading(true);
+    // Initial Fetch from Supabase
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                // Fetch Products
+                const { data: productsData } = await supabase.from('products').select('*').eq('is_active', true);
+                if (productsData) {
+                    setProducts(productsData.map(p => ({
+                        ...p,
+                        price: parseFloat(p.price),
+                        discounted_price: p.discounted_price ? parseFloat(p.discounted_price) : null,
+                        rating: parseFloat(p.rating),
+                        images: p.images || [],
+                        tags: p.tags || [],
+                        features: p.features || []
+                    })));
+                } else {
+                    setProducts(INITIAL_PRODUCTS); // Fallback
+                }
 
-        const loadFromStorage = (key: string, fallback: any) => {
-            const saved = localStorage.getItem(key);
-            return saved ? JSON.parse(saved) : fallback;
+                // Fetch Brands
+                const { data: brandsData } = await supabase.from('brands').select('*');
+                if (brandsData && brandsData.length > 0) {
+                    setBrands(brandsData);
+                } else {
+                    setBrands(INITIAL_BRANDS);
+                }
+
+                // Fetch Categories
+                const { data: categoriesData } = await supabase.from('categories').select('*');
+                if (categoriesData && categoriesData.length > 0) {
+                    setCategories(categoriesData);
+                } else {
+                    setCategories(INITIAL_CATEGORIES);
+                }
+
+                // Fetch Campaigns
+                try {
+                    const campaignsData = await getCampaigns();
+                    if (campaignsData.length > 0) setCampaigns(campaignsData);
+                    else setCampaigns(INITIAL_CAMPAIGNS);
+                } catch {
+                    setCampaigns(INITIAL_CAMPAIGNS);
+                }
+
+                // Fetch Blog Posts
+                try {
+                    const blogData = await getBlogPosts();
+                    if (blogData.length > 0) setBlogPosts(blogData);
+                    else setBlogPosts(INITIAL_BLOG_POSTS);
+                } catch {
+                    // Fallback
+                    setBlogPosts(INITIAL_BLOG_POSTS.map((post) => ({
+                        id: post.id,
+                        title: post.title,
+                        content: 'İçerik yakında eklenecek...',
+                        img: post.img,
+                        category: post.category,
+                        author: post.author,
+                        created_at: post.date,
+                        is_published: true,
+                        slug: post.title.toLowerCase().replace(/ /g, '-')
+                    })));
+                }
+
+                // Other settings from LocalStorage for now
+                const loadFromStorage = (key: string, fallback: any) => {
+                    const saved = localStorage.getItem(key);
+                    return saved ? JSON.parse(saved) : fallback;
+                };
+
+                setSiteSettings(loadFromStorage('siteSettings', DEFAULT_SITE_SETTINGS));
+                setHomeFeatures(loadFromStorage('homeFeatures', DEFAULT_HOME_FEATURES));
+                setHomeCategories(loadFromStorage('homeCategories', DEFAULT_HOME_CATEGORIES));
+                setCustomerReviews(loadFromStorage('customerReviews', DEFAULT_CUSTOMER_REVIEWS));
+
+            } catch (error) {
+                console.error('Error fetching initial data:', error);
+            } finally {
+                setLoading(false);
+            }
         };
 
-        setProducts(loadFromStorage('products', INITIAL_PRODUCTS));
-        setCampaigns(loadFromStorage('campaigns', INITIAL_CAMPAIGNS));
-        setBrands(loadFromStorage('brands', INITIAL_BRANDS));
-        setCategories(loadFromStorage('categories', INITIAL_CATEGORIES));
-
-        // Blog posts handling
-        const savedBlog = localStorage.getItem('blogPosts');
-        if (savedBlog) {
-            setBlogPosts(JSON.parse(savedBlog));
-        } else {
-            setBlogPosts(INITIAL_BLOG_POSTS.map((post) => ({
-                id: post.id,
-                title: post.title,
-                content: 'İçerik yakında eklenecek...',
-                img: post.img,
-                category: 'Bakım & Sağlık',
-                author: 'PatiDükkan Editörü',
-                created_at: new Date().toISOString().split('T')[0],
-                is_published: true
-            })));
-        }
-
-        setSiteSettings(loadFromStorage('siteSettings', DEFAULT_SITE_SETTINGS));
-        setHomeFeatures(loadFromStorage('homeFeatures', DEFAULT_HOME_FEATURES));
-        setHomeCategories(loadFromStorage('homeCategories', DEFAULT_HOME_CATEGORIES));
-        setCustomerReviews(loadFromStorage('customerReviews', DEFAULT_CUSTOMER_REVIEWS));
-
-        setLoading(false);
-    };
-
-    const fetchData = async () => {
-        // Check if we are using placeholder Supabase URL (missing env vars)
-        const isPlaceholder = supabase.supabaseUrl.includes('placeholder');
-
-        if (isPlaceholder) {
-            console.warn("Using LocalStorage/Mock data due to missing Supabase keys");
-            initializeData();
-            return;
-        }
-
-        try {
-            setLoading(true);
-            // Products
-            const { data: dbProducts } = await supabase.from('products').select('*');
-            if (dbProducts && dbProducts.length > 0) {
-                setProducts(dbProducts);
-                localStorage.setItem('products', JSON.stringify(dbProducts)); // Sync to local
-            } else {
-                setProducts(loadFromStorage('products', INITIAL_PRODUCTS));
-            }
-
-            // ... (Repeat pattern for others if needed, but for now focusing on Mock Mode stability)
-            // For simplicity in this hybrid state, we will prioritize LocalStorage if in Mock Mode
-            // If real DB connects, we would normally prefer DB data. 
-
-            // Re-using initializeData for other components to ensure consistency if partial fail
-            // asking initializeData to run only if we are fully falling back is safer
-            // But let's keep the existing structure partially to not break flow.
-
-            // Actually, to fulfill the user request "Make it work like a real admin panel",
-            // We should enforce LocalStorage usage heavily when in Mock Mode.
-            initializeData();
-
-        } catch (error) {
-            console.error("Error fetching data, using fallback mocks:", error);
-            initializeData();
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Helper to load from storage locally inside fetchData for fallback
-    const loadFromStorage = (key: string, fallback: any) => {
-        const saved = localStorage.getItem(key);
-        return saved ? JSON.parse(saved) : fallback;
-    };
-
-    useEffect(() => {
         fetchData();
     }, []);
 
-    // Helper to persist data
+    // Helper to persist to localStorage (for non-database items)
     const persist = (key: string, data: any) => {
         localStorage.setItem(key, JSON.stringify(data));
     };
 
     // PRODUCTS CRUD
     const updateProduct = async (product: Product) => {
-        setProducts(prev => {
-            const next = prev.map(p => p.id === product.id ? product : p);
-            persist('products', next);
-            return next;
-        });
+        setProducts(prev => prev.map(p => p.id === product.id ? product : p));
+        try {
+            await supabase.from('products').update({ ...product }).eq('id', product.id);
+        } catch (e) { console.error('Supabase update failed:', e); }
     };
-
     const addProduct = async (product: Product) => {
-        setProducts(prev => {
-            const next = [...prev, product];
-            persist('products', next);
-            return next;
-        });
+        setProducts(prev => [...prev, product]);
+        try {
+            await supabase.from('products').insert(product);
+        } catch (e) { console.error('Supabase insert failed:', e); }
     };
-
     const deleteProduct = async (id: string) => {
-        setProducts(prev => {
-            const next = prev.filter(p => p.id !== id);
-            persist('products', next);
-            return next;
-        });
+        setProducts(prev => prev.filter(p => p.id !== id));
+        try {
+            await supabase.from('products').delete().eq('id', id);
+        } catch (e) { console.error('Supabase delete failed:', e); }
     };
 
-    // CAMPAIGNS CRUD
+    // CAMPAIGNS CRUD (Using Service)
     const updateCampaign = async (campaign: Campaign) => {
-        setCampaigns(prev => {
-            const next = prev.map(c => c.id === campaign.id ? campaign : c);
-            persist('campaigns', next);
-            return next;
-        });
+        setCampaigns(prev => prev.map(c => c.id === campaign.id ? campaign : c));
+        try { await updateCampaignService(campaign); }
+        catch (e) { console.error('Supabase campaign update failed:', e); }
     };
-
     const addCampaign = async (campaign: Campaign) => {
-        setCampaigns(prev => {
-            const next = [...prev, campaign];
-            persist('campaigns', next);
-            return next;
-        });
+        setCampaigns(prev => [...prev, campaign]);
+        try { await addCampaignService(campaign); }
+        catch (e) { console.error('Supabase campaign add failed:', e); }
     };
-
     const deleteCampaign = async (id: string) => {
-        setCampaigns(prev => {
-            const next = prev.filter(c => c.id !== id);
-            persist('campaigns', next);
-            return next;
-        });
+        setCampaigns(prev => prev.filter(c => c.id !== id));
+        try { await deleteCampaignService(id); }
+        catch (e) { console.error('Supabase campaign delete failed:', e); }
     };
 
     // BRANDS CRUD
     const updateBrand = async (brand: Brand) => {
-        setBrands(prev => {
-            const next = prev.map(b => b.id === brand.id ? brand : b);
-            persist('brands', next);
-            return next;
-        });
+        setBrands(prev => prev.map(b => b.id === brand.id ? brand : b));
+        try { await supabase.from('brands').update({ name: brand.name, logo_url: brand.logo_url }).eq('id', brand.id); }
+        catch (e) { console.error('Supabase brand update failed:', e); }
     };
-
     const addBrand = async (brand: Brand) => {
-        setBrands(prev => {
-            const next = [...prev, brand];
-            persist('brands', next);
-            return next;
-        });
+        setBrands(prev => [...prev, brand]);
+        try { await supabase.from('brands').insert(brand); }
+        catch (e) { console.error('Supabase brand insert failed:', e); }
     };
-
     const deleteBrand = async (id: string) => {
-        setBrands(prev => {
-            const next = prev.filter(b => b.id !== id);
-            persist('brands', next);
-            return next;
-        });
+        setBrands(prev => prev.filter(b => b.id !== id));
+        try { await supabase.from('brands').delete().eq('id', id); }
+        catch (e) { console.error('Supabase brand delete failed:', e); }
     };
 
     // CATEGORIES CRUD
     const updateCategory = async (category: Category) => {
-        setCategories(prev => {
-            const next = prev.map(c => c.id === category.id ? category : c);
-            persist('categories', next);
-            return next;
-        });
+        setCategories(prev => prev.map(c => c.id === category.id ? category : c));
+        try { await supabase.from('categories').update({ name: category.name, parent_id: category.parent_id }).eq('id', category.id); }
+        catch (e) { console.error('Supabase category update failed:', e); }
     };
-
     const addCategory = async (category: Category) => {
-        setCategories(prev => {
-            const next = [...prev, category];
-            persist('categories', next);
-            return next;
-        });
+        setCategories(prev => [...prev, category]);
+        try { await supabase.from('categories').insert(category); }
+        catch (e) { console.error('Supabase category insert failed:', e); }
     };
-
     const deleteCategory = async (id: string) => {
-        setCategories(prev => {
-            const next = prev.filter(c => c.id !== id);
-            persist('categories', next);
-            return next;
-        });
+        setCategories(prev => prev.filter(c => c.id !== id));
+        try { await supabase.from('categories').delete().eq('id', id); }
+        catch (e) { console.error('Supabase category delete failed:', e); }
     };
 
-    // BLOG CRUD
+    // BLOG CRUD (Using Service)
     const updateBlogPost = async (post: BlogPost) => {
-        setBlogPosts(prev => {
-            const next = prev.map(p => p.id === post.id ? post : p);
-            persist('blogPosts', next);
-            return next;
-        });
+        setBlogPosts(prev => prev.map(p => p.id === post.id ? post : p));
+        try { await updateBlogPostService(post); }
+        catch (e) { console.error('Supabase blog update failed:', e); }
     };
-
     const addBlogPost = async (post: BlogPost) => {
-        setBlogPosts(prev => {
-            const next = [...prev, post];
-            persist('blogPosts', next);
-            return next;
-        });
+        // We'll re-fetch to get the proper schema back usually, but optimistic update is fine
+        try {
+            await addBlogPostService(post);
+            const data = await getBlogPosts();
+            setBlogPosts(data);
+        } catch (e) { console.error('Supabase blog add failed:', e); }
     };
-
     const deleteBlogPost = async (id: string) => {
-        setBlogPosts(prev => {
-            const next = prev.filter(p => p.id !== id);
-            persist('blogPosts', next);
-            return next;
-        });
+        setBlogPosts(prev => prev.filter(p => p.id !== id));
+        try { await deleteBlogPostService(id); }
+        catch (e) { console.error('Supabase blog delete failed:', e); }
     };
 
-    // SETTINGS
+    // SETTINGS (Local Storage)
     const updateSiteSettings = async (settings: SiteSettings) => {
         setSiteSettings(settings);
         persist('siteSettings', settings);
     };
 
-    // HOME CONTENT
+    // HOME CONTENT (Local Storage)
     const updateHomeFeatures = async (features: HomeFeature[]) => {
         setHomeFeatures(features);
         persist('homeFeatures', features);
     };
-
     const updateHomeCategories = async (categories: HomeCategory[]) => {
         setHomeCategories(categories);
         persist('homeCategories', categories);
     };
-
     const updateCustomerReview = async (review: CustomerReview) => {
         setCustomerReviews(prev => {
             const next = prev.map(r => r.id === review.id ? review : r);
@@ -366,7 +330,6 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
             return next;
         });
     };
-
     const addCustomerReview = async (review: CustomerReview) => {
         setCustomerReviews(prev => {
             const next = [...prev, review];
@@ -374,7 +337,6 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
             return next;
         });
     };
-
     const deleteCustomerReview = async (id: string) => {
         setCustomerReviews(prev => {
             const next = prev.filter(r => r.id !== id);

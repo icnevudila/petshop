@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Phone, Send, Clock, MessageSquare, ArrowRight } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, Clock, MessageSquare, ArrowRight, Loader2 } from 'lucide-react';
 import SEO from '../components/SEO';
+import { sendContactMessage } from '../services/contactService';
 
 const ContactPage: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -9,13 +10,26 @@ const ContactPage: React.FC = () => {
         subject: '',
         message: ''
     });
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Handle form submission logic
-        console.log("Form submitted:", formData);
-        alert("Mesajınız alındı! En kısa sürede dönüş yapacağız.");
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        setLoading(true);
+        try {
+            await sendContactMessage({
+                name: formData.name,
+                email: formData.email,
+                subject: formData.subject,
+                message: formData.message
+            });
+            alert("Mesajınız başarıyla gönderildi! En kısa sürede dönüş yapacağız.");
+            setFormData({ name: '', email: '', subject: '', message: '' });
+        } catch (error) {
+            console.error(error);
+            alert("Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin veya telefon ile ulaşın.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -97,6 +111,7 @@ const ContactPage: React.FC = () => {
                                             value={formData.name}
                                             onChange={e => setFormData({ ...formData, name: e.target.value })}
                                             required
+                                            disabled={loading}
                                         />
                                     </div>
                                     <div className="space-y-2">
@@ -108,6 +123,7 @@ const ContactPage: React.FC = () => {
                                             value={formData.email}
                                             onChange={e => setFormData({ ...formData, email: e.target.value })}
                                             required
+                                            disabled={loading}
                                         />
                                     </div>
                                 </div>
@@ -121,6 +137,7 @@ const ContactPage: React.FC = () => {
                                         value={formData.subject}
                                         onChange={e => setFormData({ ...formData, subject: e.target.value })}
                                         required
+                                        disabled={loading}
                                     />
                                 </div>
 
@@ -133,14 +150,20 @@ const ContactPage: React.FC = () => {
                                         value={formData.message}
                                         onChange={e => setFormData({ ...formData, message: e.target.value })}
                                         required
+                                        disabled={loading}
                                     ></textarea>
                                 </div>
 
                                 <button
                                     type="submit"
-                                    className="w-full bg-secondary text-white font-black py-5 rounded-2xl shadow-xl hover:bg-primary hover:shadow-2xl hover:shadow-primary/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-3 group"
+                                    disabled={loading}
+                                    className="w-full bg-secondary text-white font-black py-5 rounded-2xl shadow-xl hover:bg-primary hover:shadow-2xl hover:shadow-primary/30 hover:-translate-y-1 transition-all flex items-center justify-center gap-3 group disabled:opacity-70 disabled:cursor-not-allowed"
                                 >
-                                    Mesajı Gönder <Send size={20} className="group-hover:translate-x-1 transition-transform" />
+                                    {loading ? (
+                                        <>Gönderiliyor... <Loader2 size={20} className="animate-spin" /></>
+                                    ) : (
+                                        <>Mesajı Gönder <Send size={20} className="group-hover:translate-x-1 transition-transform" /></>
+                                    )}
                                 </button>
                             </form>
                         </div>

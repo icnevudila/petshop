@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, User, ArrowRight, Clock, Tag } from 'lucide-react';
+import { useProducts } from '../ProductContext';
 
 // Blog yazıları verisi
 const BLOG_ARTICLES = [
@@ -151,6 +151,34 @@ const BLOG_ARTICLES = [
 ];
 
 const BlogPage: React.FC = () => {
+    const { blogPosts, loading } = useProducts();
+
+    // Use placeholder if no posts yet, or just show loading/empty state
+    // For now, let's assume we want to show nothing or a message if empty
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-white pt-[240px] md:pt-[360px] pb-20 flex justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
+
+    // Filter published posts just in case (though service does this)
+    const publishedPosts = blogPosts.filter(p => p.is_published);
+
+    if (publishedPosts.length === 0) {
+        return (
+            <div className="min-h-screen bg-white pt-[240px] md:pt-[360px] pb-20 container mx-auto px-4 text-center">
+                <h1 className="text-3xl font-bold text-secondary mb-4">Henüz blog yazısı bulunmuyor.</h1>
+                <p className="text-gray-500">Yakında çok daha fazlası burada olacak!</p>
+            </div>
+        );
+    }
+
+    const featuredPost = publishedPosts[0];
+    const otherPosts = publishedPosts.slice(1);
+
     return (
         <div className="min-h-screen bg-white pt-[240px] md:pt-[360px] pb-20">
 
@@ -170,54 +198,57 @@ const BlogPage: React.FC = () => {
             </section>
 
             {/* Featured Post */}
-            <section className="container mx-auto px-4 mb-16">
-                <div className="bg-white rounded-[2rem] overflow-hidden border border-gray-100 hover:shadow-xl transition-all">
-                    <div className="grid md:grid-cols-2 gap-0">
-                        <div className="aspect-[4/3] md:aspect-auto">
-                            <img
-                                src={BLOG_ARTICLES[0].image}
-                                alt={BLOG_ARTICLES[0].title}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                        <div className="p-8 md:p-12 flex flex-col justify-center">
-                            <span className="inline-block bg-primary text-white text-xs font-bold px-3 py-1 rounded-full w-fit mb-4">
-                                {BLOG_ARTICLES[0].category}
-                            </span>
-                            <h2 className="text-2xl md:text-3xl font-black text-secondary mb-4 leading-tight">
-                                {BLOG_ARTICLES[0].title}
-                            </h2>
-                            <p className="text-gray-600 mb-6 leading-relaxed">
-                                {BLOG_ARTICLES[0].excerpt}
-                            </p>
-                            <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
-                                <span className="flex items-center gap-1"><User size={14} /> {BLOG_ARTICLES[0].author}</span>
-                                <span className="flex items-center gap-1"><Calendar size={14} /> {BLOG_ARTICLES[0].date}</span>
-                                <span className="flex items-center gap-1"><Clock size={14} /> {BLOG_ARTICLES[0].readTime}</span>
+            {featuredPost && (
+                <section className="container mx-auto px-4 mb-16">
+                    <div className="bg-white rounded-[2rem] overflow-hidden border border-gray-100 hover:shadow-xl transition-all">
+                        <div className="grid md:grid-cols-2 gap-0">
+                            <div className="aspect-[4/3] md:aspect-auto">
+                                <img
+                                    src={featuredPost.img}
+                                    alt={featuredPost.title}
+                                    className="w-full h-full object-cover"
+                                />
                             </div>
-                            <Link
-                                to={`/blog/${BLOG_ARTICLES[0].slug}`}
-                                className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-hover transition-all w-fit"
-                            >
-                                Devamını Oku <ArrowRight size={18} />
-                            </Link>
+                            <div className="p-8 md:p-12 flex flex-col justify-center">
+                                <span className="inline-block bg-primary text-white text-xs font-bold px-3 py-1 rounded-full w-fit mb-4">
+                                    {featuredPost.category}
+                                </span>
+                                <h2 className="text-2xl md:text-3xl font-black text-secondary mb-4 leading-tight">
+                                    {featuredPost.title}
+                                </h2>
+                                <p className="text-gray-600 mb-6 leading-relaxed line-clamp-3">
+                                    {featuredPost.content.substring(0, 150)}...
+                                </p>
+                                <div className="flex items-center gap-4 text-sm text-gray-500 mb-6">
+                                    <span className="flex items-center gap-1"><User size={14} /> {featuredPost.author}</span>
+                                    <span className="flex items-center gap-1"><Calendar size={14} /> {new Date(featuredPost.created_at).toLocaleDateString('tr-TR')}</span>
+                                    {/* Read time could be calculated */}
+                                    <span className="flex items-center gap-1"><Clock size={14} /> 5 dk</span>
+                                </div>
+                                <Link
+                                    to={`/blog/${featuredPost.slug}`}
+                                    className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-hover transition-all w-fit"
+                                >
+                                    Devamını Oku <ArrowRight size={18} />
+                                </Link>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             {/* Article Grid */}
             <section className="container mx-auto px-4">
                 <h3 className="text-2xl font-black text-secondary mb-8">Tüm Yazılar</h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {BLOG_ARTICLES.slice(1).map(article => (
+                    {otherPosts.map(article => (
                         <article
                             key={article.id}
                             className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg hover:border-primary/20 transition-all group"
                         >
                             <div className="aspect-[16/10] overflow-hidden">
                                 <img
-                                    src={article.image}
+                                    src={article.img}
                                     alt={article.title}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                 />
@@ -227,16 +258,16 @@ const BlogPage: React.FC = () => {
                                     <span className="bg-orange-50 text-primary text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
                                         <Tag size={12} /> {article.category}
                                     </span>
-                                    <span className="text-xs text-gray-400">{article.readTime}</span>
+                                    {/* <span className="text-xs text-gray-400">{article.readTime}</span> */}
                                 </div>
                                 <h4 className="text-lg font-bold text-secondary mb-2 group-hover:text-primary transition-colors line-clamp-2">
                                     {article.title}
                                 </h4>
                                 <p className="text-gray-500 text-sm mb-4 line-clamp-2">
-                                    {article.excerpt}
+                                    {article.content.substring(0, 100)}...
                                 </p>
                                 <div className="flex items-center justify-between">
-                                    <span className="text-xs text-gray-400">{article.date}</span>
+                                    <span className="text-xs text-gray-400">{new Date(article.created_at).toLocaleDateString('tr-TR')}</span>
                                     <Link
                                         to={`/blog/${article.slug}`}
                                         className="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all"

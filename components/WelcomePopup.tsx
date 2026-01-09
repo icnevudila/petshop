@@ -42,22 +42,22 @@ const WelcomePopup: React.FC = () => {
             />
 
             {/* Modal Content */}
-            <div className="relative bg-white rounded-[2rem] shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in duration-300">
+            <div className="relative bg-white rounded-2xl md:rounded-[2rem] shadow-2xl w-full max-w-sm md:max-w-4xl overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in duration-300 max-h-[85vh] md:max-h-none">
 
                 {/* Close Button */}
                 <button
                     onClick={handleClose}
                     aria-label="Close modal"
-                    className="absolute top-4 right-4 z-20 w-10 h-10 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+                    className="absolute top-3 right-3 md:top-4 md:right-4 z-20 w-8 h-8 md:w-10 md:h-10 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
                 >
-                    <X size={20} />
+                    <X size={18} />
                 </button>
 
-                {/* Left Side - Image */}
-                <div className="w-full md:w-1/2 relative min-h-[250px] md:min-h-[500px]">
+                {/* Left Side - Image (Hidden on mobile) */}
+                <div className="hidden md:block w-full md:w-1/2 relative min-h-[250px] md:min-h-[500px]">
                     <img
-                        src="/welcome-popup-2.png"
-                        alt="Welcome Gift"
+                        src="/welcome-popup-patidukkan.png"
+                        alt="PATİDUKKAN Hoş Geldin"
                         className="absolute inset-0 w-full h-full object-cover"
                         onError={(e) => {
                             // Fallback if image not found to a nice gradient or pattern
@@ -79,7 +79,7 @@ const WelcomePopup: React.FC = () => {
                 </div>
 
                 {/* Right Side - Content */}
-                <div className="w-full md:w-1/2 p-10 flex flex-col justify-center text-center md:text-left bg-white relative">
+                <div className="w-full md:w-1/2 p-6 md:p-10 flex flex-col justify-center text-center md:text-left bg-white relative">
                     {/* Confetti Decoration */}
                     <div className="absolute top-0 right-0 p-4 opacity-50 pointer-events-none">
                         <span className="text-4xl">🎉</span>
@@ -87,17 +87,17 @@ const WelcomePopup: React.FC = () => {
 
                     {!isSubmitted ? (
                         <>
-                            <div className="inline-flex items-center justify-center md:justify-start gap-2 mb-4 text-primary font-bold uppercase tracking-widest text-xs">
+                            <div className="inline-flex items-center justify-center md:justify-start gap-2 mb-2 md:mb-4 text-primary font-bold uppercase tracking-widest text-xs">
                                 <Gift size={16} />
                                 <span>Özel Fırsat</span>
                             </div>
 
-                            <h2 className="text-3xl md:text-4xl font-black text-secondary leading-tight mb-4">
+                            <h2 className="text-2xl md:text-4xl font-black text-secondary leading-tight mb-2 md:mb-4">
                                 Hoş Geldin <br />
                                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-400">Hediyesi!</span>
                             </h2>
 
-                            <p className="text-gray-500 mb-8 font-medium leading-relaxed">
+                            <p className="text-gray-500 mb-4 md:mb-8 font-medium leading-relaxed text-sm md:text-base">
                                 İlk alışverişine özel <strong className="text-secondary">%15 İndirim</strong> kazanmak ister misin? E-posta adresini bırak, kodunu hemen gönderelim.
                             </p>
 

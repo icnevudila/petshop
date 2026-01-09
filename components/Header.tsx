@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import { Search, ShoppingCart, Heart, User, Menu, X, ChevronDown, Phone, MapPin, Loader2, Cat, Dog, Bird, ArrowRight, Info, BookOpen, Waves, Rabbit } from 'lucide-react';
 import AnnouncementBar from './AnnouncementBar';
+
 import { NAV_DATA } from '../constants';
 import { useAuth } from '../context/AuthContext';
 import { useProducts } from '../ProductContext';
@@ -16,10 +17,11 @@ interface HeaderProps {
 const PatiDukkanLogo = () => (
    <img
       src="/logopng.png"
-      alt="PatiDükkan"
-      className="h-64 md:h-80 w-auto drop-shadow-lg transition-all hover:scale-110 hover:drop-shadow-2xl absolute left-0 top-1/2 -translate-y-1/2 animate-pulse-slow"
+      className="h-64 md:h-80 w-auto drop-shadow-lg transition-all hover:scale-110 hover:drop-shadow-2xl absolute -left-10 top-1/2 -translate-y-1/2 animate-pulse-slow"
    />
 );
+
+
 
 const placeholders = [
    "Kedi maması...",
@@ -126,37 +128,27 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
          <div className={`w-full transition-all duration-300 relative z-[1003] bg-white ${isScrolled ? 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]' : 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]'}`}>
             <div className="container flex flex-wrap lg:flex-nowrap items-center justify-between gap-4 py-3 lg:py-2">
 
-               {/* Logo */}
-               <div className="flex items-center gap-4">
-                  {/* Hamburger Menu Button - Mobile Only */}
-                  <button
-                     onClick={() => setIsMobileMenuOpen(true)}
-                     className="lg:hidden flex items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:text-brand hover:bg-brand/5 transition-all"
-                     aria-label="Menü"
-                  >
-                     <Menu size={24} />
-                  </button>
 
-                  <Link to="/" className="relative w-40 md:w-80 h-8 hover:opacity-80 transition-opacity">
+               {/* Logo - Smaller on mobile */}
+               <div className="flex items-center">
+                  <Link to="/" className="relative w-28 md:w-80 h-8 hover:opacity-80 transition-opacity">
                      <PatiDukkanLogo />
                   </Link>
-               </div>
-
-               {/* Search Bar - Full Width on Mobile */}
-               <div className="order-last lg:order-none w-full lg:w-auto lg:flex-grow max-w-[500px] relative block" ref={searchRef}>
+               </div>     {/* Search Bar - Full Width on Mobile with refined style */}
+               <div className="flex-grow max-w-[500px] relative block ml-2 md:ml-0" ref={searchRef}>
                   <div className="relative group">
                      <input
                         type="text"
                         value={searchQuery}
                         onChange={handleSearch}
                         placeholder={displayText}
-                        className="w-full bg-[#f4f4f4] hover:bg-[#ebebeb] focus:bg-white border border-gray-200 focus:border-brand/40 rounded-full pl-11 pr-20 py-2.5 text-sm font-medium outline-none transition-all placeholder:text-gray-400 text-secondary"
+                        className="w-full bg-[#f4f4f4] hover:bg-[#ebebeb] focus:bg-white border border-gray-200 focus:border-brand/40 rounded-full pl-10 pr-4 py-2 text-xs md:text-sm font-medium outline-none transition-all placeholder:text-gray-400 text-secondary"
                      />
-                     <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand transition-colors" />
-                     <button className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-primary text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-primary-hover transition-colors">
-                        ARA
-                     </button>
+                     <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand transition-colors" />
                   </div>
+                  <button className="hidden md:block absolute right-1.5 top-1/2 -translate-y-1/2 bg-primary text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-primary-hover transition-colors">
+                     ARA
+                  </button>
 
                   {/* Search Results Dropdown */}
                   {searchResults.length > 0 && (

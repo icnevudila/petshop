@@ -454,7 +454,22 @@ body {
 
 .hide-scrollbar {
   -ms-overflow-style: none;
-  /* scrollbar-width: none; */
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* Smooth momentum scrolling on iOS */
+  scroll-behavior: smooth;
+}
+
+/* Mobile carousel optimization */
+@media (max-width: 768px) {
+  .hide-scrollbar {
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+  }
+
+  .hide-scrollbar>* {
+    scroll-snap-align: start;
+  }
 }
 
 .bg-pattern-dot {

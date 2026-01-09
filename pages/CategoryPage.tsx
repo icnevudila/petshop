@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from "react-router-dom";
 import { NAV_DATA, CATEGORY_DATA } from '../constants';
 import { useProducts } from '../ProductContext';
 import ProductCard from '../components/ProductCard';
+import SkeletonProductCard from '../components/SkeletonProductCard';
 import { Product, FilterState } from '../types';
-import { SlidersHorizontal, ChevronDown, ChevronRight, X, LayoutGrid, List, ChevronLeft, Cat, Dog, Bird, Home, Heart, Check, Filter } from 'lucide-react';
+import { SlidersHorizontal, ChevronDown, ChevronRight, X, LayoutGrid, List, ChevronLeft, Cat, Dog, Bird, Home, Heart, Check, Filter, CheckCircle2, ArrowRight } from 'lucide-react';
 
 interface CategoryPageProps {
   addToCart: (p: Product, quantity?: number) => void;
@@ -27,7 +28,16 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
     grain: [],
     specialNeeds: []
   });
+  const [loading, setLoading] = useState(true);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
+  const [isSortInfoOpen, setIsSortInfoOpen] = useState(false);
+
+  useEffect(() => {
+    // Simulate loading for skeleton demo
+    setLoading(true);
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, [slug, filters]);
 
   const normalizeText = (value: string) => value
     .toLocaleLowerCase('tr-TR')
@@ -101,7 +111,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
 
     if (filters.grain.length > 0) {
       result = result.filter(p => {
-        const searchable = normalizeText(`${p.name} ${p.description} ${p.tags.join(' ')} ${p.features.join(' ')}`);
+        const searchable = normalizeText(`${p.name} ${p.description} ${p.tags.join(' ')} ${p.features.join(' ')} `);
         return filters.grain.some(f => {
           // Tahılsız: "tahilsiz", "grain free"
           if (f.includes('Tahılsız')) return searchable.includes('tahilsiz') || searchable.includes('grain free');
@@ -116,7 +126,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
 
     if (filters.specialNeeds.length > 0) {
       result = result.filter(p => {
-        const searchable = normalizeText(`${p.name} ${p.description} ${p.tags.join(' ')} ${p.features.join(' ')}`);
+        const searchable = normalizeText(`${p.name} ${p.description} ${p.tags.join(' ')} ${p.features.join(' ')} `);
         return filters.specialNeeds.some(f => {
           if (f.includes('Kısırlaştırılmış')) return searchable.includes('kisir') || searchable.includes('steril');
           if (f.includes('Hassas Sindirim')) return searchable.includes('hassas') || searchable.includes('sensitive') || searchable.includes('digest');
@@ -204,16 +214,16 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
           className="w-full flex justify-between items-center mb-2 group py-1"
         >
           <h4 className="text-xs font-bold text-gray-900 group-hover:text-orange-600 transition-colors uppercase">{title}</h4>
-          <ChevronDown size={14} className={`text-gray-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+          <ChevronDown size={14} className={`text - gray - 400 transition - transform duration - 300 ${isOpen ? 'rotate-180' : ''} `} />
         </button>
         {isOpen && (
           <div className="space-y-2 animate-in fade-in slide-in-from-top-1 duration-200">
             {options.map(opt => (
               <label key={opt} className="flex items-center gap-2 cursor-pointer group select-none" onClick={() => toggleFilter(type, opt)}>
-                <div className={`w-4 h-4 rounded border flex items-center justify-center transition-all duration-200 ${filters[type].includes(opt) ? 'bg-orange-500 border-orange-500' : 'border-gray-300 bg-white group-hover:border-orange-400'}`}>
+                <div className={`w - 4 h - 4 rounded border flex items - center justify - center transition - all duration - 200 ${filters[type].includes(opt) ? 'bg-orange-500 border-orange-500' : 'border-gray-300 bg-white group-hover:border-orange-400'} `}>
                   {filters[type].includes(opt) && <Check size={10} className="text-white" strokeWidth={4} />}
                 </div>
-                <span className={`text-[13px] transition-colors ${filters[type].includes(opt) ? 'text-gray-900 font-medium' : 'text-gray-600 group-hover:text-gray-800'}`}>{opt}</span>
+                <span className={`text - [13px] transition - colors ${filters[type].includes(opt) ? 'text-gray-900 font-medium' : 'text-gray-600 group-hover:text-gray-800'} `}>{opt}</span>
               </label>
             ))}
           </div>
@@ -240,12 +250,12 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
 
       <div className="flex flex-col lg:flex-row gap-16">
         {/* Sidebar Filtering */}
-        <aside className={`fixed inset-0 z-[2000] bg-white p-6 overflow-y-auto transition-transform duration-300 lg:static lg:z-auto lg:w-64 lg:p-0 lg:bg-transparent lg:overflow-visible lg:block shadow-2xl lg:shadow-none ${isMobileFilterOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <aside className={`fixed inset - 0 z - [2000] bg - white p - 6 overflow - y - auto transition - transform duration - 300 lg:static lg: z - auto lg: w - 64 lg: p - 0 lg: bg - transparent lg: overflow - visible lg:block shadow - 2xl lg: shadow - none ${isMobileFilterOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} `}>
           <div className="sticky top-24 px-2">
             {/* Mobile Close Button */}
             <div className="flex lg:hidden items-center justify-between mb-6 border-b border-gray-100 pb-4">
               <span className="text-lg font-black text-gray-900">Filtreler</span>
-              <button onClick={() => setIsMobileFilterOpen(false)} className="p-2 bg-gray-50 rounded-full hover:bg-gray-100">
+              <button onClick={() => setIsMobileFilterOpen(false)} aria-label="Filtreleri Kapat" className="p-2 bg-gray-50 rounded-full hover:bg-gray-100">
                 <X size={20} />
               </button>
             </div>
@@ -325,8 +335,17 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
               >
                 <Filter size={14} /> Filtrele
               </button>
+
+              {/* Mobile Sort Trigger */}
+              <button
+                onClick={() => setIsSortInfoOpen(true)}
+                className="lg:hidden px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-xs font-bold flex items-center gap-2 hover:bg-gray-200 transition-colors"
+              >
+                <ArrowRight size={14} className="rotate-90" /> Sırala
+              </button>
               {/* Sort Select - Clean */}
-              <div className="relative group">
+              {/* Sort Select - Desktop */}
+              <div className="hidden lg:block relative group">
                 <select
                   className="appearance-none bg-gray-50 border border-gray-200 hover:border-gray-300 rounded-md pl-3 pr-8 py-2 text-xs font-medium text-gray-700 focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all outline-none cursor-pointer"
                   aria-label="Sıralama seçin"
@@ -346,14 +365,14 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
               <div className="flex bg-gray-50 p-1 rounded-md border border-gray-200">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-1.5 rounded transition-all ${viewMode === 'grid' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                  className={`p - 1.5 rounded transition - all ${viewMode === 'grid' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} `}
                   aria-label="Grid görünümü"
                 >
                   <LayoutGrid size={16} />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-1.5 rounded transition-all ${viewMode === 'list' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'}`}
+                  className={`p - 1.5 rounded transition - all ${viewMode === 'list' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400 hover:text-gray-600'} `}
                   aria-label="Liste görünümü"
                 >
                   <List size={16} />
@@ -362,7 +381,13 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
             </div>
           </div>
 
-          {filteredProducts.length === 0 ? (
+          {loading ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                <SkeletonProductCard key={i} />
+              ))}
+            </div>
+          ) : filteredProducts.length === 0 ? (
             <div className="bg-white p-12 rounded-xl shadow-sm border border-gray-100 text-center">
               <div className="text-5xl mb-4">🔍</div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">Sonuç Bulunamadı</h2>
@@ -389,20 +414,20 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
               <div className="space-y-5">
                 {paginatedProducts.map(product => (
                   <div key={product.id} className="bg-white border border-gray-100 rounded-[2rem] p-6 flex flex-col md:flex-row gap-6 items-center shadow-soft">
-                    <Link to={`/urun/${product.slug}`} className="w-32 h-32 bg-gray-50 rounded-2xl p-4 flex-shrink-0">
+                    <Link to={`/ urun / ${product.slug} `} className="w-32 h-32 bg-gray-50 rounded-2xl p-4 flex-shrink-0">
                       <img src={product.images[0]} alt={product.name} className="w-full h-full object-contain mix-blend-multiply" />
                     </Link>
                     <div className="flex-grow w-full">
                       <div className="flex items-center justify-between gap-4">
                         <div>
                           <p className="text-[10px] font-black text-brand uppercase tracking-widest">{product.brand_name}</p>
-                          <Link to={`/urun/${product.slug}`} className="text-lg font-black text-gray-900 hover:text-brand transition-colors line-clamp-2">
+                          <Link to={`/ urun / ${product.slug} `} className="text-lg font-black text-gray-900 hover:text-brand transition-colors line-clamp-2">
                             {product.name}
                           </Link>
                         </div>
                         <button
                           onClick={() => toggleWishlist(product.id)}
-                          className={`h-10 w-10 rounded-xl border-2 flex items-center justify-center transition-all ${wishlist.includes(product.id) ? 'border-rose-500 text-rose-500 bg-rose-50' : 'border-gray-200 text-gray-400 hover:border-rose-300 hover:text-rose-500'}`}
+                          className={`h - 10 w - 10 rounded - xl border - 2 flex items - center justify - center transition - all ${wishlist.includes(product.id) ? 'border-rose-500 text-rose-500 bg-rose-50' : 'border-gray-200 text-gray-400 hover:border-rose-300 hover:text-rose-500'} `}
                           aria-label="Favoriye ekle"
                         >
                           <Heart size={18} fill={wishlist.includes(product.id) ? 'currentColor' : 'none'} />
@@ -477,11 +502,11 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
                       )}
                       <button
                         onClick={() => handlePageChange(page)}
-                        className={`w-10 h-10 rounded-xl font-bold text-sm transition-all ${currentPage === page
-                          ? 'bg-primary text-white shadow-lg'
-                          : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'
-                          }`}
-                        aria-label={`Sayfa ${page}`}
+                        className={`w - 10 h - 10 rounded - xl font - bold text - sm transition - all ${currentPage === page
+                            ? 'bg-primary text-white shadow-lg'
+                            : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'
+                          } `}
+                        aria-label={`Sayfa ${page} `}
                       >
                         {page}
                       </button>
@@ -502,6 +527,37 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
           )}
         </div>
       </div>
+      {/* Mobile Sort Bottom Sheet */}
+      {isSortInfoOpen && (
+        <>
+          <div className="fixed inset-0 bg-black/60 z-[2001]" onClick={() => setIsSortInfoOpen(false)} />
+          <div className="fixed bottom-0 left-0 right-0 bg-white rounded-t-[2rem] z-[2002] p-6 pb-safe animate-in slide-in-from-bottom duration-300">
+            <div className="w-12 h-1.5 bg-gray-200 rounded-full mx-auto mb-6" />
+            <h3 className="font-bold text-lg text-center mb-6">Sıralama Seçenekleri</h3>
+            <div className="space-y-2">
+              {[
+                { val: 'editor', label: 'Önerilen Sıralama' },
+                { val: 'price-asc', label: 'En Düşük Fiyat' },
+                { val: 'price-desc', label: 'En Yüksek Fiyat' },
+                { val: 'best', label: 'En Çok Satanlar' },
+                { val: 'rating', label: 'Yüksek Puanlılar' }
+              ].map((opt) => (
+                <button
+                  key={opt.val}
+                  onClick={() => {
+                    setSortOrder(opt.val as any);
+                    setIsSortInfoOpen(false);
+                  }}
+                  className={`w - full py - 4 px - 4 rounded - xl flex items - center justify - between font - bold text - sm transition - all ${sortOrder === opt.val ? 'bg-brand/10 text-brand' : 'bg-gray-50 text-gray-600'} `}
+                >
+                  {opt.label}
+                  {sortOrder === opt.val && <CheckCircle2 size={18} />}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

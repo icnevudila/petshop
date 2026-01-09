@@ -1,17 +1,28 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, User, Clock, ArrowLeft, Tag, Share2, Facebook, Twitter, Linkedin } from 'lucide-react';
-import { BLOG_ARTICLES } from '../data/blogData';
+import { useProducts } from '../ProductContext';
 import SEO from '../components/SEO';
 
 const BlogDetailPage: React.FC = () => {
     const { slug } = useParams<{ slug: string }>();
-    const article = BLOG_ARTICLES.find(a => a.slug === slug);
+    const { blogPosts, loading } = useProducts();
+
+    // Find article from context
+    const article = blogPosts.find(a => a.slug === slug);
 
     // Scroll to top on load
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [slug]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-white pt-[240px] md:pt-[360px] pb-20 flex justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
 
     if (!article) {
         return (
@@ -20,7 +31,7 @@ const BlogDetailPage: React.FC = () => {
                 <div className="container mx-auto px-4 text-center">
                     <div className="text-6xl mb-6">📝</div>
                     <h1 className="text-3xl font-black text-secondary mb-4">Makale Bulunamadı</h1>
-                    <p className="text-gray-500 mb-8">Aradığınız blog yazısı mevcut değil.</p>
+                    <p className="text-gray-500 mb-8">Aradığınız blog yazısı mevcut değil veya yayından kaldırılmış.</p>
                     <Link to="/blog" className="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-orange-600 transition-all">
                         Blog'a Dön
                     </Link>
@@ -29,10 +40,13 @@ const BlogDetailPage: React.FC = () => {
         );
     }
 
-    const relatedArticles = BLOG_ARTICLES.filter(a => a.slug !== slug && a.category === article.category).slice(0, 3);
+    const relatedArticles = blogPosts
+        .filter(a => a.slug !== slug && a.category === article.category && a.is_published)
+        .slice(0, 3);
 
     // Markdown benzeri içeriği HTML'e çevirme (basit versiyon)
     const formatContent = (content: string) => {
+        if (!content) return null;
         return content
             .split('\n\n')
             .map((paragraph, idx) => {
@@ -69,8 +83,8 @@ const BlogDetailPage: React.FC = () => {
         <div className="min-h-screen bg-white pt-[240px] md:pt-[360px] pb-20">
             <SEO
                 title={article.title}
-                description={article.excerpt}
-                image={article.image}
+                description={article.content.substring(0, 150)}
+                image={article.img}
                 type="article"
             />
 
@@ -96,27 +110,29 @@ const BlogDetailPage: React.FC = () => {
                             <span className="font-bold text-gray-700">{article.author}</span>
                         </span>
                         <span className="flex items-center gap-2">
-                            <Calendar size={18} className="text-primary" /> {article.date}
+                            <Calendar size={18} className="text-primary" /> {new Date(article.created_at).toLocaleDateString('tr-TR')}
                         </span>
-                        <span className="flex items-center gap-2">
+                        {/* <span className="flex items-center gap-2">
                             <Clock size={18} className="text-primary" /> {article.readTime} okuma
-                        </span>
+                        </span> */}
                     </div>
                 </div>
             </section>
 
             {/* Featured Image */}
-            <section className="container mx-auto px-4 mb-16">
-                <div className="max-w-5xl mx-auto">
-                    <div className="aspect-[21/9] rounded-[2rem] overflow-hidden bg-gray-100 shadow-xl shadow-gray-200/50">
-                        <img
-                            src={article.image}
-                            alt={article.title}
-                            className="w-full h-full object-cover"
-                        />
+            {article.img && (
+                <section className="container mx-auto px-4 mb-16">
+                    <div className="max-w-5xl mx-auto">
+                        <div className="aspect-[21/9] rounded-[2rem] overflow-hidden bg-gray-100 shadow-xl shadow-gray-200/50">
+                            <img
+                                src={article.img}
+                                alt={article.title}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            )}
 
             {/* Content */}
             <section className="container mx-auto px-4 mb-20">
@@ -125,7 +141,7 @@ const BlogDetailPage: React.FC = () => {
                     <div className="lg:w-2/3">
                         <div className="prose prose-lg prose-orange max-w-none">
                             <p className="lead text-xl text-gray-600 font-medium mb-8 leading-relaxed border-l-4 border-gray-200 pl-6 italic">
-                                {article.excerpt}
+                                {article.content.substring(0, 200)}...
                             </p>
                             {formatContent(article.content)}
                         </div>
@@ -135,11 +151,12 @@ const BlogDetailPage: React.FC = () => {
                             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                                 <div className="flex flex-wrap items-center gap-3">
                                     <Tag size={18} className="text-gray-400" />
-                                    {article.tags.map(tag => (
+                                    {/* {article.tags && article.tags.map(tag => (
                                         <span key={tag} className="bg-gray-100 text-gray-600 text-sm font-bold px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors cursor-default">
                                             #{tag}
                                         </span>
-                                    ))}
+                                    ))} */}
+                                    <span className="text-gray-500 italic text-sm">Etiket yok</span>
                                 </div>
                                 <div className="flex items-center gap-3">
                                     <span className="text-sm text-gray-500 font-bold uppercase tracking-wider">Paylaş</span>
@@ -181,35 +198,37 @@ const BlogDetailPage: React.FC = () => {
                             </div>
 
                             {/* Related Articles Widget */}
-                            <div>
-                                <h3 className="font-black text-secondary text-lg mb-4 flex items-center gap-2">
-                                    <span className="w-1 h-6 bg-primary rounded-full"></span>
-                                    İlginizi Çekebilir
-                                </h3>
-                                <div className="space-y-4">
-                                    {relatedArticles.map(related => (
-                                        <Link
-                                            key={related.id}
-                                            to={`/blog/${related.slug}`}
-                                            className="flex gap-4 group bg-white p-3 rounded-xl border border-gray-100 hover:shadow-md transition-all"
-                                        >
-                                            <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
-                                                <img
-                                                    src={related.image}
-                                                    alt={related.title}
-                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                                />
-                                            </div>
-                                            <div className="flex flex-col justify-center">
-                                                <span className="text-[10px] font-bold text-primary mb-1">{related.category}</span>
-                                                <h4 className="text-sm font-bold text-secondary leading-tight line-clamp-2 group-hover:text-primary transition-colors">
-                                                    {related.title}
-                                                </h4>
-                                            </div>
-                                        </Link>
-                                    ))}
+                            {relatedArticles.length > 0 && (
+                                <div>
+                                    <h3 className="font-black text-secondary text-lg mb-4 flex items-center gap-2">
+                                        <span className="w-1 h-6 bg-primary rounded-full"></span>
+                                        İlginizi Çekebilir
+                                    </h3>
+                                    <div className="space-y-4">
+                                        {relatedArticles.map(related => (
+                                            <Link
+                                                key={related.id}
+                                                to={`/blog/${related.slug}`}
+                                                className="flex gap-4 group bg-white p-3 rounded-xl border border-gray-100 hover:shadow-md transition-all"
+                                            >
+                                                <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0">
+                                                    <img
+                                                        src={related.img}
+                                                        alt={related.title}
+                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                    />
+                                                </div>
+                                                <div className="flex flex-col justify-center">
+                                                    <span className="text-[10px] font-bold text-primary mb-1">{related.category}</span>
+                                                    <h4 className="text-sm font-bold text-secondary leading-tight line-clamp-2 group-hover:text-primary transition-colors">
+                                                        {related.title}
+                                                    </h4>
+                                                </div>
+                                            </Link>
+                                        ))}
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,7 @@ import ProductCard from '../components/ProductCard';
 import {
   LayoutDashboard, Package, Plus, Search, Edit3, Trash2,
   X, Save, ChevronDown, Settings, Star, Upload,
-  Image, Tag, Folder, FileText, Home, Check, ShoppingBag, ShieldCheck
+  Image, Tag, Folder, FileText, Home, Check, ShoppingBag, ShieldCheck, ArrowRight
 } from 'lucide-react';
 import { Product, Campaign, Brand, Category, BlogPost, SiteSettings } from '../types';
 
@@ -97,7 +97,7 @@ const AdminPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<string>('');
   const [editingItem, setEditingItem] = useState<any>(null);
-  const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error' } | null>(null);
+  const [notification, setNotification] = useState<{ message: string, type: 'success' | 'error', link?: string, linkText?: string } | null>(null);
 
   // Auth State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -136,9 +136,9 @@ const AdminPage: React.FC = () => {
   const [newFeature, setNewFeature] = useState('');
   const [newImage, setNewImage] = useState('');
 
-  const showNotification = (message: string, type: 'success' | 'error') => {
-    setNotification({ message, type });
-    setTimeout(() => setNotification(null), 3000);
+  const showNotification = (message: string, type: 'success' | 'error', link?: string, linkText?: string) => {
+    setNotification({ message, type, link, linkText });
+    setTimeout(() => setNotification(null), 5000);
   };
 
   // Stats - Only real data
@@ -274,10 +274,15 @@ const AdminPage: React.FC = () => {
     };
     try {
       if (editingItem) await updateProduct(productData); else await addProduct(productData);
-      showNotification(editingItem ? 'Ürün güncellendi!' : 'Ürün eklendi!', 'success');
+      showNotification(
+        editingItem ? 'Ürün başarıyla güncellendi!' : 'Ürün başarıyla eklendi!',
+        'success',
+        `/urun/${productData.slug}`,
+        'Sitede Görüntüle'
+      );
       setIsModalOpen(false);
     } catch (e) {
-      showNotification('Hata oluştu', 'error');
+      showNotification('Bir hata oluştu, lütfen tekrar deneyin.', 'error');
     }
   };
 
@@ -374,8 +379,15 @@ const AdminPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-28 pb-12">
       {notification && (
-        <div className={`fixed top-32 right-4 z-50 px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 ${notification.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
-          <Check size={18} /> {notification.message}
+        <div className={`fixed top-32 right-4 z-50 px-6 py-4 rounded-xl shadow-lg flex flex-col gap-2 ${notification.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
+          <div className="flex items-center gap-2">
+            <Check size={18} /> <span className="font-bold">{notification.message}</span>
+          </div>
+          {notification.link && (
+            <a href={notification.link} target="_blank" rel="noopener noreferrer" className="ml-6 bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors w-fit flex items-center gap-1">
+              {notification.linkText || 'Görüntüle'} <ArrowRight size={12} />
+            </a>
+          )}
         </div>
       )}
 

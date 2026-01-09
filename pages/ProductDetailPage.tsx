@@ -220,14 +220,14 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ addToCart, toggle
       </div>
 
       {/* Mobile Sticky Add to Cart Bar */}
-      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.1)] z-[1000] flex items-center justify-between gap-4 pb-safe safe-area-bottom">
+      <div className="lg:hidden fixed bottom-[55px] left-0 right-0 bg-white border-t border-gray-100 p-3 shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)] z-[9990] flex items-center justify-between gap-3">
         <div className="flex flex-col">
-          {hasDiscount && <span className="text-xs text-gray-400 font-bold line-through">{(product.price).toLocaleString('tr-TR')} TL</span>}
-          <span className="text-xl font-black text-orange-600">{(product.discounted_price || product.price).toLocaleString('tr-TR')} TL</span>
+          {hasDiscount && <span className="text-[10px] text-gray-400 font-bold line-through">{(product.price).toLocaleString('tr-TR')} TL</span>}
+          <span className="text-lg font-black text-brand">{(product.discounted_price || product.price).toLocaleString('tr-TR')} TL</span>
         </div>
         <button
           onClick={() => addToCart(product, 1)}
-          className="flex-grow bg-orange-600 text-white h-12 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-orange-700 transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95"
+          className="flex-grow bg-brand text-white h-11 rounded-lg font-black text-xs uppercase tracking-widest hover:bg-brand-hover transition-all flex items-center justify-center gap-2 shadow md active:scale-95"
         >
           Sepete Ekle
         </button>
