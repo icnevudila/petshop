@@ -15,6 +15,40 @@ const MOCK_ORDERS = [
 
 type TabType = 'dashboard' | 'products' | 'campaigns' | 'brands' | 'categories' | 'blog' | 'homepage' | 'settings' | 'orders';
 
+// Simple Error Boundary to catch render errors in tabs
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    console.error("Admin Page Error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="p-8 text-center bg-red-50 rounded-xl border border-red-100 m-4">
+          <div className="text-red-500 font-bold mb-2">Bir hata oluştu.</div>
+          <p className="text-sm text-gray-600 mb-4">Bu sekme görüntülenirken bir sorun yaşandı.</p>
+          <button
+            onClick={() => this.setState({ hasError: false })}
+            className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm hover:bg-gray-50"
+          >
+            Tekrar Dene
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 const AdminPage: React.FC = () => {
   const {
     products, addProduct, updateProduct, deleteProduct,
