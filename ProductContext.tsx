@@ -119,6 +119,22 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
 
     const fetchData = async () => {
         setLoading(true);
+
+        // Check if we are using placeholder Supabase URL (missing env vars)
+        // If so, skip network calls and use mock data immediately to prevent errors
+        const isPlaceholder = supabase.supabaseUrl.includes('placeholder');
+
+        if (isPlaceholder) {
+            console.warn("Using mock data due to missing Supabase keys");
+            setProducts(INITIAL_PRODUCTS);
+            setCampaigns(INITIAL_CAMPAIGNS);
+            setBrands(INITIAL_BRANDS);
+            setCategories(INITIAL_CATEGORIES);
+            setBlogPosts(INITIAL_BLOG_POSTS);
+            setLoading(false);
+            return;
+        }
+
         try {
             // Products
             const { data: dbProducts } = await supabase.from('products').select('*');

@@ -204,10 +204,7 @@ const App: React.FC = () => {
               isWishlisted={quickViewProduct ? wishlist.includes(quickViewProduct.id) : false}
             />
 
-            {/* Mobile Bottom Navigation */}
-            <BottomNav cartCount={cartCount} />
 
-            <Footer />
           </div>
         </HashRouter>
       </ProductProvider>
