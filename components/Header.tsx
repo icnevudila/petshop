@@ -336,7 +336,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                                  <h5 className="text-xs font-bold text-gray-400 uppercase mb-2">{item.name}</h5>
                                  <div className="grid gap-2">
                                     {item.sub.map((s: any, i: number) => (
-                                       <button key={i} onClick={() => handleNavClick(nav.slug)} className="flex items-center gap-3 text-left py-2 group">
+                                       <button key={i} onClick={() => handleNavClick(item.slug)} className="flex items-center gap-3 text-left py-2 group">
                                           <img src={s.image} className="w-8 h-8 rounded-lg object-cover bg-gray-50" alt={s.name} />
                                           <span className="text-sm font-medium text-gray-700 group-hover:text-brand">{s.name}</span>
                                        </button>
