@@ -188,15 +188,14 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
     useEffect(() => {
         fetchData();
 
-        // Setup Realtime Subscription
-        const channel = supabase.channel('public_db_changes')
-            .on('postgres_changes', { event: '*', schema: 'public' }, () => {
-                // To keep it simple for now, refine fetch later
-                fetchData();
-            })
-            .subscribe();
+        // Realtime subscription temporarily disabled for production
+        // const channel = supabase.channel('public_db_changes')
+        //     .on('postgres_changes', { event: '*', schema: 'public' }, () => {
+        //         fetchData();
+        //     })
+        //     .subscribe();
 
-        return () => { supabase.removeChannel(channel); };
+        // return () => { supabase.removeChannel(channel); };
     }, []);
 
     // Helper to map and persist generic updates
