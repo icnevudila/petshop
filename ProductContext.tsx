@@ -120,12 +120,30 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
     const fetchData = async () => {
         setLoading(true);
         try {
-            // Use mock data only - Supabase disabled for production
-            setProducts(INITIAL_PRODUCTS);
-            setCampaigns(INITIAL_CAMPAIGNS);
-            setBrands(INITIAL_BRANDS);
-            setCategories(INITIAL_CATEGORIES);
-            setBlogPosts(INITIAL_BLOG_POSTS.map((post) => ({
+            // Products
+            const { data: dbProducts } = await supabase.from('products').select('*');
+            if (dbProducts && dbProducts.length > 0) setProducts(dbProducts);
+            else setProducts(INITIAL_PRODUCTS); // Fallback to initial constants
+
+            // Campaigns
+            const { data: dbCampaigns } = await supabase.from('campaigns').select('*');
+            if (dbCampaigns && dbCampaigns.length > 0) setCampaigns(dbCampaigns);
+            else setCampaigns(INITIAL_CAMPAIGNS);
+
+            // Brands
+            const { data: dbBrands } = await supabase.from('brands').select('*');
+            if (dbBrands && dbBrands.length > 0) setBrands(dbBrands);
+            else setBrands(INITIAL_BRANDS);
+
+            // Categories
+            const { data: dbCategories } = await supabase.from('categories').select('*');
+            if (dbCategories && dbCategories.length > 0) setCategories(dbCategories);
+            else setCategories(INITIAL_CATEGORIES);
+
+            // Blog Posts
+            const { data: dbBlogPosts } = await supabase.from('blog_posts').select('*');
+            if (dbBlogPosts && dbBlogPosts.length > 0) setBlogPosts(dbBlogPosts);
+            else setBlogPosts(INITIAL_BLOG_POSTS.map((post) => ({
                 id: post.id,
                 title: post.title,
                 content: 'İçerik yakında eklenecek...',
@@ -135,13 +153,33 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
                 created_at: new Date().toISOString().split('T')[0],
                 is_published: true
             })));
+
+            // Site Settings
+            const { data: dbSettings } = await supabase.from('site_settings').select('*').single();
+            if (dbSettings) setSiteSettings({
+                siteName: dbSettings.site_name,
+                logoUrl: dbSettings.logo_url,
+                phone: dbSettings.phone,
+                email: dbSettings.email,
+                address: dbSettings.address,
+                topBarMessage: dbSettings.top_bar_message,
+                socialLinks: {
+                    facebook: dbSettings.social_facebook || '',
+                    instagram: dbSettings.social_instagram || '',
+                    twitter: dbSettings.social_twitter || '',
+                    youtube: dbSettings.social_youtube || ''
+                }
+            });
+
         } catch (error) {
-            console.error("Error loading data:", error);
+            console.error("Error fetching data, using fallback mocks:", error);
+            // Fallback to initial constants on error (e.g. missing keys)
             setProducts(INITIAL_PRODUCTS);
             setCampaigns(INITIAL_CAMPAIGNS);
             setBrands(INITIAL_BRANDS);
             setCategories(INITIAL_CATEGORIES);
             setBlogPosts(INITIAL_BLOG_POSTS);
+            // Settings stay as DEFAULT_SITE_SETTINGS initialized in state
         } finally {
             setLoading(false);
         }
