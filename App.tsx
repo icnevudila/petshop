@@ -15,9 +15,15 @@ import BlogPage from './pages/BlogPage';
 import BlogDetailPage from './pages/BlogDetailPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import AccountPage from './pages/AccountPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import ReturnPolicyPage from './pages/ReturnPolicyPage';
+import FAQPage from './pages/FAQPage';
+import OrderTrackingPage from './pages/OrderTrackingPage';
 import CartModal from './components/CartModal';
 import QuickViewModal from './components/QuickViewModal';
 import BottomNav from './components/BottomNav';
+import ChatBot from './components/ChatBot';
 import { AuthProvider } from './context/AuthContext';
 import { ProductProvider } from './ProductContext';
 import { CartEntry, Product } from './types';
@@ -190,6 +196,13 @@ const App: React.FC = () => {
                 <Route path="/giris" element={<LoginPage />} />
                 <Route path="/kayit" element={<RegisterPage />} />
                 <Route path="/admin" element={<AdminPage />} />
+
+                {/* New Footer Links */}
+                <Route path="/hesabim" element={<AccountPage />} />
+                <Route path="/gizlilik-politikasi" element={<PrivacyPolicyPage />} />
+                <Route path="/iade-politikasi" element={<ReturnPolicyPage />} />
+                <Route path="/sss" element={<FAQPage />} />
+                <Route path="/siparis-takibi" element={<OrderTrackingPage />} />
               </Routes>
             </main>
 
@@ -205,6 +218,7 @@ const App: React.FC = () => {
               onAddToCart={addToCart}
             />
 
+
             <QuickViewModal
               product={quickViewProduct}
               onClose={() => setQuickViewProduct(null)}
@@ -213,6 +227,7 @@ const App: React.FC = () => {
               isWishlisted={quickViewProduct ? wishlist.includes(quickViewProduct.id) : false}
             />
 
+            <ChatBot />
 
           </div>
         </HashRouter>
