@@ -59,6 +59,26 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
 //... (rest of imports)
 
 
+
+interface StatCardProps {
+  icon: any;
+  label: string;
+  value: number;
+  color: string;
+}
+
+const StatCard: React.FC<StatCardProps> = ({ icon: Icon, label, value, color }) => (
+  <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+    <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white ${color}`}>
+      <Icon size={24} />
+    </div>
+    <div>
+      <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">{label}</p>
+      <h3 className="text-2xl font-black text-secondary">{value}</h3>
+    </div>
+  </div>
+);
+
 const AdminPage: React.FC = () => {
   const {
     products, addProduct, updateProduct, deleteProduct,
