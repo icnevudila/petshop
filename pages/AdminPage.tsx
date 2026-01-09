@@ -197,17 +197,17 @@ const AdminPage: React.FC = () => {
   ];
 
   // Filtered data
-  const filteredProducts = useMemo(() => products.filter(p =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.brand_name?.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredProducts = useMemo(() => (products || []).filter(p =>
+    (p?.name?.toLowerCase() || '').includes(searchQuery.toLowerCase()) ||
+    (p?.brand_name?.toLowerCase() || '').includes(searchQuery.toLowerCase())
   ), [searchQuery, products]);
 
-  const filteredCampaigns = useMemo(() => campaigns.filter(c =>
-    c.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredCampaigns = useMemo(() => (campaigns || []).filter(c =>
+    (c?.title?.toLowerCase() || '').includes(searchQuery.toLowerCase())
   ), [searchQuery, campaigns]);
 
-  const filteredBrands = useMemo(() => brands.filter(b =>
-    b.name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredBrands = useMemo(() => (brands || []).filter(b =>
+    (b?.name?.toLowerCase() || '').includes(searchQuery.toLowerCase())
   ), [searchQuery, brands]);
 
   // Open modal handlers
@@ -407,7 +407,7 @@ const AdminPage: React.FC = () => {
                 <StatCard icon={Image} label="Banner" value={stats.totalCampaigns} color="bg-pink-500" />
                 <StatCard icon={FileText} label="Blog Yazısı" value={stats.totalBlogPosts} color="bg-teal-500" />
                 <StatCard icon={Star} label="Müşteri Yorumu" value={stats.totalReviews} color="bg-amber-500" />
-                <StatCard icon={Home} label="Anasayfa Özellik" value={homeFeatures.length} color="bg-cyan-500" />
+                <StatCard icon={Home} label="Anasayfa Özellik" value={homeFeatures?.length || 0} color="bg-cyan-500" />
               </div>
 
               {/* Quick Actions */}
