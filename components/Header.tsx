@@ -123,7 +123,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
          {/* Top Bar - Removed for compact header */}
 
          {/* Main Header - Compact with box-shadow */}
-         <div className={`w-full transition-all duration-300 relative z-[1001] bg-white ${isScrolled ? 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]' : 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]'}`}>
+         <div className={`w-full transition-all duration-300 relative z-[1003] bg-white ${isScrolled ? 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]' : 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]'}`}>
             <div className="container flex flex-wrap lg:flex-nowrap items-center justify-between gap-4 py-3 lg:py-2">
 
                {/* Logo */}
