@@ -211,7 +211,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                   {NAV_DATA.map((nav, index) => (
                      <div key={nav.id} className="group" onMouseEnter={() => setActiveMenu(nav.id)} onMouseLeave={() => setActiveMenu(null)}>
                         <Link
-                           to={`/kategori/${nav.slug}`}
+                           to={`/kategori/${item.slug}`}
                            className={`flex items-center gap-2 py-3 px-3 text-[14px] font-bold tracking-wide uppercase transition-all border-b-2 border-transparent relative z-[1002] whitespace-nowrap ${index === 0 ? 'pl-0' : ''} ${activeMenu === nav.id ? 'text-primary border-primary' : 'text-secondary hover:text-primary'}`}
                         >
                            {nav.id === 'kedi' && <Cat size={18} />}
@@ -243,7 +243,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                                              {item.sub.map((s: any, i: number) => (
                                                 <li key={i}>
                                                    <Link
-                                                      to={`/kategori/${nav.slug}`}
+                                                      to={`/kategori/${item.slug}`}
                                                       className="flex items-center gap-3 p-2 rounded-xl hover:bg-brand/5 transition-all group/link"
                                                       onClick={() => setActiveMenu(null)}
                                                    >
