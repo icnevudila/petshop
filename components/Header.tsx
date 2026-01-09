@@ -14,12 +14,7 @@ interface HeaderProps {
    wishlistCount: number;
 }
 
-const PatiDukkanLogo = () => (
-   <img
-      src="/logopng.png"
-      className="h-64 md:h-80 w-auto drop-shadow-lg transition-all hover:scale-110 hover:drop-shadow-2xl absolute -left-10 top-1/2 -translate-y-1/2 animate-pulse-slow"
-   />
-);
+
 
 
 
@@ -118,7 +113,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
    }, [cartCount]);
 
    return (
-      <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}>
+      <header className={`w-full z-[1002] transition-all duration-300 ${isScrolled ? 'absolute top-0 lg:fixed shadow-md' : 'absolute top-0 lg:fixed'}`}>
          {/* Top Announcement Bar */}
          <AnnouncementBar />
 
@@ -129,13 +124,32 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
             <div className="container flex flex-wrap lg:flex-nowrap items-center justify-between gap-4 py-3 lg:py-2">
 
 
-               {/* Logo - Smaller on mobile */}
-               <div className="flex items-center">
-                  <Link to="/" className="relative w-28 md:w-80 h-8 hover:opacity-80 transition-opacity">
-                     <PatiDukkanLogo />
+               {/* Logo Area */}
+               <div className="flex items-center justify-center lg:justify-start w-full lg:w-auto mt-1 lg:mt-0 mb-0 lg:mb-0 relative z-[1003] order-1 lg:order-none">
+                  <Link to="/" className="relative block hover:opacity-90 transition-opacity">
+                     {/* Desktop Logo */}
+                     <div className="hidden lg:block relative">
+                        <img
+                           src="/logopng.png"
+                           alt="PatiDükkan"
+                           className="h-24 md:h-28 w-auto drop-shadow-md"
+                        />
+                     </div>
+                     {/* Mobile Logo - Large & Stacked */}
+                     <div className="lg:hidden flex justify-center items-center">
+                        <img
+                           src="/logopng.png"
+                           alt="PatiDükkan"
+                           className="h-40 w-auto drop-shadow-xl object-contain"
+                        />
+                     </div>
                   </Link>
-               </div>     {/* Search Bar - Full Width on Mobile with refined style */}
-               <div className="flex-grow max-w-[500px] relative block ml-2 md:ml-0" ref={searchRef}>
+               </div>
+
+
+
+               {/* Search Bar */}
+               <div className="flex-grow w-full lg:w-auto max-w-none lg:max-w-[500px] relative block ml-0 lg:ml-0 -mt-12 lg:mt-0 mb-2 lg:mb-0 order-2 lg:order-none" ref={searchRef}>
                   <div className="relative group">
                      <input
                         type="text"

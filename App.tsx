@@ -315,7 +315,10 @@ const AppContent: React.FC = () => {
 
         <MobileBottomNav cartCount={cartCount} wishlistCount={wishlist.length} />
 
-        <ChatBot />
+        {/* ChatBot - Desktop Only */}
+        <div className="hidden md:block">
+          <ChatBot />
+        </div>
       </div>
     </HashRouter>
   );

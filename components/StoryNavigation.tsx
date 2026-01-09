@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 const STORIES = [
-    { id: 1, name: 'İndirimler', img: '/menu_images/menu_adult_cat_food_1767813783935.png', link: '/kategori/kedi-mamasi', ringColor: 'ring-rose-500' },
-    { id: 2, name: 'Yeni', img: '/menu_images/menu_sterilized_cat_food_1767813803082.png', link: '/kategori/kopek-mamasi', ringColor: 'ring-brand' },
-    { id: 3, name: 'Çok Satan', img: '/menu_images/menu_dog_treats_1767814141258.png', link: '/kategori/kedi-kumu', ringColor: 'ring-blue-500' },
+    { id: 1, name: 'İndirimler', img: '/stories/discount.png', link: '/kategori/kedi-mamasi', ringColor: 'ring-rose-500' },
+    { id: 2, name: 'Yeni', img: '/stories/new.png', link: '/kategori/kopek-mamasi', ringColor: 'ring-brand' },
+    { id: 3, name: 'Çok Satan', img: '/stories/bestseller.png', link: '/kategori/kedi-kumu', ringColor: 'ring-blue-500' },
     { id: 4, name: 'Kedi', img: '/banners/mega_kedi.png', link: '/kategori/kedi', ringColor: 'ring-gray-200' },
     { id: 5, name: 'Köpek', img: '/banners/mega_kopek.png', link: '/kategori/kopek', ringColor: 'ring-gray-200' },
     { id: 6, name: 'Kuş', img: '/banners/mega_kus.png', link: '/kategori/kus', ringColor: 'ring-gray-200' },

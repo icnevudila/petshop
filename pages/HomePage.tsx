@@ -304,13 +304,13 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
          <SEO title="Ana Sayfa" description="Türkiye'nin en seçkin pet ürünleri mağazası. Kedi, köpek, kuş ve balık ürünlerinde geniş seçenekler." />
 
          {/* Mobile Story Navigation */}
-         <div className="pt-[100px] md:hidden">
+         <div className="pt-[290px] md:pt-[100px] md:hidden relative z-10">
             <StoryNavigation />
          </div>
 
          {/* 1. HERO SLIDER - Tam Ekran, Crossfade Geçişli */}
 
-         <section className="relative h-[50vh] min-h-[350px] md:h-screen md:min-h-[600px] md:max-h-[850px] md:mt-[100px] bg-gradient-to-br from-gray-900 to-gray-800 overflow-hidden group flex items-center justify-center">
+         <section className="relative z-0 h-[50vh] min-h-[350px] md:h-screen md:min-h-[600px] md:max-h-[850px] md:mt-[100px] bg-gradient-to-br from-gray-900 to-gray-800 overflow-hidden group flex items-center justify-center">
 
             {/* Loading Spinner */}
             {!heroLoaded && (
