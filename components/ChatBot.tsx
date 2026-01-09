@@ -1,11 +1,11 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Bot, ChevronRight, CornerDownRight, Smile, Briefcase, HelpCircle, User, Truck, CreditCard, ShoppingBag } from 'lucide-react';
+import { MessageCircle, X, Send, Bot, ChevronRight, CornerDownRight, Smile, Briefcase, HelpCircle, User, Truck, CreditCard, ShoppingBag, HeartPulse, Search } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
 interface Message {
     id: string;
-    text: React.ReactNode; // Allow JSX for links
+    text: React.ReactNode;
     sender: 'user' | 'bot';
     timestamp: Date;
 }
@@ -16,19 +16,23 @@ interface QuickAction {
     icon?: React.ReactNode;
 }
 
+type ConversationState = 'IDLE' | 'WAITING_ORDER_ID' | 'RECOMMEND_START' | 'RECOMMEND_CAT_AGE' | 'RECOMMEND_DOG_SIZE';
+
 const ChatBot: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
-            text: 'Merhaba! Ben PatiBot 🤖\nSize nasıl yardımcı olabilirim? Aşağıdaki menüden seçim yapabilir veya sorunuzu yazabilirsiniz.',
+            text: 'Merhaba! Ben PatiBot 🧠\nPetShop dünyasının en bilgili asistanıyım. Size siparişler, ürün tavsiyeleri, sağlık ipuçları veya mağaza bilgileri hakkında ultra detaylı bilgi verebilirim. Nasıl başlayalım?',
             sender: 'bot',
             timestamp: new Date()
         }
     ]);
     const [inputText, setInputText] = useState('');
     const [isTyping, setIsTyping] = useState(false);
-    const [currentMenu, setCurrentMenu] = useState('main'); // main, kargo, iade, urunler, iletisim
+    const [currentMenu, setCurrentMenu] = useState('main');
+    const [conversationState, setConversationState] = useState<ConversationState>('IDLE');
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
 
@@ -40,193 +44,231 @@ const ChatBot: React.FC = () => {
         scrollToBottom();
     }, [messages, isOpen, isTyping]);
 
-    // --- KNOWLEDGE BASE ---
+    // --- ULTRA KNOWLEDGE BASE ---
     const knowledgeBase = [
+        // CATS
         {
-            keywords: ['kedi maması', 'kedi yemi', 'nd kedi', 'royal canin kedi'],
-            response: 'Kediniz için en lezzetli mamalar bizde! 🐱 Kısırlaştırılmış, yavru veya yetişkin kediler için özel mamalarımızı incelemek için <a href="/#/kategori/kedi" class="text-secondary font-bold underline">Kedi Kategorisine</a> göz atabilirsiniz.',
-            link: '/kategori/kedi'
+            keywords: ['kedi', 'pisipisi', 'tekir'],
+            response: 'Kediler hakkında ne bilmek istersiniz? 🐱\n- <a href="/kategori/kedi" class="text-secondary font-bold underline">Mama Çeşitleri</a>\n- <a href="/kategori/kedi" class="text-secondary font-bold underline">Kum ve Tuvalet</a>\n- <a href="/kategori/kedi" class="text-secondary font-bold underline">Oyuncaklar</a>\n\nSize özel mama tavsiyesi yapmamı ister misiniz? Menüden "Mama Tavsiyesi"ni seçebilirsiniz.',
         },
         {
-            keywords: ['köpek maması', 'köpek yemi', 'proplan', 'acana'],
-            response: 'Sadık dostunuz için en kaliteli mamalar raflarımızda! 🐶 Tahılsız, kuzu etli veya somonlu seçenekleri görmek için <a href="/#/kategori/kopek" class="text-secondary font-bold underline">Köpek Kategorisine</a> tıklayabilirsiniz.',
-            link: '/kategori/kopek'
+            keywords: ['kısır', 'sterilised', 'kısırlaştırılmış'],
+            response: 'Kısırlaştırılmış kedilerin metabolizması yavaşlar ve kilo almaya meyilli olurlar. Bu yüzden yağ oranı düşük, L-karnitin içeren "Sterilised" mamaları öneriyoruz. 🏥\n<a href="/kategori/kedi?filter=kisir" class="text-primary font-bold underline">Kısır Kediler İçin Mamaları Gör</a>',
         },
         {
-            keywords: ['balık', 'akvaryum', 'yem', 'filtre'],
-            response: 'Sualtı dünyası için her şey burada! 🐠 Yemlerden filtrelere kadar tüm ihtiyaçlarınız için <a href="/#/kategori/balik" class="text-secondary font-bold underline">Balık Kategorisini</a> ziyaret edin.',
-            link: '/kategori/balik'
+            keywords: ['yavru kedi', 'kitten', 'bebek kedi'],
+            response: 'Yavru kedilerin (0-12 ay) gelişimi çok hızlıdır! Yüksek protein ve kalsiyum içeren "Kitten" mamalarla beslenmeleri gerekir. Ayrıca bağışıklık için anne sütü tozu da önerilir. 🍼\n<a href="/kategori/kedi?filter=kitten" class="text-primary font-bold underline">Yavru Kedi Ürünleri</a>',
         },
         {
-            keywords: ['kuş', 'muhabbet', 'papağan', 'yem', 'kafes'],
-            response: 'Kanatlı dostlarımız için en taze yemler ve geniş kafesler! 🦜 Hemen <a href="/#/kategori/kus" class="text-secondary font-bold underline">Kuş Kategorisine</a> ışınlanın.',
-            link: '/kategori/kus'
+            keywords: ['tüy yumağı', 'hairball', 'kusma'],
+            response: 'Kediniz çok tüy yutuyorsa "Hairball Control" özellikli mamalar veya Malt Macunu kullanmalısınız. Malt macunu, tüylerin sindirim sisteminden doğal yolla atılmasını sağlar. 🧶',
         },
         {
-            keywords: ['kargo ücreti', 'kargo ne kadar', 'ücretsiz kargo'],
-            response: '📦 **Kargo Ücretleri:**\n- 500 TL ve üzeri siparişlerde **KARGO BEDAVA!** 🎉\n- 500 TL altı siparişlerde sabit **50 TL** gönderim ücreti alınmaktadır.'
+            keywords: ['idrar', 'böbrek', 'üriner', 'urinary'],
+            response: 'Böbrek ve idrar yolu sağlığı (Urinary) kedilerde çok kritiktir. Magnezyum oranı dengelenmiş profesyonel mamalar kullanmanızı ve bol taze su bulundurmanızı öneririz. 💧\n<a href="/kategori/kedi" class="text-primary font-bold underline">Urinary Mamalar</a> (Hekim tavsiyesi gerekebilir)',
+        },
+
+        // DOGS
+        {
+            keywords: ['köpek', 'havhav'],
+            response: 'Köpek dostlarımız için her şey düşünüldü! 🐶\nIrk boyutu ve yaşı çok önemlidir. Köpeğiniz hakkında daha detaylı bilgi verirseniz (örn: "Yavru Golden" veya "Yaşlı Terrier") nokta atışı ürün önerebilirim.',
         },
         {
-            keywords: ['hangi kargo', 'kargo firması', 'gönderim'],
-            response: 'Anlaşmalı olduğumuz kargo firması **Yurtiçi Kargo**dur. 🚛 Tüm Türkiye\'ye sigortalı ve hızlı gönderim yapıyoruz.'
+            keywords: ['kuzu', 'somon', 'tahılsız', 'alerji'],
+            response: 'Hassas sindirim sistemine sahip veya alerjik köpekler için **Tahılsız (Grain Free)**, **Kuzu Etli** veya **Somonlu** mamalar kurtarıcıdır. Deri ve tüy sağlığına da çok iyi gelir. 🐟🥩',
         },
         {
-            keywords: ['sipariş takibi', 'nerede', 'kargom'],
-            response: 'Siparişinizin durumunu öğrenmek çok kolay! 🧐\n1. <a href="/#/siparis-takibi" class="text-secondary font-bold underline">Sipariş Takibi</a> sayfasını kullanabilirsiniz.\n2. Veya "Hesabım > Siparişlerim" menüsünden detayları görebilirsiniz.',
-            link: '/siparis-takibi'
+            keywords: ['oyuncak', 'kemirme', 'diş'],
+            response: 'Köpeklerin diş sağlığı ve enerjilerini atmaları için dayanıklı kemirme oyuncakları şarttır! Kong veya halat oyuncaklar hem eğlendirir hem de tartar oluşumunu engeller. 🦴',
+        },
+
+        // GENERAL
+        {
+            keywords: ['mama saklama', 'taze', 'bayat'],
+            response: 'Mamanın tazeliğini korumak için hava almayan kilitli kaplarda, serin ve kuru bir yerde saklamalısınız. Paketi her seferinde sıkıca kapatmayı unutmayın! 🥡',
         },
         {
-            keywords: ['iade', 'değişim', 'geri gönder'],
-            response: 'Memnun kalmadığınız ürünleri **14 gün** içinde koşulsuz iade edebilirsiniz. 🔄\n- Ürün açılmamış olmalı.\n- İade kargo ücreti bize aittir.\nDetaylar için <a href="/#/iade-politikasi" class="text-secondary font-bold underline">İade Politikası</a> sayfamıza bakabilirsiniz.',
-            link: '/iade-politikasi'
-        },
-        {
-            keywords: ['ödeme', 'taksit', 'kredi kartı', 'havale'],
-            response: '💳 **Ödeme Seçenekleri:**\n- Tüm Kredi Kartlarına 12 Taksit\n- Banka Kartı\n- Havale / EFT\n⚠️ Kapıda ödeme seçeneğimiz malesef bulunmamaktadır.'
-        },
-        {
-            keywords: ['mağaza', 'adres', 'yeriniz', 'konum'],
-            response: 'Bize kahve içmeye bekleriz! ☕\n📍 **Adres:** Ertuğrulgazi Mah. Kozluca Bulvarı No:29 (Şımarık AVM Yanı) İnegöl/BURSA.\nHaftanın her günü 09:00 - 22:00 arası açığız.'
-        },
-        {
-            keywords: ['iletişim', 'telefon', 'mail', 'eposta'],
-            response: 'Bize her zaman ulaşabilirsiniz! 📞\n📱 Tel: 0555 123 45 67\n📧 Mail: destek@patidukkan.com\n💬 Veya buradan yazmaya devam edebilirsiniz.'
-        },
-        {
-            keywords: ['indirim', 'kupon', 'kampanya', 'promosyon'],
-            response: 'Şu an aktif kampanyamız: **YAZ2025** kupon kodu ile sepette ekstra **%10 İndirim** kazanabilirsiniz! 🎁 Acele edin, süre sınırlı!'
+            keywords: ['pire', 'kene', 'parazit'],
+            response: 'Dış parazitler (pire/kene) ciddi hastalık taşıyabilir. Düzenli olarak damla/tasma kullanmalısınız. Mağazamızda bitkisel koruyucu tasmalar mevcuttur ancak kesin çözüm için veteriner hekiminize danışın. 🦠'
         }
     ];
 
     // --- MENUS ---
     const menus: Record<string, QuickAction[]> = {
         main: [
-            { label: '📦 Kargo & Teslimat', action: 'menu_kargo', icon: <Truck size={14} /> },
-            { label: '🔄 İade İşlemleri', action: 'menu_iade', icon: <ShoppingBag size={14} /> },
-            { label: '🦴 Ürünler & Stok', action: 'menu_urunler', icon: <Bot size={14} /> },
-            { label: '💳 Ödeme & Fatura', action: 'menu_odeme', icon: <CreditCard size={14} /> },
-            { label: '🎧 Canlı Destek', action: 'canli_destek', icon: <Headset size={14} /> }
+            { label: '🚚 Kargo ve Siparişler', action: 'menu_kargo', icon: <Truck size={14} /> },
+            { label: '🍖 Mama Tavsiyesi Al', action: 'start_recommendation', icon: <HeartPulse size={14} /> },
+            { label: '💳 İade ve Ödeme', action: 'menu_finans', icon: <CreditCard size={14} /> },
+            { label: '📍 Mağaza Bilgisi', action: 'menu_magaza', icon: <ShoppingBag size={14} /> },
+            { label: '🕵️ Sipariş Sorgula', action: 'start_tracking', icon: <Search size={14} /> }
         ],
         menu_kargo: [
-            { label: '🚚 Kargo Ücreti Ne Kadar?', action: 'q_kargo_ucret' },
-            { label: '⏱️ Ne Zaman Gelir?', action: 'q_teslimat_sure' },
-            { label: '🔎 Kargom Nerede?', action: 'q_takip' },
+            { label: 'Ücret Politikası', action: 'info_kargo_ucret' },
+            { label: 'Teslimat Süresi', action: 'info_kargo_sure' },
+            { label: 'Hangi Kargo?', action: 'info_kargo_firma' },
             { label: '🔙 Ana Menü', action: 'menu_main', icon: <CornerDownRight size={14} /> }
         ],
-        menu_iade: [
-            { label: '❓ Nasıl İade Ederim?', action: 'q_iade_nasil' },
-            { label: '💰 Para İadesi Ne Zaman?', action: 'q_para_iadesi' },
-            { label: '📦 Değişim Var mı?', action: 'q_degisim' },
+        menu_finans: [
+            { label: 'İade Koşulları', action: 'info_iade' },
+            { label: 'Taksit Seçenekleri', action: 'info_taksit' },
+            { label: 'Havale Hesapları', action: 'info_havale' },
             { label: '🔙 Ana Menü', action: 'menu_main', icon: <CornerDownRight size={14} /> }
         ],
-        menu_urunler: [
-            { label: '🐈 Kedi Ürünleri', action: 'link_cat' },
-            { label: '🐕 Köpek Ürünleri', action: 'link_dog' },
-            { label: '🦜 Kuş Ürünleri', action: 'link_bird' },
-            { label: '🐠 Balık Ürünleri', action: 'link_fish' },
-            { label: '🔙 Ana Menü', action: 'menu_main', icon: <CornerDownRight size={14} /> }
-        ],
-        menu_odeme: [
-            { label: '💳 Taksit Seçenekleri', action: 'q_taksit' },
-            { label: '🚪 Kapıda Ödeme', action: 'q_kapida' },
-            { label: '🧾 Havale Bilgileri', action: 'q_havale' },
+        menu_magaza: [
+            { label: 'Adres & Konum', action: 'info_adres' },
+            { label: 'Çalışma Saatleri', action: 'info_saat' },
+            { label: 'Telefon', action: 'info_tel' },
             { label: '🔙 Ana Menü', action: 'menu_main', icon: <CornerDownRight size={14} /> }
         ]
     };
 
+    // --- LOGIC ---
+
     const handleAction = (action: string) => {
-        // Check if it's a menu switch
+        // Menu Navigation
         if (menus[action]) {
             setCurrentMenu(action);
             return;
         }
-
-        // Check for explicit back
         if (action === 'menu_main') {
             setCurrentMenu('main');
+            setConversationState('IDLE');
             return;
         }
 
-        // Direct Answers
-        let responseText = '';
         let userText = '';
+        let reqResponse = '';
 
-        switch (action) {
-            // Kargo
-            case 'q_kargo_ucret':
-                userText = 'Kargo ücreti ne kadar?';
-                responseText = '500 TL altı siparişlerde kargo ücreti 50 TL\'dir. 500 TL üzeri siparişlerinizde kargo bizden! 🎁';
-                break;
-            case 'q_teslimat_sure':
-                userText = 'Siparişim ne zaman gelir?';
-                responseText = 'Siparişleriniz 24 saat içinde kargoya verilir ve genellikle 1-3 iş günü içinde size ulaşır. 🚀';
-                break;
-            case 'q_takip':
-                userText = 'Kargom nerede?';
-                responseText = 'Siparişinizi "Sipariş Takibi" sayfasından sorgulayabilirsiniz. Size gönderilen SMS\'teki takip kodunu kullanmayı unutmayın.';
-                break;
-
-            // İade
-            case 'q_iade_nasil':
-                userText = 'Nasıl iade ederim?';
-                responseText = 'İade işlemi çok basit! Kargo şubesine gidip "123456789" numaralı müşteri kodumuzu söyleyerek ürünü ücretsiz gönderebilirsiniz.';
-                break;
-            case 'q_para_iadesi':
-                userText = 'Para iadesi ne zaman yatar?';
-                responseText = 'Ürün depomuza ulaştıktan sonra 24 saat içinde iade onayı verilir. Bankanıza bağlı olarak 3-7 gün içinde kartınıza yansır.';
-                break;
-
-            // Ödeme
-            case 'q_kapida':
-                userText = 'Kapıda ödeme var mı?';
-                responseText = 'Güvenlik prosedürlerimiz gereği şu an için kapıda ödeme kabul edemiyoruz. Kredi kartı veya Havale ile güvenle alışveriş yapabilirsiniz.';
-                break;
-
-            // Kategori Linkleri (Special handling)
-            case 'link_cat':
-                navigate('/kategori/kedi');
-                setIsOpen(false);
-                return;
-            case 'link_dog':
-                navigate('/kategori/kopek');
-                setIsOpen(false);
-                return;
-
-            case 'canli_destek':
-                userText = 'Canlı desteğe bağlanmak istiyorum.';
-                responseText = '📞 Müşteri Hizmetleri Numaramız: 0555 123 45 67\nMesai saatleri (09:00-18:00) içerisinde arayabilir veya WhatsApp hattımızdan yazabilirsiniz.';
-                break;
-
-            default:
-                userText = 'Bilgi almak istiyorum.';
-                responseText = 'Size nasıl yardımcı olabilirim?';
+        // Specialized Logic Routes
+        if (action === 'start_tracking') {
+            setConversationState('WAITING_ORDER_ID');
+            addMessage('user', 'Siparişimi sorgulamak istiyorum.');
+            setTimeout(() => addMessage('bot', 'Lütfen 10 haneli sipariş numaranızı yazar mısınız? (Örn: 1234567890)'), 600);
+            return;
         }
 
-        addMessage('user', userText);
-        simulateBotResponse(responseText);
+        if (action === 'start_recommendation') {
+            setConversationState('RECOMMEND_START');
+            addMessage('user', 'Mama tavsiyesi istiyorum.');
+            setTimeout(() => {
+                addMessage('bot', 'Harika! Size en uygun mamayı bulalım. Öncelikle, minik dostumuz bir **Kedi** mi yoksa **Köpek** mi?');
+                // We could simulate buttons here by injecting them into chat or changing quick menu
+                // For now, let's guide user to type or use basic text recognition
+            }, 600);
+            return;
+        }
+
+        // Static Information Responses
+        switch (action) {
+            case 'info_kargo_ucret':
+                userText = 'Kargo ücreti ne kadar?';
+                reqResponse = '📦 **Kargo Politikamız:**\n• 500 TL ve üzeri: **ÜCRETSİZ**\n• 500 TL altı: **50 TL** sabit ücret.\n• Kapıda ödeme yoktur.';
+                break;
+            case 'info_kargo_sure':
+                userText = 'Ne zaman ulaşır?';
+                reqResponse = 'Siparişleriniz Bursa depomuzdan çıkar.\n• Marmara Bölgesi: 1 İş Günü\n• Diğer Bölgeler: 1-3 İş Günü\nHafta içi 16:00\'a kadar verilen siparişler aynı gün kargodadır.';
+                break;
+            case 'info_kargo_firma':
+                userText = 'Hangi firmayla çalışıyorsunuz?';
+                reqResponse = 'Tüm gönderimlerimiz **Yurtiçi Kargo** güvencesiyle sigortalı olarak yapılmaktadır. Kırılacak ürünler (akvaryum vb.) özel straforlu kutularda gönderilir.';
+                break;
+            case 'info_iade':
+                userText = 'İade koşulları nelerdir?';
+                reqResponse = 'Memnuniyetiniz garantimiz altında! 🛡️\nÜrünü teslim aldıktan sonra **14 gün** içerisinde, ambalajı bozulmamış olmak kaydıyla sebep belirtmeksizin iade edebilirsiniz. İade kargo kodu için Hesabım panelini kullanabilirsiniz.';
+                break;
+            case 'info_taksit':
+                userText = 'Taksit yapıyor musunuz?';
+                reqResponse = 'Evet, anlaşmalı ödeme kuruluşumuz (Iyzico/PayTR) üzerinden Bonus, World, Axess, Maximum, CardFinans ve Paraf kartlarına **12 aya varan taksit** imkanı sunuyoruz.';
+                break;
+            case 'info_adres':
+                userText = 'Mağaza nerede?';
+                reqResponse = '📍 **Showroom:**\nErtuğrulgazi Mah. Kozluca Bulvarı No:29\nİnegöl / BURSA\n(Şımarık AVM Yanı, ana cadde üzerinde)';
+                break;
+        }
+
+        if (userText) addMessage('user', userText);
+        if (reqResponse) simulateBotResponse(reqResponse);
     };
 
-    const processInput = (text: string) => {
-        // Check Knowledge Base Logic
+    const processConversationState = (text: string) => {
         const lower = text.toLowerCase();
 
-        // Check Knowledge Base
+        // State: WAITING_ORDER_ID
+        if (conversationState === 'WAITING_ORDER_ID') {
+            if (text.length >= 5 && !isNaN(Number(text))) {
+                simulateBotResponse(`🔍 **${text}** numaralı siparişiniz kontrol ediliyor...\n\n✅ **Durum:** Sipariş Hazırlanıyor\n📦 **Tahmini Kargolama:** Bugün 17:00\n\nDetaylı bilgi için SMS bildirimlerini takip edebilirsiniz.`);
+                setConversationState('IDLE');
+            } else {
+                simulateBotResponse('Bu numara formatı hatalı görünüyor. Lütfen sadece rakamlardan oluşan sipariş numaranızı girin veya iptal etmek için "İptal" yazın.');
+            }
+            return;
+        }
+
+        // State: RECOMMEND_START (Cat or Dog?)
+        if (conversationState === 'RECOMMEND_START') {
+            if (lower.includes('kedi')) {
+                setConversationState('RECOMMEND_CAT_AGE');
+                simulateBotResponse('Miyav! 😺 Peki kediniz kaç yaşında?\n1. Yavru (0-12 ay)\n2. Yetişkin (1-7 yaş)\n3. Yaşlı (7+ yaş)');
+            } else if (lower.includes('köpek')) {
+                setConversationState('RECOMMEND_DOG_SIZE');
+                simulateBotResponse('Hav hav! 🐶 Köpeğinizin ırk boyutu nedir?\n1. Küçük (Small)\n2. Orta (Medium)\n3. Büyük (Large)');
+            } else {
+                simulateBotResponse('Lütfen "Kedi" veya "Köpek" olarak belirtir misiniz?');
+            }
+            return;
+        }
+
+        // State: RECOMMEND_CAT_AGE
+        if (conversationState === 'RECOMMEND_CAT_AGE') {
+            if (lower.includes('yavru') || lower.includes('0') || lower.includes('bebek')) {
+                simulateBotResponse('Yavru kedilerin yüksek enerjiye ihtiyacı vardır! 🍼\nÖnerim: **Royal Canin Kitten** veya **Proplan Junior**.\nBu mamalar kemik gelişimi için ekstra kalsiyum içerir. <a href="/kategori/kedi?q=kitten" class="underline font-bold">Ürünleri İncele</a>');
+            } else if (lower.includes('yasli') || lower.includes('yaşlı') || lower.includes('7')) {
+                simulateBotResponse('Kıdemli dostumuz için böbrek sağlığını destekleyen mamalar seçmeliyiz. 👴\nÖnerim: **Hill\'s Mature Adult 7+**.\n<a href="/kategori/kedi?q=mature" class="underline font-bold">Ürünleri İncele</a>');
+            } else {
+                simulateBotResponse('Yetişkin kediniz için **N&D Tahılsız** veya **La Vital Sterilised** (eğer kısırsa) harika seçeneklerdir. Lezzet garantilidir! 🍗\n<a href="/kategori/kedi" class="underline font-bold">Tüm Yetişkin Mamaları</a>');
+            }
+            setConversationState('IDLE');
+            return;
+        }
+
+        // State: RECOMMEND_DOG_SIZE
+        if (conversationState === 'RECOMMEND_DOG_SIZE') {
+            simulateBotResponse('Anlaşıldı! 🐕 Seçtiğiniz boyuta uygun, eklem destekleyici (Glukozamin içeren) mamalarımıza buradan göz atabilirsiniz:\n<a href="/kategori/kopek" class="underline font-bold">Size Özel Köpek Mamaları</a>');
+            setConversationState('IDLE');
+            return;
+        }
+
+        // Fallback to normal keyword search
+        const response = searchKnowledgeBase(text);
+        simulateBotResponse(response);
+    };
+
+    const searchKnowledgeBase = (text: string): string => {
+        const lower = text.toLowerCase();
+
+        // Check predefined detailed knowledge base
         const found = knowledgeBase.find(kb => kb.keywords.some(k => lower.includes(k)));
+        if (found) return found.response;
 
-        if (found) {
-            return found.response;
+        // Small Talk
+        if (['merhaba', 'selam'].some(w => lower.includes(w))) return 'Merhaba! Nasıl yardımcı olabilirim?';
+        if (lower.includes('insan') || lower.includes('canlı')) return 'Müşteri temsilcilerimiz şu an yoğun. Ancak 0555 123 45 67 hattından bize ulaşabilirsiniz.';
+
+        // Smart Fallback
+        return 'Bu konuda henüz eğitilmedim ama öğreniyorum! 📚\nMenüyü kullanarak "Kargo", "İade" veya "Ürün Tavsiyesi" alabilirsiniz.';
+    };
+
+    const handleSend = (text: string) => {
+        addMessage('user', text);
+
+        // If inside a flow state, use processConversationState
+        if (conversationState !== 'IDLE') {
+            processConversationState(text);
+        } else {
+            // Normal processing
+            const response = searchKnowledgeBase(text);
+            simulateBotResponse(response);
         }
-
-        // Greeting
-        if (['selam', 'merhaba', 'günaydın'].some(w => lower.includes(w))) {
-            return 'Selam! 👋 Hoş geldiniz. Size nasıl yardımcı olabilirim?';
-        }
-
-        if (['teşekkür', 'sağol'].some(w => lower.includes(w))) {
-            return 'Rica ederim! 🧡 Başka bir sorunuz olursa buradayım.';
-        }
-
-        return 'Bunu tam anlayamadım 😔 Ama üzülmeyin, öğreniyorum! \nAşağıdaki menüden konuyu seçerseniz size daha doğru yardımcı olabilirim.';
     };
 
     const addMessage = (sender: 'user' | 'bot', text: string | React.ReactNode) => {
@@ -240,13 +282,12 @@ const ChatBot: React.FC = () => {
 
     const simulateBotResponse = (responseText: string) => {
         setIsTyping(true);
-        const delay = Math.random() * 800 + 800; // Natural delay
+        const delay = Math.random() * 800 + 600;
 
         setTimeout(() => {
             setIsTyping(false);
-            // Process HTML links in response text appropriately
-            if (responseText.includes('<a href=')) {
-                // Basic parser for this specific use case to render JSX
+            // Basic JSX Link Parser
+            if (typeof responseText === 'string' && responseText.includes('<a href=')) {
                 const parts = responseText.split(/<a href="([^"]+)"[^>]*>([^<]+)<\/a>/);
                 if (parts.length > 1) {
                     addMessage('bot', (
@@ -265,21 +306,12 @@ const ChatBot: React.FC = () => {
         }, delay);
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!inputText.trim()) return;
-
-        addMessage('user', inputText);
-        const response = processInput(inputText);
-        simulateBotResponse(response);
-        setInputText('');
-    };
-
+    // UI Components
     return (
         <>
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`fixed bottom-6 right-6 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 ${isOpen ? 'bg-white text-gray-500 rotate-90' : 'bg-gradient-to-tr from-primary to-orange-400 text-white animate-bounce-subtle'}`}
+                className={`fixed bottom-6 right-6 z-50 w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-300 hover:scale-110 ${isOpen ? 'bg-white text-gray-500 rotate-90' : 'bg-gradient-to-tr from-primary to-orange-400 text-white animate-bounce-subtle'}`}
             >
                 {isOpen ? <X size={28} /> : (
                     <div className="relative">
@@ -293,46 +325,46 @@ const ChatBot: React.FC = () => {
             </button>
 
             {isOpen && (
-                <div className="fixed bottom-24 right-6 w-[90vw] md:w-[380px] h-[600px] max-h-[70vh] bg-white rounded-3xl shadow-2xl border border-gray-100 z-50 flex flex-col overflow-hidden animate-slide-up origin-bottom-right font-sans ring-4 ring-black/5">
+                <div className="fixed bottom-24 right-4 md:right-8 w-[90vw] md:w-[380px] h-[650px] max-h-[75vh] bg-white rounded-[2rem] shadow-2xl border border-gray-100/50 z-50 flex flex-col overflow-hidden animate-slide-up origin-bottom-right font-sans ring-1 ring-black/5 backdrop-blur-xl">
 
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-primary to-orange-500 p-5 flex items-center gap-4 text-white shadow-md relative overflow-hidden">
-                        <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
-                            <Bot size={80} />
-                        </div>
+                    <div className="bg-gradient-to-r from-primary to-orange-500 p-5 pt-6 flex items-center gap-4 text-white shadow-lg relative overflow-hidden">
+                        {/* Decorative Circles */}
+                        <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                        <div className="absolute top-12 left-12 w-16 h-16 bg-white/10 rounded-full blur-xl"></div>
 
-                        <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-inner">
+                        <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-md border border-white/30 shadow-inner relative z-10">
                             <Bot size={28} />
                         </div>
-                        <div>
-                            <h3 className="font-black text-lg tracking-wide">PatiBot</h3>
+                        <div className="relative z-10">
+                            <h3 className="font-black text-lg tracking-wide drop-shadow-sm">PatiBot</h3>
                             <div className="flex items-center gap-1.5 opacity-90">
                                 <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]"></span>
-                                <p className="text-xs font-medium">Çevrimiçi</p>
+                                <p className="text-xs font-medium">Asistan modunda</p>
                             </div>
                         </div>
                     </div>
 
                     {/* Messages */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50/80 scroll-smooth">
-                        <div className="text-center">
-                            <span className="text-[10px] text-gray-400 bg-gray-100 px-3 py-1 rounded-full">{new Date().toLocaleDateString()}</span>
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-[#F8F9FA] scroll-smooth">
+                        <div className="text-center my-4">
+                            <span className="text-[10px] text-gray-400 font-medium bg-white border border-gray-100 px-3 py-1 rounded-full shadow-sm">Bugün</span>
                         </div>
 
                         {messages.map((msg) => (
-                            <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in items-end gap-2`}>
+                            <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in items-end gap-2 group`}>
                                 {msg.sender === 'bot' && (
-                                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-primary to-orange-400 flex items-center justify-center text-white shrink-0 mb-4 shadow-sm">
-                                        <Bot size={14} />
+                                    <div className="w-8 h-8 rounded-2xl bg-white border border-gray-100 flex items-center justify-center text-primary shrink-0 mb-4 shadow-sm group-hover:scale-110 transition-transform">
+                                        <Bot size={18} />
                                     </div>
                                 )}
 
-                                <div className={`max-w-[85%] p-3.5 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.sender === 'user'
-                                        ? 'bg-secondary text-white rounded-br-none'
+                                <div className={`max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed shadow-sm relative ${msg.sender === 'user'
+                                        ? 'bg-gradient-to-br from-[#2D3436] to-[#000000] text-white rounded-br-none'
                                         : 'bg-white text-gray-700 rounded-bl-none border border-gray-100'
                                     }`}>
                                     <div className="whitespace-pre-wrap">{msg.text}</div>
-                                    <div className={`text-[9px] mt-1.5 text-right font-medium ${msg.sender === 'user' ? 'text-white/60' : 'text-gray-400'}`}>
+                                    <div className={`text-[9px] mt-1.5 text-right font-medium ${msg.sender === 'user' ? 'text-white/50' : 'text-gray-300'}`}>
                                         {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </div>
                                 </div>
@@ -340,24 +372,27 @@ const ChatBot: React.FC = () => {
                         ))}
 
                         {isTyping && (
-                            <div className="flex justify-start items-center gap-2">
-                                <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
-                                    <div className="w-3 h-3 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                            <div className="flex justify-start items-center gap-2 pl-1">
+                                <div className="w-8 h-8 rounded-2xl bg-gray-100 flex items-center justify-center shrink-0">
+                                    <div className="flex gap-0.5">
+                                        <span className="w-1 h-1 bg-gray-400 rounded-full animate-bounce"></span>
+                                        <span className="w-1 h-1 bg-gray-400 rounded-full animate-bounce delay-100"></span>
+                                        <span className="w-1 h-1 bg-gray-400 rounded-full animate-bounce delay-200"></span>
+                                    </div>
                                 </div>
-                                <div className="text-xs text-gray-400 animate-pulse">Yazıyor...</div>
                             </div>
                         )}
                         <div ref={messagesEndRef} />
                     </div>
 
                     {/* Smart Menu (Chips) */}
-                    <div className="bg-white p-2 border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">
-                        <div className="flex gap-2 overflow-x-auto pb-2 px-1 no-scrollbar">
+                    <div className="bg-white p-3 border-t border-gray-100 shadow-[0_-4px_20px_rgba(0,0,0,0.02)] z-10">
+                        <div className="flex gap-2 overflow-x-auto pb-1 px-1 no-scrollbar mask-linear-fade">
                             {menus[currentMenu]?.map((btn, idx) => (
                                 <button
                                     key={idx}
                                     onClick={() => handleAction(btn.action)}
-                                    className="whitespace-nowrap flex items-center gap-1.5 px-4 py-2.5 bg-gray-50 hover:bg-primary hover:text-white border border-gray-200 hover:border-primary text-gray-600 text-xs font-bold rounded-xl transition-all active:scale-95 shrink-0"
+                                    className="whitespace-nowrap flex items-center gap-1.5 px-4 py-2.5 bg-gray-50 hover:bg-black hover:text-white border border-gray-100 hover:border-black text-gray-600 text-[11px] font-bold rounded-xl transition-all active:scale-95 shrink-0"
                                 >
                                     {btn.icon} {btn.label}
                                 </button>
@@ -366,20 +401,20 @@ const ChatBot: React.FC = () => {
                     </div>
 
                     {/* Input Area */}
-                    <form onSubmit={handleSubmit} className="p-3 bg-white border-t border-gray-100 flex gap-2 items-center">
+                    <form onSubmit={(e) => { e.preventDefault(); handleSend(inputText); setInputText(''); }} className="p-3 bg-white border-t border-gray-50 flex gap-2 items-center bg-white/80 backdrop-blur-sm">
                         <input
                             type="text"
                             value={inputText}
                             onChange={(e) => setInputText(e.target.value)}
-                            placeholder="Bir mesaj yazın..."
-                            className="flex-1 pl-4 pr-4 py-3 bg-gray-100 rounded-xl border-none focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all outline-none text-sm placeholder-gray-400"
+                            placeholder="Bir şeyler yazın..."
+                            className="flex-1 pl-4 pr-4 py-3.5 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-gray-200 focus:ring-4 focus:ring-gray-100 transition-all outline-none text-sm placeholder-gray-400 font-medium"
                         />
                         <button
                             type="submit"
                             disabled={!inputText.trim()}
-                            className="w-11 h-11 bg-secondary disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl flex items-center justify-center hover:bg-black transition-colors shadow-lg active:scale-95"
+                            className="w-12 h-12 bg-primary disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed text-white rounded-2xl flex items-center justify-center hover:bg-orange-600 transition-all shadow-lg hover:shadow-primary/30 active:scale-95"
                         >
-                            <Send size={18} />
+                            <Send size={20} />
                         </button>
                     </form>
 
