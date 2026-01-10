@@ -33,7 +33,7 @@ const ChatBot: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
-            text: 'Merhaba! Ben PatiBot 🧠\nPetShop dünyasının en kapsamlı yapay zeka asistanıyım. \n\n🦸‍♂️ **Neler Yapabilirim?**\n• En uygun mamayı seçebilirim.\n• Siparişini saniyeler içinde bulabilirim.\n• Minik dostuna isim bulabilirim.\n• Sağlık ve bakım tavsiyeleri verebilirim.\n\nNasıl yardımcı olmamı istersin?',
+            text: 'Merhaba! Ben Patti, PatiDükkan müşteri temsilciniz.\n\nSize nasıl yardımcı olabilirim?\n\n**Yapabileceklerim:**\n• Evcil dostunuz için en uygun ürünleri önerebilirim\n• Sipariş durumunuzu sorgulayabilirim\n• Ürün özellikleri hakkında detaylı bilgi verebilirim\n• Kargo ve iade süreçlerinde yardımcı olabilirim',
             sender: 'bot',
             timestamp: new Date()
         }
@@ -57,12 +57,12 @@ const ChatBot: React.FC = () => {
     // --- UBER KNOWLEDGE BASE (ENCYCLOPEDIA) ---
     const knowledgeBase = [
         // --- KEDİ (CATS) ---
-        { keywords: ['kedi maması', 'kedi yemi'], response: 'Kediniz için en lezzetli mamalar bizde! 🐱 <a href="/kategori/kedi" class="underline font-bold">Kedi Kategorisine Git</a>' },
-        { keywords: ['kısır kedi', 'sterilised'], response: 'Kısırlaştırılmış kediler kilo almaya meyillidir. Yağ oranı düşük, L-karnitin içeren mamalar öneriyoruz. 🏥 <a href="/kategori/kedi?q=kisir" class="underline font-bold">Kısır Kedi Mamaları</a>' },
-        { keywords: ['tüy döküyor', 'tüy dökülmesi', 'dökülme'], response: 'Mevsimsel geçişlerde normaldir ancak aşırıysa Biotin ve Çinko eksikliği olabilir. "Derma" içeren mamalar veya somon yağı takviyesi kullanmanızı öneririm. Ayrıca furminator taraklarımız harikadır! 🧶' },
-        { keywords: ['malt', 'kusma', 'tüy yumağı'], response: 'Kediniz tüy yutuyorsa mutlaka Malt Macunu kullanmalısınız. Haftada 2-3 kez nohut büyüklüğünde vermeniz sindirimi rahatlatır.' },
-        { keywords: ['kedi kumu', 'bentonit', 'silika', 'pelet'], response: 'Kum seçimi önemlidir! 🚽\n• **Bentonit:** Topaklaşır, kokuyu hapseder.\n• **Silika:** Uzun ömürlüdür, emicidir.\n• **Pelet:** %100 doğaldır, toz yapmaz.' },
-        { keywords: ['kedi otu', 'catnip'], response: 'Kediniz stresliyse veya oyuna ilgisizse Kedi Otu (Catnip) harika bir çözüm! Oyuncakların üzerine sıkabilir veya serpebilirsiniz. 🌿' },
+        { keywords: ['kedi maması', 'kedi yemi'], response: 'Kediniz için kaliteli mama seçeneklerimiz mevcut. <a href="/kategori/kedi" class="underline font-bold">Kedi kategorisine</a> göz atabilirsiniz.' },
+        { keywords: ['kısır kedi', 'sterilised'], response: 'Kısırlaştırılmış kediler için özel formüle edilmiş, yağ oranı düşük ve L-karnitin içeren mamalarımız var. Bu mamalar kilo kontrolüne yardımcı olur. <a href="/kategori/kedi?q=kisir" class="underline font-bold">Kısır kedi mamalarını</a> inceleyebilirsiniz.' },
+        { keywords: ['tüy döküyor', 'tüy dökülmesi', 'dökülme'], response: 'Tüy dökülmesi mevsimsel geçişlerde normaldir. Ancak aşırı dökülme varsa Biotin ve Çinko içeren mamalar faydalı olabilir. Derma içerikli mamalarımız ve somon yağı takviyelerimiz bu konuda yardımcı olur. Furminator taraklarımız da tüy bakımında oldukça etkilidir.' },
+        { keywords: ['malt', 'kusma', 'tüy yumağı'], response: 'Kediniz tüy yutma sorunu yaşıyorsa malt macunu kullanmanızı öneririm. Haftada 2-3 kez nohut büyüklüğünde vermek sindirim sistemini rahatlatır ve tüy yumağı oluşumunu önler.' },
+        { keywords: ['kedi kumu', 'bentonit', 'silika', 'pelet'], response: 'Kedi kumu seçiminde üç ana tip bulunur:\n\n**Bentonit:** Topaklaşma özelliği sayesinde temizliği kolaydır ve kokuyu etkili şekilde hapseder.\n**Silika:** Uzun ömürlü ve yüksek emicilik özelliğine sahiptir.\n**Pelet:** Doğal içeriklidir ve toz oluşturmaz.' },
+        { keywords: ['kedi otu', 'catnip'], response: 'Kedi otu (Catnip) stresli kediler için rahatlatıcı etkiye sahiptir. Oyuncakların üzerine sürerek veya serperek kullanabilirsiniz. Kedilerin oyun isteğini artırır.' },
 
         // --- KÖPEK (DOGS) ---
         { keywords: ['köpek maması', 'proplan', 'acana', 'royal canin'], response: 'Sadık dostlarımız için premium markalarımız var: Acana, Orijen, ProPlan, Royal Canin, N&D. Hepsi taze, hepsi orijinal! 🐶 <a href="/kategori/kopek" class="underline font-bold">Mamaları Gör</a>' },
@@ -362,14 +362,14 @@ const ChatBot: React.FC = () => {
                         <div className="absolute top-0 right-0 w-40 h-40 bg-orange-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                         <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-500/10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/2"></div>
 
-                        <div className="relative z-10 w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/10 shadow-inner">
-                            <Bot size={28} className="text-orange-400" />
+                        <div className="relative z-10 w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-inner overflow-hidden">
+                            <img src="/patti_avatar.png" alt="Patti" className="w-full h-full object-cover" />
                         </div>
                         <div className="relative z-10">
-                            <h3 className="font-black text-xl tracking-tight text-white">PatiBot <span className="text-orange-400">Pro</span></h3>
+                            <h3 className="font-black text-xl tracking-tight text-white" style={{ fontFamily: 'Varela Round, sans-serif' }}>Patti</h3>
                             <div className="flex items-center gap-1.5 opacity-80">
                                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.8)]"></span>
-                                <p className="text-[10px] uppercase tracking-widest font-bold">Canlı & Hazır</p>
+                                <p className="text-[10px] tracking-wide font-medium">Dükkan İletişim</p>
                             </div>
                         </div>
                     </div>
@@ -380,14 +380,14 @@ const ChatBot: React.FC = () => {
                         {messages.map((msg) => (
                             <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in items-end gap-3 group px-1`}>
                                 {msg.sender === 'bot' && (
-                                    <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0 mb-6 shadow-sm border border-orange-200">
-                                        <Bot size={16} />
+                                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 mb-6 shadow-sm border border-gray-200 overflow-hidden">
+                                        <img src="/patti_avatar.png" alt="Patti" className="w-full h-full object-cover" />
                                     </div>
                                 )}
 
                                 <div className={`max-w-[85%] p-4 rounded-2xl text-[13px] leading-relaxed shadow-sm relative transition-all duration-200 hover:shadow-md ${msg.sender === 'user'
-                                        ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-br-none'
-                                        : 'bg-white text-gray-700 rounded-bl-none border border-gray-100'
+                                    ? 'bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-br-none'
+                                    : 'bg-white text-gray-700 rounded-bl-none border border-gray-100'
                                     }`}>
                                     <div className="whitespace-pre-wrap">{msg.text}</div>
                                     <div className={`text-[10px] mt-2 text-right font-medium ${msg.sender === 'user' ? 'text-white/60' : 'text-gray-300'}`}>
