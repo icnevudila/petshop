@@ -38,8 +38,10 @@ const LoginPage: React.FC = () => {
                 setError('E-posta veya şifre hatalı.');
             } else if (err.code === 'auth/too-many-requests') {
                 setError('Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin.');
+            } else if (err.message && (err.message.includes('Email not confirmed') || err.message.includes('not verified'))) {
+                setError('Giriş yapabilmek için lütfen e-posta adresinizi doğrulayın.');
             } else {
-                setError('Giriş başarısız oldu. Lütfen tekrar deneyin.');
+                setError('Giriş başarısız oldu: ' + (err.message || 'Lütfen tekrar deneyin.'));
             }
         } finally {
             setIsSubmitting(false);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from "react-router-dom";
 import { NAV_DATA, CATEGORY_DATA } from '../constants';
 import { useProducts } from '../ProductContext';
@@ -235,7 +235,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
   const activeFilterCount = Object.values(filters).flat().length;
 
   return (
-    <div className="container mx-auto px-4 py-12 pb-32">
+    <div className="container mx-auto px-4 pt-[260px] md:pt-12 pb-32">
       {/* Breadcrumb */}
       <div className="flex items-center gap-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-12">
         <Link to="/" className="hover:text-brand cursor-pointer transition-colors flex items-center gap-1">
@@ -503,8 +503,8 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
                       <button
                         onClick={() => handlePageChange(page)}
                         className={`w - 10 h - 10 rounded - xl font - bold text - sm transition - all ${currentPage === page
-                            ? 'bg-primary text-white shadow-lg'
-                            : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'
+                          ? 'bg-primary text-white shadow-lg'
+                          : 'bg-white text-gray-600 border border-gray-200 hover:border-primary hover:text-primary'
                           } `}
                         aria-label={`Sayfa ${page} `}
                       >

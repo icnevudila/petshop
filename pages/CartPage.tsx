@@ -57,7 +57,7 @@ const CartPage: React.FC<CartPageProps> = ({ cart, removeFromCart, updateCartQua
   }
 
   return (
-    <div className="bg-[#fcfcfc] min-h-screen pb-32">
+    <div className="bg-[#fcfcfc] min-h-screen pt-[260px] md:pt-28 pb-32">
       {/* Top Banner Message */}
       <div className="bg-white border-b border-gray-50 py-3">
         <div className="container mx-auto px-4 flex items-center justify-center gap-4">

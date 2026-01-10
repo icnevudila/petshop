@@ -80,7 +80,7 @@ const BlogDetailPage: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white pt-[240px] md:pt-[360px] pb-20">
+        <div className="min-h-screen bg-white pt-[290px] md:pt-[360px] pb-20">
             <SEO
                 title={article.title}
                 description={article.content.substring(0, 150)}

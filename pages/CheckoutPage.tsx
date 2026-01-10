@@ -127,7 +127,7 @@ const CheckoutPage: React.FC = () => {
     }
 
     return (
-        <div className="bg-[#fcfcfc] min-h-screen py-12">
+        <div className="bg-[#fcfcfc] min-h-screen pt-[260px] md:pt-12 pb-12">
             <div className="container mx-auto px-4">
                 <button onClick={() => navigate(-1)} className="flex items-center text-gray-500 mb-8 hover:text-brand transition-colors">
                     <ArrowLeft size={20} className="mr-2" /> Alışverişe Dön

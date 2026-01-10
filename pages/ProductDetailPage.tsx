@@ -57,7 +57,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ addToCart, toggle
   }, [product.id]);
 
   return (
-    <div className="bg-[#FAFAFA] min-h-screen pb-24">
+    <div className="bg-[#FAFAFA] min-h-screen pt-[260px] md:pt-28 pb-24">
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-8">

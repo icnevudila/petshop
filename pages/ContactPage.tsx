@@ -33,7 +33,7 @@ const ContactPage: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#fdfbf7] pt-[240px] md:pt-[360px] pb-20">
+        <div className="min-h-screen bg-[#fdfbf7] pt-[290px] md:pt-[360px] pb-20">
             <SEO
                 title="İletişim"
                 description="PatiDükkan iletişim bilgileri. Adres, telefon, e-posta ve iletişim formu ile bize ulaşın."
