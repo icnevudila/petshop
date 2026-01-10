@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 150">
+  <defs>
+    <linearGradient id="brownGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#A0522D;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#CD853F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A0522D;stop-opacity:1" />
+    </linearGradient>
+    <style>
+      .txt { 
+        font-family: "Varela Round", "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif; 
+        font-weight: bold; 
+        font-size: 100px; 
+        fill: url(#brownGrad); 
+      }
+      .icon { fill: url(#brownGrad); }
+    </style>
+  </defs>
+
+  <!-- P -->
+  <text x="10" y="110" class="txt">p</text>
+
+  <!-- DOG (as 'a') - Visual check: needs to look Right (towards the T) -->
+  <!-- User's Dog Path. Assuming native faces Left. Flip X to face Right. -->
+  <g transform="translate(135, 110) scale(-0.22, 0.22) translate(-196, -392)">
+     <path class="icon" d="M379.498,90.453l-40.104-16.18c-2.449-12.946-12.287-23.311-24.947-26.528l-2.169-24.992
+	c-0.31-3.565-2.702-6.608-6.093-7.75c-3.392-1.142-7.138-0.168-9.541,2.484l-10.492,11.572l-6.437-22.531
+	c-1.072-3.752-4.441-6.386-8.341-6.522c-3.898-0.121-7.443,2.258-8.774,5.928l-55.536,153.21
+	c-39.95,10.374-74.835,35.938-96.262,70.724c-19.626,31.862-25.722,68.366-17.165,102.786c5.001,20.117,14.496,33.373,24.209,42.065
+	h-7.639c-0.072,0-0.144,0.001-0.216,0.003c-36.135,0.881-69.622-19.663-85.259-52.307c-2.147-4.483-7.522-6.375-12.005-4.229
+	c-4.483,2.148-6.376,7.522-4.228,12.005c18.31,38.226,57.078,62.557,99.286,62.557c0.842,0,171.829,0,171.829,0c4.971,0,9-4.029,9-9
+	c0-24.226-19.323-35.268-36.377-39.321c7.974-15.546,8.663-29.218,7.759-38.162l2.352-0.314l53.943,82.713
+	c1.662,2.547,4.497,4.083,7.539,4.083h32.755c3.277,0,6.296-1.782,7.879-4.651c1.584-2.869,1.482-6.373-0.265-9.146
+	c-0.348-0.552-34.166-54.247-52.346-84.309V143.416c2.676,0.308,5.681,0.463,8.335,0.463c26.109,0,50.664-14.73,63.885-40.848
+	c0.011-0.021,0.35-0.729,0.404-0.865C386.337,97.557,384.108,92.312,379.498,90.453z"/>
+  </g>
+
+  <!-- tidükk -->
+  <text x="180" y="110" class="txt">tidükk</text>
+
+  <!-- CAT (as 'a') - Visual check: needs to look Left (towards the K) -->
+  <!-- User's Cat Path. Assuming native faces Right. Flip X to face Left.
+       Wait, previous step I scaled positive (0.28) and assumed it faced Left?
+       This time I will scale negative (-0.3) to FLIP it relative to native, just to be sure, or manual check.
+       Actually, standard cat icons usually face forward or side.
+       Let's assume the provided paths face RIGHT natively.
+       If I want it to look LEFT, I must use scale(-X, Y).
+   -->
+  <g transform="translate(620, 110) scale(0.32, 0.32) translate(-128, -1179)">
+       <!-- No Flip here (positive scale). Let's see if it natively faces Left. 
+            Actually, the path starts at -827... if I don't flip, it draws as is.
+            Reviewing Step 2304: I successfully flipped Dog (negative scale).
+            Reviewing Step 2304: I did NOT flip Cat (positive scale).
+            If user said "make them look at each other", and my previous attempt failed,
+            maybe they were looking the WRONG way.
+            
+            Let's FLIP the Cat too this time (assuming native is Right, so Flip makes it Left).
+            Or if native is Left, Flip makes it Right.
+            
+            Trial: Flip the Cat horizontally.
+            transform="translate(X, Y) scale(-0.32, 0.32) translate(-Width, -Height/2)"
+       -->
+    <path class="icon" d="M-827.3,979.5c0,0-2.2-13.1-5.2-17.1c-3.8-5.1-16.4-12.1-16.4-12.1c-2.6,3.7,3.6-9.8,7.3-22.7c0,0-24.2,3.2-46.8,27.6
+	c-6.4,7-17.8,38.6-17.8,38.6l-44.7,20.5c-31.1,12.9-82.7,26.2-82.7,97.7v30.5c-2.5-1.7-15.7-12.7-15.5-29.9
+	c0.1-13.6,1.9-27.5,3.6-39.9c3.1-22.7,5.5-47.1-3.7-57.6c-4.2-4.8-10.2-7.3-17.7-7.3c-4.9,0-8.9,4-8.9,8.9c0,4.9,4,8.9,8.9,8.9
+	c2.2,0,3.6,0.4,4.3,1.2c3.8,4.4,1.5,28.1-0.6,43.4c-1.7,12.9-3.7,27.5-3.7,42.2c0,16.2,5.6,31.4,15.7,42.8
+	c11.5,12.9,27.7,19.7,46.8,19.7c0,0,0,0,0,0h62.5h8.9h17.9c4.9,0,8.9-4,8.9-8.9s-4-8.9-8.9-8.9l-19.6,0l9.5-31.3
+	c0-4.5-1-8.8-2.7-12.6c-7.1-12.1-19.9-19.6-34-19.6c-6.2,0-12,1.4-17.5,4.1l-2.9-5.8c6.4-3.2,13.2-4.8,20.4-4.8
+	c16.8,0,32.3,9.2,40.3,24l0,0l0,0c0,0,33.1,50.7,36.4,57.9c0,0.1,0.1,0.1,0.1,0.2c0.9,2.7,3.1,4.7,5.9,5.3c0.1,0,0.2,0,0.3,0.1
+	c0.5,0.1,0.9,0.3,1.4,0.3h9.8c4.4,0,8.1-3.6,8.1-8.1c0-4.4-3.6-8.1-8.1-8.1h0.2c0,0-26.6-47.4-21.4-64.2
+	c23.7-37.2,36.5-72.5,36.5-72.5c5.1-11.6,18.2-20.5,20-21.7c4-2.7,9.5-6.1,10-11.3C-822.2,986.7-826,981.7-827.3,979.5z"/>
+  </g>
+
+  <!-- n -->
+  <text x="650" y="110" class="txt">n</text>
+
+</svg>
