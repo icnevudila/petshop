@@ -7,7 +7,6 @@ import ProductCard from '../components/ProductCard';
 import SEO from '../components/SEO';
 import SubCategoryStrip from '../components/SubCategoryStrip';
 import BrandMarquee from '../components/BrandMarquee';
-import WelcomePopup from '../components/WelcomePopup';
 import FadeInSection from '../components/FadeInSection';
 import StoryNavigation from '../components/StoryNavigation';
 import {
@@ -300,7 +299,6 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
 
    return (
       <div className="min-h-screen bg-white">
-         <WelcomePopup />
          <SEO title="Ana Sayfa" description="Türkiye'nin en seçkin pet ürünleri mağazası. Kedi, köpek, kuş ve balık ürünlerinde geniş seçenekler." />
 
          {/* Mobile Story Navigation */}
@@ -364,9 +362,9 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                                     <p className="text-gray-300 text-lg md:text-xl font-medium mb-6 md:mb-8 max-w-lg">
                                        Seçilmiş içerikler, dengeli protein oranı ve doğal desteklerle üst düzey bakım.
                                     </p>
-                                    <button className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-3.5 md:px-8 md:py-4 rounded-xl font-bold text-sm md:text-sm uppercase tracking-wider transition-all shadow-xl hover:shadow-primary/30 flex items-center gap-2">
+                                    <div className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-3.5 md:px-8 md:py-4 rounded-xl font-bold text-sm md:text-sm uppercase tracking-wider transition-all shadow-xl hover:shadow-primary/30 flex items-center gap-2 w-max">
                                        Keşfet <ArrowRight size={16} />
-                                    </button>
+                                    </div>
                                  </>
                               )}
                               {index === 1 && (
@@ -381,9 +379,9 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                                     <p className="text-gray-300 text-lg md:text-xl font-medium mb-6 md:mb-8 max-w-lg">
                                        Omega 3-6, vitamin ve eklem desteğiyle aktif yaşamı güvenle destekleyin.
                                     </p>
-                                    <button className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-3.5 md:px-8 md:py-4 rounded-xl font-bold text-sm md:text-sm uppercase tracking-wider transition-all shadow-xl flex items-center gap-2">
+                                    <div className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-3.5 md:px-8 md:py-4 rounded-xl font-bold text-sm md:text-sm uppercase tracking-wider transition-all shadow-xl flex items-center gap-2 w-max">
                                        Keşfet <ArrowRight size={16} />
-                                    </button>
+                                    </div>
                                  </>
                               )}
                               {index === 2 && (
@@ -398,9 +396,9 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                                     <p className="text-gray-300 text-lg md:text-xl font-medium mb-6 md:mb-8 max-w-lg">
                                        Nazik içerikler ve premium tariflerle her gün doğru dengeyi sunun.
                                     </p>
-                                    <Link to="/kategori/kedi-mamasi" className="btn-smooth bg-primary hover:bg-orange-600 text-white px-5 py-2.5 md:px-8 md:py-4 rounded-xl font-bold text-xs md:text-sm uppercase tracking-wider transition-all shadow-xl flex items-center gap-2 inline-flex">
+                                    <div className="btn-smooth bg-primary hover:bg-orange-600 text-white px-5 py-2.5 md:px-8 md:py-4 rounded-xl font-bold text-xs md:text-sm uppercase tracking-wider transition-all shadow-xl flex items-center gap-2 inline-flex w-max">
                                        Keşfet <ArrowRight size={16} />
-                                    </Link>
+                                    </div>
                                  </>
                               )}
                               {index > 2 && (
@@ -408,9 +406,9 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                                     <h1 className="text-2xl md:text-6xl font-black text-white leading-tight mb-3 md:mb-6 font-display">
                                        {campaign.title}
                                     </h1>
-                                    <Link to={campaign.target_url || '/'} className="btn-smooth bg-primary hover:bg-orange-600 text-white px-5 py-2.5 md:px-8 md:py-4 rounded-xl font-bold text-xs md:text-sm uppercase tracking-wider transition-all inline-flex items-center gap-2">
+                                    <div className="btn-smooth bg-primary hover:bg-orange-600 text-white px-5 py-2.5 md:px-8 md:py-4 rounded-xl font-bold text-xs md:text-sm uppercase tracking-wider transition-all inline-flex items-center gap-2 w-max">
                                        Keşfet <ArrowRight size={16} />
-                                    </Link>
+                                    </div>
                                  </>
                               )}
                            </div>

@@ -25,7 +25,7 @@ const OrderTrackingPage: React.FC = () => {
     };
 
     return (
-        <div className="pt-32 pb-16 bg-gray-50 min-h-screen flex flex-col items-center">
+        <div className="pt-36 pb-16 bg-gray-50 min-h-screen flex flex-col items-center">
             <div className="container mx-auto px-4 max-w-lg">
 
                 <div className="text-center mb-8">

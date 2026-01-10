@@ -113,25 +113,48 @@ interface ProductProviderProps {
     children: ReactNode;
 }
 
+// ... imports
+
 export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) => {
-    const [products, setProducts] = useState<Product[]>([]);
-    const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-    const [brands, setBrands] = useState<Brand[]>([]);
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+    // Initialize with fallback data for immediate fast load
+    const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+    const [campaigns, setCampaigns] = useState<Campaign[]>(INITIAL_CAMPAIGNS);
+    const [brands, setBrands] = useState<Brand[]>(INITIAL_BRANDS);
+    const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
+    const [blogPosts, setBlogPosts] = useState<BlogPost[]>(INITIAL_BLOG_POSTS);
+
     const [siteSettings, setSiteSettings] = useState<SiteSettings>(DEFAULT_SITE_SETTINGS);
     const [homeFeatures, setHomeFeatures] = useState<HomeFeature[]>(DEFAULT_HOME_FEATURES);
     const [homeCategories, setHomeCategories] = useState<HomeCategory[]>(DEFAULT_HOME_CATEGORIES);
     const [customerReviews, setCustomerReviews] = useState<CustomerReview[]>(DEFAULT_CUSTOMER_REVIEWS);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false); // Set to false initially since we have data
 
-    // Initial Fetch from Supabase
+    // Initial Fetch from Supabase (Background Update)
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
+            // We don't necessarily need to set loading=true here if we want to show stale data first
+            // But if we want to show a spinner, we can. Given user complaint about speed, 
+            // let's show data immediately and update silently.
             try {
-                // Fetch Products
-                const { data: productsData } = await supabase.from('products').select('*').eq('is_active', true);
+                // Determine calls
+                const pProducts = supabase.from('products').select('*').eq('is_active', true);
+                const pBrands = supabase.from('brands').select('*');
+                const pCategories = supabase.from('categories').select('*');
+                const pCampaigns = getCampaigns();
+                const pBlog = getBlogPosts();
+
+                // Execute in parallel
+                const [
+                    { data: productsData },
+                    { data: brandsData },
+                    { data: categoriesData },
+                    campaignsData,
+                    blogData
+                ] = await Promise.all([
+                    pProducts, pBrands, pCategories, pCampaigns, pBlog
+                ]);
+
+                // Update state only if data exists
                 if (productsData) {
                     setProducts(productsData.map(p => ({
                         ...p,
@@ -142,56 +165,14 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
                         tags: p.tags || [],
                         features: p.features || []
                     })));
-                } else {
-                    setProducts(INITIAL_PRODUCTS); // Fallback
                 }
 
-                // Fetch Brands
-                const { data: brandsData } = await supabase.from('brands').select('*');
-                if (brandsData && brandsData.length > 0) {
-                    setBrands(brandsData);
-                } else {
-                    setBrands(INITIAL_BRANDS);
-                }
+                if (brandsData && brandsData.length > 0) setBrands(brandsData);
+                if (categoriesData && categoriesData.length > 0) setCategories(categoriesData);
+                if (campaignsData && campaignsData.length > 0) setCampaigns(campaignsData);
+                if (blogData && blogData.length > 0) setBlogPosts(blogData);
 
-                // Fetch Categories
-                const { data: categoriesData } = await supabase.from('categories').select('*');
-                if (categoriesData && categoriesData.length > 0) {
-                    setCategories(categoriesData);
-                } else {
-                    setCategories(INITIAL_CATEGORIES);
-                }
-
-                // Fetch Campaigns
-                try {
-                    const campaignsData = await getCampaigns();
-                    if (campaignsData.length > 0) setCampaigns(campaignsData);
-                    else setCampaigns(INITIAL_CAMPAIGNS);
-                } catch {
-                    setCampaigns(INITIAL_CAMPAIGNS);
-                }
-
-                // Fetch Blog Posts
-                try {
-                    const blogData = await getBlogPosts();
-                    if (blogData.length > 0) setBlogPosts(blogData);
-                    else setBlogPosts(INITIAL_BLOG_POSTS);
-                } catch {
-                    // Fallback
-                    setBlogPosts(INITIAL_BLOG_POSTS.map((post) => ({
-                        id: post.id,
-                        title: post.title,
-                        content: 'İçerik yakında eklenecek...',
-                        img: post.img,
-                        category: post.category,
-                        author: post.author,
-                        created_at: post.date,
-                        is_published: true,
-                        slug: post.title.toLowerCase().replace(/ /g, '-')
-                    })));
-                }
-
-                // Other settings from LocalStorage for now
+                // Load local storage items
                 const loadFromStorage = (key: string, fallback: any) => {
                     const saved = localStorage.getItem(key);
                     return saved ? JSON.parse(saved) : fallback;
@@ -203,9 +184,7 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
                 setCustomerReviews(loadFromStorage('customerReviews', DEFAULT_CUSTOMER_REVIEWS));
 
             } catch (error) {
-                console.error('Error fetching initial data:', error);
-            } finally {
-                setLoading(false);
+                console.error('Error fetching initial data (using fallbacks):', error);
             }
         };
 

@@ -57,7 +57,7 @@ const LoginPage: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white pt-28 pb-12 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-white pt-36 pb-12 flex items-center justify-center px-4">
             <div className="w-full max-w-md">
                 {/* Logo */}
                 <div className="text-center mb-8">

@@ -4,7 +4,7 @@ import { RefreshCw, Truck, CheckCircle, AlertCircle } from 'lucide-react';
 
 const ReturnPolicyPage: React.FC = () => {
     return (
-        <div className="pt-32 pb-16 bg-white min-h-screen">
+        <div className="pt-36 pb-16 bg-white min-h-screen">
             <div className="container mx-auto px-4">
                 {/* Header */}
                 <div className="text-center mb-12">

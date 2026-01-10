@@ -58,7 +58,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ addToCart, toggle
   }, [product.id]);
 
   return (
-    <div className="bg-[#FAFAFA] min-h-screen pt-[260px] md:pt-28 pb-24">
+    <div className="bg-[#FAFAFA] min-h-screen pt-36 md:pt-28 pb-24">
       <div className="container mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-8">
@@ -216,16 +216,17 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ addToCart, toggle
         </div>
       </div>
 
-      {/* Mobile Sticky Add to Cart Bar */}
-      <div className="lg:hidden fixed bottom-[60px] left-0 right-0 bg-white border-t border-gray-100 p-3 shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)] z-[9990] flex items-center justify-between gap-3">
+      {/* Mobile Sticky Add to Cart Bar - Premium Design */}
+      <div className="lg:hidden fixed bottom-[60px] left-0 right-0 bg-gradient-to-t from-white via-white to-white/95 backdrop-blur-lg border-t border-gray-100 p-3 shadow-[0_-8px_16px_-4px_rgba(0,0,0,0.1)] z-[9990] flex items-center justify-between gap-3">
         <div className="flex flex-col">
           {hasDiscount && <span className="text-[10px] text-gray-400 font-bold line-through">{(product.price).toLocaleString('tr-TR')} TL</span>}
-          <span className="text-lg font-black text-brand">{(product.discounted_price || product.price).toLocaleString('tr-TR')} TL</span>
+          <span className="text-lg font-black bg-gradient-to-r from-orange-600 to-orange-500 bg-clip-text text-transparent">{(product.discounted_price || product.price).toLocaleString('tr-TR')} TL</span>
         </div>
         <button
           onClick={() => addToCart(product, 1)}
-          className="flex-grow bg-brand text-white h-11 rounded-lg font-black text-xs uppercase tracking-widest hover:bg-brand-hover transition-all flex items-center justify-center gap-2 shadow md active:scale-95"
+          className="flex-grow bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white h-11 rounded-xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 active:scale-95"
         >
+          <ShoppingCart size={16} strokeWidth={2.5} />
           Sepete Ekle
         </button>
       </div>

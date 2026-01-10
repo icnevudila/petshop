@@ -25,6 +25,7 @@ import CartModal from './components/CartModal';
 import QuickViewModal from './components/QuickViewModal';
 import ChatBot from './components/ChatBot';
 import MobileBottomNav from './components/MobileBottomNav';
+import SplashScreen from './components/SplashScreen';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProductProvider } from './ProductContext';
 import { HelmetProvider } from 'react-helmet-async';
@@ -48,6 +49,27 @@ const AppContent: React.FC = () => {
   const [isCartModalOpen, setIsCartModalOpen] = useState(false);
   const [lastAddedProduct, setLastAddedProduct] = useState<Product | null>(null);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [showSplash, setShowSplash] = useState(() => {
+    // Show splash only once per session
+    const hasSeenSplash = sessionStorage.getItem('hasSeenSplash');
+    return !hasSeenSplash;
+  });
+
+  const handleSplashFinish = () => {
+    setShowSplash(false);
+    sessionStorage.setItem('hasSeenSplash', 'true');
+  };
+
+  // Safety timeout: Force remove splash screen after 4 seconds max
+  useEffect(() => {
+    if (showSplash) {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+        sessionStorage.setItem('hasSeenSplash', 'true');
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSplash]);
 
   const cartCount = cart.reduce((sum, entry) => sum + entry.quantity, 0);
 
@@ -224,6 +246,7 @@ const AppContent: React.FC = () => {
 
   return (
     <HashRouter>
+      {showSplash && <SplashScreen onFinish={handleSplashFinish} />}
       <div className="flex flex-col min-h-screen font-sans selection:bg-primary selection:text-white relative overflow-hidden bg-transparent">
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
           <div className="shape-blob one mix-blend-multiply filter blur-3xl opacity-60"></div>

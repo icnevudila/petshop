@@ -235,7 +235,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
   const activeFilterCount = Object.values(filters).flat().length;
 
   return (
-    <div className="container mx-auto px-4 pt-[260px] md:pt-12 pb-32">
+    <div className="container mx-auto px-4 pt-36 md:pt-12 pb-32">
       {/* Breadcrumb */}
       <div className="flex items-center gap-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-12">
         <Link to="/" className="hover:text-brand cursor-pointer transition-colors flex items-center gap-1">

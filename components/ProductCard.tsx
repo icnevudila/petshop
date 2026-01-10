@@ -154,11 +154,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, toggleW
             )}
           </div>
 
-          {/* Add to Cart Button - Explicit Orange */}
+          {/* Add to Cart Button - Premium Mobile Design */}
           <button
             onClick={handleAddToCart}
-            className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs py-2 rounded-md transition-all shadow-sm flex items-center justify-center gap-1 opacity-100 translate-y-0 lg:opacity-0 lg:group-hover:opacity-100 lg:translate-y-2 lg:group-hover:translate-y-0 duration-200 btn-glow"
+            className="w-full bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 text-white font-bold text-xs py-2.5 rounded-xl transition-all shadow-lg shadow-orange-500/30 hover:shadow-xl hover:shadow-orange-500/40 flex items-center justify-center gap-2 opacity-100 translate-y-0 lg:opacity-0 lg:group-hover:opacity-100 lg:translate-y-2 lg:group-hover:translate-y-0 duration-200 btn-glow active:scale-95"
           >
+            <ShoppingCart size={14} strokeWidth={2.5} />
             Sepete Ekle
           </button>
         </div>
