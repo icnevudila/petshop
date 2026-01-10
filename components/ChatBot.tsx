@@ -354,7 +354,7 @@ const ChatBot: React.FC = () => {
             </button>
 
             {isOpen && (
-                <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] md:w-[400px] h-[700px] max-h-[80vh] bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 z-50 flex flex-col overflow-hidden animate-slide-up origin-center font-sans ring-1 ring-black/5">
+                <div className="fixed bottom-24 right-4 md:right-8 w-[92vw] md:w-[400px] h-[650px] max-h-[75vh] bg-white rounded-[2.5rem] shadow-2xl border border-gray-100 z-50 flex flex-col overflow-hidden animate-slide-up origin-bottom-right font-sans ring-1 ring-black/5">
 
                     {/* Header */}
                     <div className="bg-gradient-to-br from-[#1e293b] to-[#0f172a] p-5 pt-6 flex items-center gap-4 text-white shadow-lg relative overflow-hidden">
