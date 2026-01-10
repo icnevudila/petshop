@@ -1,5 +1,5 @@
 
-import { Product, Category, Brand, Campaign } from './types';
+import { Product, Category, Brand, Campaign, BlogPost } from './types';
 
 // ==================== MARKALAR ====================
 export const BRANDS: Brand[] = [
@@ -1714,11 +1714,56 @@ export const PRODUCT_REVIEWS = [
 ];
 
 // ==================== BLOG YAZILARI ====================
-export const BLOG_POSTS = [
-  { id: 'bp1', title: 'Yavru Kedi Beslenmesinde 5 Altın Kural', img: '/banners/blog_kitten.png' },
-  { id: 'bp2', title: 'Köpeklerde Eklem Sağlığı ve Önemi', img: '/banners/blog_dog.png' },
-  { id: 'bp3', title: 'Tahılsız Mamalar Hakkında Bilinmeyenler', img: '/banners/blog_grain.png' },
-  { id: 'bp4', title: 'Kedi Kumu Seçiminde Dikkat Edilmesi Gerekenler', img: '/banners/blog_litter.png' },
+// ==================== BLOG YAZILARI ====================
+export const BLOG_POSTS: BlogPost[] = [
+  {
+    id: 'yavru-kedi-beslenmesi',
+    title: 'Yavru Kedi Beslenmesinde 5 Altın Kural',
+    slug: 'yavru-kedi-beslenmesi',
+    img: '/banners/blog_kitten.png',
+    category: 'Beslenme',
+    author: 'Dr. Ayşe Veteriner',
+    created_at: '2026-01-15T10:00:00Z',
+    is_published: true,
+    content: 'Yavru kediler, hayatlarının ilk aylarında hızlı bir büyüme sürecindedir. Bu dönemde doğru beslenme, sağlıklı bir yetişkin kedi olmaları için kritik öneme sahiptir.',
+    tags: ['Yavru', 'Beslenme']
+  },
+  {
+    id: 'kopek-eklem-sagligi',
+    title: 'Köpeklerde Eklem Sağlığı: Erken Teşhis ve Önleme',
+    slug: 'kopek-eklem-sagligi',
+    img: '/banners/blog_dog.png',
+    category: 'Sağlık',
+    author: 'Dr. Mehmet Veteriner',
+    created_at: '2026-01-10T14:30:00Z',
+    is_published: true,
+    content: 'Eklem problemleri, özellikle büyük ırk köpeklerde yaşlanmayla birlikte sık görülen bir sorundur. Erken önlem almak, köpeğinizin yaşam kalitesini artırır.',
+    tags: ['Sağlık', 'Köpek', 'Eklem']
+  },
+  {
+    id: 'tahilsiz-mama-rehberi',
+    title: 'Tahılsız Mamalar: Gerçekten Gerekli mi?',
+    slug: 'tahilsiz-mama-rehberi',
+    img: '/banners/blog_grain.png',
+    category: 'Beslenme',
+    author: 'Vet. Hekim Zeynep',
+    created_at: '2026-01-05T09:15:00Z',
+    is_published: true,
+    content: 'Son yıllarda tahılsız mamalar popülerlik kazandı. Peki gerçekten her evcil hayvan için uygun mu? Tahılsız mamaların avantajları ve dezavantajlarını inceledik.',
+    tags: ['Beslenme', 'Tahılsız', 'Mama']
+  },
+  {
+    id: 'kedi-kumu-secimi',
+    title: 'Doğru Kedi Kumu Nasıl Seçilir?',
+    slug: 'kedi-kumu-secimi',
+    img: '/banners/blog_litter.png',
+    category: 'Bakım',
+    author: 'Pati Uzmanı Selin',
+    created_at: '2026-01-01T11:45:00Z',
+    is_published: true,
+    content: 'Kedi kumu seçimi, hem kedinizin hem de sizin konforunuz için önemlidir. Topaklanan, silika ve doğal kum çeşitlerini karşılaştırdık.',
+    tags: ['Bakım', 'Kedi Kumu', 'Hijyen']
+  }
 ];
 
 // ==================== MOCK SİPARİŞLER ====================
