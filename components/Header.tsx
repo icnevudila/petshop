@@ -121,11 +121,11 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
 
          {/* Main Header - Compact with box-shadow */}
          <div className={`w-full transition-all duration-300 relative z-[1003] bg-white ${isScrolled ? 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]' : 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]'}`}>
-            <div className="container flex flex-wrap lg:flex-nowrap items-center justify-between gap-4 py-3 lg:py-2">
+            <div className="container flex flex-wrap items-center justify-between gap-2 py-2 lg:py-2">
 
 
                {/* Logo Area */}
-               <div className="flex items-center justify-center lg:justify-start w-full lg:w-auto mt-1 lg:mt-0 mb-0 lg:mb-0 relative z-[1003] order-1 lg:order-none">
+               <div className="flex items-center justify-center lg:justify-start w-full lg:w-auto order-1">
                   <Link to="/" className="relative block hover:opacity-90 transition-opacity">
                      {/* Desktop Logo */}
                      <div className="hidden lg:flex items-center relative">
@@ -149,7 +149,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
 
 
                {/* Search Bar */}
-               <div className="flex-grow w-full lg:w-auto max-w-none lg:max-w-[500px] relative block ml-0 lg:ml-0 -mt-12 lg:mt-0 mb-2 lg:mb-0 order-2 lg:order-none" ref={searchRef}>
+               <div className="flex-grow w-full lg:w-auto max-w-none lg:max-w-[500px] relative block ml-0 lg:ml-0 mt-3 lg:mt-0 mb-0 lg:mb-0 order-2 lg:order-none" ref={searchRef}>
                   <div className="relative group">
                      <input
                         type="text"

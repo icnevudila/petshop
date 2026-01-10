@@ -5,7 +5,7 @@ import { Sparkles, Truck, Gift, Smartphone } from 'lucide-react';
 const ANNOUNCEMENTS = [
     { icon: Gift, text: "İlk Siparişinize %15 İndirim • Kod: PATİ15" },
     { icon: Truck, text: "1500 TL Üzeri Siparişlerde Kargo Bedava" },
-    { icon: Smartphone, text: "Mobil Uygulamaya Özel Fırsatlar" },
+    { icon: Sparkles, text: "Tüm Kategorilerde Özel Fırsatlar" },
     { icon: Sparkles, text: "Premium Markalarda %30'a Varan İndirimler" },
 ];
 

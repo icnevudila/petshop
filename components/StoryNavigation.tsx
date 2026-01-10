@@ -19,8 +19,8 @@ const StoryNavigation: React.FC = () => {
                 {STORIES.map((story) => (
                     <Link key={story.id} to={story.link} className="flex flex-col items-center gap-2 flex-shrink-0 snap-center group cursor-pointer">
                         <div className={`p-[2px] rounded-full ring-2 ${story.ringColor} ring-offset-2 transition-all group-hover:scale-105`}>
-                            <div className="w-16 h-16 rounded-full bg-white border border-gray-100 overflow-hidden p-1">
-                                <img src={story.img} alt={story.name} className="w-full h-full object-contain mix-blend-multiply" />
+                            <div className="w-16 h-16 rounded-full bg-white border border-gray-100 p-1.5 overflow-hidden">
+                                <img src={story.img} alt={story.name} className="w-full h-full object-cover rounded-full" />
                             </div>
                         </div>
                         <span className="text-[10px] font-black text-gray-700 truncate max-w-[70px] tracking-wide">{story.name}</span>

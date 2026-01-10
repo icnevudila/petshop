@@ -304,7 +304,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
          <SEO title="Ana Sayfa" description="Türkiye'nin en seçkin pet ürünleri mağazası. Kedi, köpek, kuş ve balık ürünlerinde geniş seçenekler." />
 
          {/* Mobile Story Navigation */}
-         <div className="pt-[290px] md:pt-[100px] md:hidden relative z-10">
+         <div className="pt-[155px] md:pt-[100px] md:hidden relative z-10">
             <StoryNavigation />
          </div>
 
