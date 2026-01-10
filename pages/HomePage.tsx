@@ -509,7 +509,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
                      { t: 'Köpek Mamaları', img: '/menu_images/menu_adult_dog_food_1767814113679.png', l: '/kategori/kopek-mamasi' },
                      { t: 'Kedi Kumu', img: '/menu_images/menu_clumping_litter_1767813876271.png', l: '/kategori/kedi-kumu' },
                      { t: 'Kedi Oyuncak', img: '/menu_images/menu_cat_toys_1767814037624.png', l: '/kategori/kedi-oyuncak' },
-                     { t: 'Köpek Oyuncak', img: '/trendyol köpek maması/1_org_zoom (8).jpg', l: '/kategori/kopek-oyuncak' },
+                     { t: 'Köpek Oyuncak', img: '/trendyol%20k%C3%B6pek%20mamas%C4%B1/1_org_zoom (8).jpg', l: '/kategori/kopek-oyuncak' },
                      { t: 'Tasma', img: '/menu_images/menu_cat_collar_1767814084204.png', l: '/kategori/kopek-tasma' },
                   ].map((item, idx) => (
                      <Link key={idx} to={item.l} className="flex items-center gap-3 p-3 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-gray-300 hover:shadow-md hover:bg-gray-50 transition-all duration-300 group">
