@@ -31,7 +31,7 @@ const Footer: React.FC = () => {
       </section>
 
       {/* Ana Footer - Mobilde Gizli (Sadece Copyright Kalacak) */}
-      <footer className="hidden lg:block bg-white pt-8 md:pt-16 pb-6 md:pb-8 border-t border-gray-100 relative overflow-hidden">
+      <footer className="bg-white pt-8 md:pt-16 pb-6 md:pb-8 border-t border-gray-100 relative overflow-hidden pb-[80px] lg:pb-8">
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-100 via-orange-300 to-orange-100"></div>
 
         <div className="container mx-auto px-4">

@@ -250,7 +250,7 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
 
       <div className="flex flex-col lg:flex-row gap-16">
         {/* Sidebar Filtering */}
-        <aside className={`fixed inset - 0 z - [2000] bg - white p - 6 overflow - y - auto transition - transform duration - 300 lg:static lg: z - auto lg: w - 64 lg: p - 0 lg: bg - transparent lg: overflow - visible lg:block shadow - 2xl lg: shadow - none ${isMobileFilterOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} `}>
+        <aside className={`fixed inset-0 z-[2000] bg-white p-6 overflow-y-auto transition-transform duration-300 lg:static lg:z-auto lg:w-64 lg:p-0 lg:bg-transparent lg:overflow-visible lg:block shadow-2xl lg:shadow-none ${isMobileFilterOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} `}>
           <div className="sticky top-24 px-2">
             {/* Mobile Close Button */}
             <div className="flex lg:hidden items-center justify-between mb-6 border-b border-gray-100 pb-4">

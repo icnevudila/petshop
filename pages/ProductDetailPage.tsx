@@ -220,7 +220,7 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ addToCart, toggle
       </div>
 
       {/* Mobile Sticky Add to Cart Bar */}
-      <div className="lg:hidden fixed bottom-[55px] left-0 right-0 bg-white border-t border-gray-100 p-3 shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)] z-[9990] flex items-center justify-between gap-3">
+      <div className="lg:hidden fixed bottom-[60px] left-0 right-0 bg-white border-t border-gray-100 p-3 shadow-[0_-4px_10px_-1px_rgba(0,0,0,0.05)] z-[9990] flex items-center justify-between gap-3">
         <div className="flex flex-col">
           {hasDiscount && <span className="text-[10px] text-gray-400 font-bold line-through">{(product.price).toLocaleString('tr-TR')} TL</span>}
           <span className="text-lg font-black text-brand">{(product.discounted_price || product.price).toLocaleString('tr-TR')} TL</span>
