@@ -1,18 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 130">
   <defs>
-    <linearGradient id="brownGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#A0522D;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#CD853F;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#A0522D;stop-opacity:1" />
+    <!-- Animated Shiny Gradient -->
+    <linearGradient id="shinyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1">
+        <animate attributeName="stop-color" values="#8B4513;#D2691E;#FFD700;#D2691E;#8B4513" dur="3s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#CD853F;stop-opacity:1">
+        <animate attributeName="stop-color" values="#CD853F;#FFD700;#FFA500;#FFD700;#CD853F" dur="3s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#A0522D;stop-opacity:1">
+        <animate attributeName="stop-color" values="#A0522D;#D2691E;#FFD700;#D2691E;#A0522D" dur="3s" repeatCount="indefinite"/>
+      </stop>
     </linearGradient>
+    
+    <!-- Shine overlay effect -->
+    <linearGradient id="shine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:rgba(255,255,255,0);stop-opacity:1"/>
+      <stop offset="50%" style="stop-color:rgba(255,255,255,0.8);stop-opacity:1">
+        <animate attributeName="offset" values="0;1;0" dur="2s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1"/>
+    </linearGradient>
+    
     <style>
       .txt { 
         font-family: "Varela Round", "Arial Rounded MT Bold", sans-serif; 
         font-weight: bold; 
         font-size: 100px; 
-        fill: url(#brownGrad); 
+        fill: url(#shinyGrad); 
       }
-      .icon { fill: url(#brownGrad); }
+      .icon { fill: url(#shinyGrad); }
+      .shine-overlay { fill: url(#shine); mix-blend-mode: overlay; }
     </style>
   </defs>
 
@@ -51,5 +69,8 @@
 
   <!-- n -->
   <text x="460" y="100" class="txt">n</text>
+
+  <!-- Shine overlay effect -->
+  <rect x="0" y="0" width="600" height="130" class="shine-overlay"/>
 
 </svg>

@@ -128,19 +128,19 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                <div className="flex items-center justify-center lg:justify-start w-full lg:w-auto mt-1 lg:mt-0 mb-0 lg:mb-0 relative z-[1003] order-1 lg:order-none">
                   <Link to="/" className="relative block hover:opacity-90 transition-opacity">
                      {/* Desktop Logo */}
-                     <div className="hidden lg:block relative">
+                     <div className="hidden lg:flex items-center relative">
                         <img
-                           src="/logopng.png"
+                           src="/logo_animated.svg"
                            alt="PatiDükkan"
-                           className="h-24 md:h-28 w-auto drop-shadow-md"
+                           className="h-16 w-auto drop-shadow-md"
                         />
                      </div>
-                     {/* Mobile Logo - Large & Stacked */}
+                     {/* Mobile Logo */}
                      <div className="lg:hidden flex justify-center items-center">
                         <img
-                           src="/logopng.png"
-                           alt="PatiDükkan"
-                           className="h-40 w-auto drop-shadow-xl object-contain"
+                           src="/logo_animated.svg"
+                           alt="PatiDükkan Mobile"
+                           className="h-12 w-auto"
                         />
                      </div>
                   </Link>
