@@ -74,6 +74,8 @@ export interface BlogPost {
   author: string;
   created_at: string;
   is_published: boolean;
+  slug: string;
+  tags?: string[];
 }
 
 export interface SiteSettings {
