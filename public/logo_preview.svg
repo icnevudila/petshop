@@ -1,13 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 150">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 130">
   <defs>
     <linearGradient id="brownGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#A0522D;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#8B4513;stop-opacity:1" />
       <stop offset="50%" style="stop-color:#CD853F;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#A0522D;stop-opacity:1" />
     </linearGradient>
     <style>
       .txt { 
-        font-family: "Varela Round", "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif; 
+        font-family: "Varela Round", "Arial Rounded MT Bold", sans-serif; 
         font-weight: bold; 
         font-size: 100px; 
         fill: url(#brownGrad); 
@@ -17,11 +17,15 @@
   </defs>
 
   <!-- P -->
-  <text x="10" y="110" class="txt">p</text>
+  <text x="10" y="100" class="txt">p</text>
 
-  <!-- DOG (as 'a') - Visual check: needs to look Right (towards the T) -->
-  <!-- User's Dog Path. Assuming native faces Left. Flip X to face Right. -->
-  <g transform="translate(135, 110) scale(-0.22, 0.22) translate(-196, -392)">
+  <!-- DOG (replacing 'a') -->
+  <!-- Needs to sit right after P. P width ~60px.
+       Let's place Dog visually at x=70.
+       Original Dog Width is large, need to scale down heavily. 
+       Center of dog needs to be at ~100.
+  -->
+  <g transform="translate(110, 100) scale(-0.20, 0.20) translate(-196, -392)">
      <path class="icon" d="M379.498,90.453l-40.104-16.18c-2.449-12.946-12.287-23.311-24.947-26.528l-2.169-24.992
 	c-0.31-3.565-2.702-6.608-6.093-7.75c-3.392-1.142-7.138-0.168-9.541,2.484l-10.492,11.572l-6.437-22.531
 	c-1.072-3.752-4.441-6.386-8.341-6.522c-3.898-0.121-7.443,2.258-8.774,5.928l-55.536,153.21
@@ -35,30 +39,14 @@
   </g>
 
   <!-- tidükk -->
-  <text x="180" y="110" class="txt">tidükk</text>
+  <!-- Dog width visually ~60-70px. So x start for text should be 70+70 = 140 -->
+  <text x="150" y="100" class="txt">tidükk</text>
 
-  <!-- CAT (as 'a') - Visual check: needs to look Left (towards the K) -->
-  <!-- User's Cat Path. Assuming native faces Right. Flip X to face Left.
-       Wait, previous step I scaled positive (0.28) and assumed it faced Left?
-       This time I will scale negative (-0.3) to FLIP it relative to native, just to be sure, or manual check.
-       Actually, standard cat icons usually face forward or side.
-       Let's assume the provided paths face RIGHT natively.
-       If I want it to look LEFT, I must use scale(-X, Y).
-   -->
-  <g transform="translate(620, 110) scale(0.32, 0.32) translate(-128, -1179)">
-       <!-- No Flip here (positive scale). Let's see if it natively faces Left. 
-            Actually, the path starts at -827... if I don't flip, it draws as is.
-            Reviewing Step 2304: I successfully flipped Dog (negative scale).
-            Reviewing Step 2304: I did NOT flip Cat (positive scale).
-            If user said "make them look at each other", and my previous attempt failed,
-            maybe they were looking the WRONG way.
-            
-            Let's FLIP the Cat too this time (assuming native is Right, so Flip makes it Left).
-            Or if native is Left, Flip makes it Right.
-            
-            Trial: Flip the Cat horizontally.
-            transform="translate(X, Y) scale(-0.32, 0.32) translate(-Width, -Height/2)"
-       -->
+  <!-- CAT (replacing 'a') -->
+  <!-- 'tidükk' ends around x=150 + width(approx 300) = 450? 
+       Let's try x=460 for Cat center.
+  -->
+  <g transform="translate(485, 100) scale(0.25, 0.25) translate(-128, -1179)">
     <path class="icon" d="M-827.3,979.5c0,0-2.2-13.1-5.2-17.1c-3.8-5.1-16.4-12.1-16.4-12.1c-2.6,3.7,3.6-9.8,7.3-22.7c0,0-24.2,3.2-46.8,27.6
 	c-6.4,7-17.8,38.6-17.8,38.6l-44.7,20.5c-31.1,12.9-82.7,26.2-82.7,97.7v30.5c-2.5-1.7-15.7-12.7-15.5-29.9
 	c0.1-13.6,1.9-27.5,3.6-39.9c3.1-22.7,5.5-47.1-3.7-57.6c-4.2-4.8-10.2-7.3-17.7-7.3c-4.9,0-8.9,4-8.9,8.9c0,4.9,4,8.9,8.9,8.9
@@ -71,6 +59,7 @@
   </g>
 
   <!-- n -->
-  <text x="650" y="110" class="txt">n</text>
+  <!-- Cat width visual ~60px. x close to 485 + 40 = 525 -->
+  <text x="525" y="100" class="txt">n</text>
 
 </svg>
