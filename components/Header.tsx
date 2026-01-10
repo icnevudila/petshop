@@ -19,9 +19,14 @@ interface HeaderProps {
 
 
 const placeholders = [
-   "Kedi maması...",
+   "Royal Canin kedi maması...",
+   "Pedigree köpek maması...",
+   "Whiskas yaş mama...",
+   "Pro Plan yavru köpek...",
+   "Brit Care kısırlaştırılmış...",
+   "Kedi tırmalama tahtası...",
    "Köpek oyuncağı...",
-   "Kuş yemi...",
+   "Kuş kafesi ve aksesuarları...",
    "Akvaryum filtresi...",
    "Tasma ve kayış..."
 ];
@@ -39,7 +44,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
    const [displayText, setDisplayText] = useState('');
    const [isDeleting, setIsDeleting] = useState(false);
    const [loopNum, setLoopNum] = useState(0);
-   const [typingSpeed, setTypingSpeed] = useState(300);
+   const [typingSpeed, setTypingSpeed] = useState(150);
 
    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
       const query = e.target.value;
@@ -65,10 +70,10 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
             : fullText.substring(0, displayText.length + 1)
          );
 
-         setTypingSpeed(isDeleting ? 30 : 150);
+         setTypingSpeed(isDeleting ? 20 : 80);
 
          if (!isDeleting && displayText === fullText) {
-            setTimeout(() => setIsDeleting(true), 1000);
+            setTimeout(() => setIsDeleting(true), 1500);
          } else if (isDeleting && displayText === '') {
             setIsDeleting(false);
             setLoopNum(loopNum + 1);
@@ -121,10 +126,9 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
 
          {/* Main Header - Compact with box-shadow */}
          <div className={`w-full transition-all duration-300 relative z-[1003] bg-white ${isScrolled ? 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]' : 'shadow-[0_1px_0_0_rgba(0,0,0,0.05)]'}`}>
-            <div className="container flex flex-wrap items-center justify-between gap-2 py-2 lg:py-2">
+            <div className="container flex flex-wrap lg:flex-nowrap items-center justify-between gap-2 py-2 lg:py-2">
 
-
-               {/* Logo Area */}
+               {/* Logo Area - Desktop Left, Mobile Top Center */}
                <div className="flex items-center justify-center lg:justify-start w-full lg:w-auto order-1">
                   <Link to="/" className="relative block hover:opacity-90 transition-opacity">
                      {/* Desktop Logo */}
@@ -146,10 +150,8 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                   </Link>
                </div>
 
-
-
-               {/* Search Bar */}
-               <div className="flex-grow w-full lg:w-auto max-w-none lg:max-w-[500px] relative block ml-0 lg:ml-0 mt-3 lg:mt-0 mb-0 lg:mb-0 order-2 lg:order-none" ref={searchRef}>
+               {/* Search Bar - Desktop Center (flex-grow), Mobile Below Logo */}
+               <div className="flex-grow w-full lg:w-auto max-w-none lg:max-w-[500px] relative block ml-0 lg:ml-4 mt-3 lg:mt-0 mb-0 lg:mb-0 order-2" ref={searchRef}>
                   <div className="relative group">
                      <input
                         type="text"
@@ -188,8 +190,8 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                   )}
                </div>
 
-               {/* User Actions - Hidden on Mobile (Moved to Bottom Nav) */}
-               <div className="hidden lg:flex items-center gap-1 md:gap-2">
+               {/* User Actions - Show on Desktop, Hidden on Mobile (Moved to Bottom Nav) */}
+               <div className="hidden lg:flex items-center gap-1 md:gap-2 order-3">
                   {/* Dynamic User Menu */}
                   {currentUser ? (
                      <div className="hidden md:flex flex-col items-center justify-center w-10 h-10 rounded-lg text-gray-600 hover:text-brand hover:bg-brand/5 transition-all cursor-pointer group relative">
