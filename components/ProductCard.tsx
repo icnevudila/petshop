@@ -79,19 +79,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, toggleW
           </div>
         </Link>
         {/* Badges - Top Left */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-20 pointer-events-none">
+        <div className="absolute top-2 left-2 flex flex-col gap-1 z-20 pointer-events-none">
           {hasDiscount && (
-            <div className="bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-sm">
+            <div className="bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md shadow-sm">
               %{discountRate} İndirim
             </div>
           )}
           {isFreeShipping && (
-            <div className="bg-emerald-500 text-white text-[10px] font-bold px-2 py-1 rounded-lg flex items-center gap-1 shadow-sm">
+            <div className="bg-emerald-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-1 shadow-sm">
               Kargo Bedava
             </div>
           )}
           {product.review_count > 100 && (
-            <div className="bg-amber-400 text-white text-[10px] font-bold px-2 py-1 rounded-lg shadow-sm">
+            <div className="bg-amber-400 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md shadow-sm hidden sm:block">
               Çok Satan
             </div>
           )}

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Varela+Round&amp;display=swap');
+      .text { font-family: 'Varela Round', 'Arial Rounded MT Bold', sans-serif; font-weight: bold; }
+    </style>
+  </defs>
+  
+  <!-- Color: PatiDükkan Orange (similar shade to image but branded) -->
+  <g fill="#EA580C">
+    
+    <!-- 'p' with Ears -->
+    <!-- Custom drawing for 'p' to ensure ears placement -->
+    <path d="M25,35 
+             L25,75 
+             A5,5 0 0,0 35,75 
+             L35,58 
+             Q35,65 50,65 
+             Q65,65 65,50 
+             Q65,35 50,35
+             Q35,35 35,42
+             L35,35 Z 
+             M35,42 
+             Q35,58 50,58 
+             Q58,58 58,50 
+             Q58,42 50,42 
+             Q35,42 35,50 Z" />
+             
+    <!-- Ears on 'p' -->
+    <path d="M38,36 L30,22 Q34,26 38,28 Z" /> <!-- Left Ear -->
+    <path d="M58,36 L66,22 Q62,26 58,28 Z" /> <!-- Right Ear -->
+
+    <!-- rest of text: 'atidükkan' -->
+    <!-- Positioning text manually to align with the custom 'p' -->
+    <text x="70" y="65" font-family="'Varela Round', sans-serif" font-size="50" font-weight="bold" letter-spacing="-2">atidükkan</text>
+
+    <!-- 'i' Dot replacement (Crown) -->
+    <!-- Masking original dot? Hard in simple SVG text.
+         Instead, I'll draw the crown over the 'i'.
+         'i' is roughly at position x=128 (p=0-65, a=65-95, t=95-120, i=120)
+         Let's manually place the crown relative to the text flow.
+    -->
+    
+    <!-- Crown on 'i' (approximate position) -->
+    <path d="M149,28 L143,18 L137,28 L131,28 L134,18 L128,28 Z" fill="#EA580C" transform="translate(10,0)"/>
+    
+    <!-- Smiley dots on 'ü' -->
+    <!-- 'd' ~160, 'ü' ~190 -->
+    <!-- We can leave standard umlaut or customize -->
+
+  </g>
+</svg>

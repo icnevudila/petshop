@@ -23,7 +23,7 @@ const StoryNavigation: React.FC = () => {
                                 <img src={story.img} alt={story.name} className="w-full h-full object-contain mix-blend-multiply" />
                             </div>
                         </div>
-                        <span className="text-[10px] font-bold text-gray-600 truncate max-w-[70px]">{story.name}</span>
+                        <span className="text-[10px] font-black text-gray-700 truncate max-w-[70px] tracking-wide">{story.name}</span>
                     </Link>
                 ))}
             </div>

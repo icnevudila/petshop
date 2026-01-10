@@ -51,6 +51,26 @@ const CartPage: React.FC<CartPageProps> = ({ cart, removeFromCart, updateCartQua
           <h2 className="text-3xl font-black mb-4 text-secondary">Sepetiniz Boş</h2>
           <p className="text-gray-500 mb-12 font-medium max-w-sm mx-auto">Anlaşılan henüz alışverişe başlamadınız. Evcil dostunuz için en kaliteli ürünleri keşfedin.</p>
           <Link to="/" className="inline-block bg-brand text-white px-12 py-5 rounded-2xl font-black shadow-brand-glow hover:bg-brand-hover hover:scale-105 transition-all text-xs uppercase tracking-widest">Alışverişe Başla</Link>
+
+          {/* Empty Cart Recommendations */}
+          <div className="mt-16 text-left">
+            <h3 className="text-xl font-black text-secondary mb-6 px-4">Sizin İçin Seçtiklerimiz</h3>
+            <div className="flex gap-4 overflow-x-auto hide-scrollbar snap-x pb-8 px-4 -mx-4">
+              {products.slice(0, 5).map(p => (
+                <div key={p.id} className="min-w-[160px] w-[160px] snap-center">
+                  <div className="bg-white border border-gray-100 rounded-xl p-3 h-full flex flex-col">
+                    <div className="aspect-square bg-gray-50 rounded-lg mb-3 relative overflow-hidden">
+                      <img src={p.images[0]} alt={p.name} className="w-full h-full object-contain mix-blend-multiply" />
+                    </div>
+                    <h4 className="text-[11px] font-bold text-gray-900 line-clamp-2 mb-1 h-8">{p.name}</h4>
+                    <div className="mt-auto">
+                      <span className="text-sm font-black text-brand block">{(p.discounted_price || p.price).toLocaleString('tr-TR')} TL</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     );

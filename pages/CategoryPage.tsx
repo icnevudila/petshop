@@ -329,20 +329,22 @@ const CategoryPage: React.FC<CategoryPageProps> = ({ addToCart, toggleWishlist, 
 
             <div className="flex items-center gap-3">
               {/* Mobile Filter Toggle */}
-              <button
-                onClick={() => setIsMobileFilterOpen(true)}
-                className="lg:hidden px-4 py-2 bg-gray-900 text-white rounded-md text-xs font-bold flex items-center gap-2 hover:bg-gray-800 transition-colors"
-              >
-                <Filter size={14} /> Filtrele
-              </button>
-
-              {/* Mobile Sort Trigger */}
-              <button
-                onClick={() => setIsSortInfoOpen(true)}
-                className="lg:hidden px-4 py-2 bg-gray-100 text-gray-700 rounded-md text-xs font-bold flex items-center gap-2 hover:bg-gray-200 transition-colors"
-              >
-                <ArrowRight size={14} className="rotate-90" /> Sırala
-              </button>
+              {/* Mobile Floating Actions Bar */}
+              <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[990] flex items-center gap-0 bg-white p-1 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 lg:hidden">
+                <button
+                  onClick={() => setIsMobileFilterOpen(true)}
+                  className="px-6 py-3 bg-gray-900 text-white rounded-l-full rounded-r-none text-xs font-bold flex items-center gap-2 active:bg-gray-800 transition-all"
+                >
+                  <Filter size={16} /> Filtrele
+                </button>
+                <div className="w-px h-full bg-white/20"></div>
+                <button
+                  onClick={() => setIsSortInfoOpen(true)}
+                  className="px-6 py-3 bg-white text-gray-900 rounded-r-full rounded-l-none text-xs font-bold flex items-center gap-2 hover:bg-gray-50 active:bg-gray-100 transition-all border-l border-gray-100"
+                >
+                  <ArrowRight size={16} className="rotate-90" /> Sırala
+                </button>
+              </div>
               {/* Sort Select - Clean */}
               {/* Sort Select - Desktop */}
               <div className="hidden lg:block relative group">

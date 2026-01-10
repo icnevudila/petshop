@@ -27,6 +27,7 @@ import ChatBot from './components/ChatBot';
 import MobileBottomNav from './components/MobileBottomNav';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProductProvider } from './ProductContext';
+import { HelmetProvider } from 'react-helmet-async';
 import { CartEntry, Product } from './types';
 import * as cartService from './services/cartService';
 import * as wishlistService from './services/wishlistService';
@@ -327,11 +328,13 @@ const AppContent: React.FC = () => {
 // Root App - Provides context
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <ProductProvider>
-        <AppContent />
-      </ProductProvider>
-    </AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
+        <ProductProvider>
+          <AppContent />
+        </ProductProvider>
+      </AuthProvider>
+    </HelmetProvider>
   );
 };
 

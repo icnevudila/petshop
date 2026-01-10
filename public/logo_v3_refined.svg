@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100">
+  <defs>
+    <!-- Importing a professional rounded font -->
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600&amp;display=swap');
+      .brand-text { font-family: 'Fredoka', 'Arial Rounded MT Bold', 'Verdana', sans-serif; font-weight: 600; }
+    </style>
+  </defs>
+
+  <!-- Main Word "patidükkan" in lower case, standard rounded font for perfect curves -->
+  <text x="50" y="75" class="brand-text" font-size="70" fill="#EA580C" letter-spacing="-2">patidükkan</text>
+
+  <!-- Custom Additions (Geometric & Symmetrical) -->
+  
+  <!-- Cat Ears on 'p' 
+       'p' is at approx x=50. The loop of 'p' is roughly centered at x=65, y=55.
+       We place sharp minimal triangles for ears.
+  -->
+  <g fill="#EA580C">
+    <!-- Left Ear -->
+    <path d="M55,42 L50,30 L65,38 Z" stroke="#EA580C" stroke-width="3" stroke-linejoin="round"/>
+    <!-- Right Ear -->
+    <path d="M78,42 L85,30 L68,38 Z" stroke="#EA580C" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Crown on 'i'
+       The 'i' is the 4th letter. Approx x pos: p(50)+a+t+i => ~138?
+       We cover the dot of the 'i' with a crown.
+       Let's place a Crown shape.
+  -->
+  <g transform="translate(148, 30)">
+    <!-- 3-point Crown -->
+    <path d="M0,15 L5,0 L10,15 L15,0 L20,15 Z" fill="#EA580C" stroke="#EA580C" stroke-width="2" stroke-linejoin="round"/>
+    <!-- Base line of crown if needed -->
+  </g>
+
+  <!-- Smiley / Nose hint inside 'p' or 'a'? Optional. Kept clean for now. -->
+  
+</svg>

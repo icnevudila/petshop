@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { Star, ShoppingCart, Heart, ChevronRight, Plus, Minus, Check, ShieldCheck } from 'lucide-react';
 import { Product } from '../types';
 import { useProducts } from '../ProductContext';
+import SEO from '../components/SEO';
 
 interface ProductDetailPageProps {
   addToCart: (p: Product, quantity?: number) => void;
@@ -117,15 +118,22 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ addToCart, toggle
 
                 <div className="flex flex-col mb-6">
                   {hasDiscount ? (
-                    <div className="flex items-end gap-3">
-                      <span className="text-4xl font-bold text-orange-600 tracking-tight">{(product.discounted_price || 0).toLocaleString('tr-TR')} TL</span>
-                      <div className="flex flex-col mb-1">
-                        <span className="text-sm text-gray-400 line-through decoration-gray-300">{(product.price).toLocaleString('tr-TR')} TL</span>
-                        <span className="text-xs text-red-600 font-bold">%{(Math.round(((product.price - (product.discounted_price || 0)) / product.price) * 100))} indirim</span>
+                    <div className="flex flex-col">
+                      <div className="flex items-baseline gap-3">
+                        <span className="text-4xl md:text-5xl font-black text-orange-600 tracking-tight">{(product.discounted_price!).toLocaleString('tr-TR')} TL</span>
+                        <span className="text-lg text-gray-300 font-bold line-through">{(product.price).toLocaleString('tr-TR')} TL</span>
                       </div>
+                      <p className="text-xs text-gray-400 font-medium mt-2">
+                        {((product.discounted_price!) / 9).toLocaleString('tr-TR', { maximumFractionDigits: 2 })} TL x 9 Taksit
+                      </p>
                     </div>
                   ) : (
-                    <span className="text-4xl font-bold text-orange-600 tracking-tight">{(product.price).toLocaleString('tr-TR')} TL</span>
+                    <div className="flex flex-col">
+                      <span className="text-4xl font-black text-orange-600 tracking-tight">{(product.price).toLocaleString('tr-TR')} TL</span>
+                      <p className="text-xs text-gray-400 font-medium mt-2">
+                        {(product.price / 9).toLocaleString('tr-TR', { maximumFractionDigits: 2 })} TL x 9 Taksit
+                      </p>
+                    </div>
                   )}
                   {product.discounted_price && product.discounted_price > 500 && (
                     <div className="flex items-center gap-2 mt-2 text-green-600 font-bold text-xs bg-green-50 w-fit px-2 py-1 rounded">
@@ -153,68 +161,57 @@ const ProductDetailPage: React.FC<ProductDetailPageProps> = ({ addToCart, toggle
                   >
                     <Heart size={20} fill={isWishlisted ? "currentColor" : "none"} />
                   </button>
-                </div>
-
-                {/* Delivery Badges */}
-                <div className="grid grid-cols-2 gap-3 mt-6 pt-6 border-t border-gray-100">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
-                      <Check size={14} strokeWidth={3} />
-                    </div>
-                    <div className="text-xs">
-                      <p className="font-bold text-gray-900">Hızlı Teslimat</p>
-                      <p className="text-gray-500">24 saatte kargoda</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-green-600">
-                      <ShieldCheck size={16} />
-                    </div>
-                    <div className="text-xs">
-                      <p className="font-bold text-gray-900">Orijinal Ürün</p>
-                      <p className="text-gray-500">%100 garanti</p>
-                    </div>
-                  </div>
+                  <p className="font-bold text-gray-900">Hızlı Teslimat</p>
+                  <p className="text-gray-500">24 saatte kargoda</p>
                 </div>
               </div>
-
-              {/* Info Tabs */}
-              <div className="mt-8">
-                <div className="flex items-center gap-8 border-b border-gray-100 mb-8 relative">
-                  <button
-                    onClick={() => setActiveTab('aciklama')}
-                    className={`pb-4 text-sm font-black uppercase tracking-widest transition-all relative ${activeTab === 'aciklama' ? 'text-secondary' : 'text-gray-400 hover:text-gray-600'}`}
-                  >
-                    Ürün Açıklaması
-                    {activeTab === 'aciklama' && <div className="absolute bottom-0 left-0 w-full h-1 bg-primary rounded-t-full"></div>}
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('yorumlar')}
-                    className={`pb-4 text-sm font-black uppercase tracking-widest transition-all relative ${activeTab === 'yorumlar' ? 'text-secondary' : 'text-gray-400 hover:text-gray-600'}`}
-                  >
-                    Yorumlar
-                    {activeTab === 'yorumlar' && <div className="absolute bottom-0 left-0 w-full h-1 bg-primary rounded-t-full"></div>}
-                  </button>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center text-green-600">
+                  <ShieldCheck size={16} />
                 </div>
-                {activeTab === 'aciklama' && (
-                  <div className="space-y-6 animate-in fade-in">
-                    <p className="text-gray-600 leading-relaxed font-medium">{product.description}</p>
-                    <ul className="space-y-3">
-                      {product.features.map((f, i) => (
-                        <li key={i} className="flex items-center gap-3 text-sm font-bold text-gray-700">
-                          <Check size={16} className="text-green-500" /> {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-                {activeTab === 'yorumlar' && (
-                  <div className="animate-in fade-in">
-                    <p className="text-gray-500 italic">Henüz yorum yapılmamış.</p>
-                  </div>
-                )}
+                <div className="text-xs">
+                  <p className="font-bold text-gray-900">Orijinal Ürün</p>
+                  <p className="text-gray-500">%100 garanti</p>
+                </div>
               </div>
             </div>
+          </div>
+
+          {/* Info Tabs */}
+          <div className="mt-8">
+            <div className="flex items-center gap-8 border-b border-gray-100 mb-8 relative">
+              <button
+                onClick={() => setActiveTab('aciklama')}
+                className={`pb-4 text-sm font-black uppercase tracking-widest transition-all relative ${activeTab === 'aciklama' ? 'text-secondary' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                Ürün Açıklaması
+                {activeTab === 'aciklama' && <div className="absolute bottom-0 left-0 w-full h-1 bg-primary rounded-t-full"></div>}
+              </button>
+              <button
+                onClick={() => setActiveTab('yorumlar')}
+                className={`pb-4 text-sm font-black uppercase tracking-widest transition-all relative ${activeTab === 'yorumlar' ? 'text-secondary' : 'text-gray-400 hover:text-gray-600'}`}
+              >
+                Yorumlar
+                {activeTab === 'yorumlar' && <div className="absolute bottom-0 left-0 w-full h-1 bg-primary rounded-t-full"></div>}
+              </button>
+            </div>
+            {activeTab === 'aciklama' && (
+              <div className="space-y-6 animate-in fade-in">
+                <p className="text-gray-600 leading-relaxed font-medium">{product.description}</p>
+                <ul className="space-y-3">
+                  {product.features.map((f, i) => (
+                    <li key={i} className="flex items-center gap-3 text-sm font-bold text-gray-700">
+                      <Check size={16} className="text-green-500" /> {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {activeTab === 'yorumlar' && (
+              <div className="animate-in fade-in">
+                <p className="text-gray-500 italic">Henüz yorum yapılmamış.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
