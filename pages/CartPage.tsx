@@ -184,9 +184,9 @@ const CartPage: React.FC<CartPageProps> = ({ cart, removeFromCart, updateCartQua
                 </div>
               </div>
 
-              <Link to="/checkout" className="hidden lg:flex w-full bg-brand text-white font-black py-5 rounded-2xl shadow-brand-glow items-center justify-center gap-3 hover:bg-brand-hover transition-all text-sm uppercase tracking-widest">
-                SEPETİ ONAYLA
-              </Link>
+              <button onClick={() => alert('Sitemiz şu an güncelleme aşamasındadır. Lütfen daha sonra tekrar deneyiniz.')} className="hidden lg:flex w-full bg-gray-300 text-white font-black py-5 rounded-2xl cursor-not-allowed items-center justify-center gap-3 text-sm uppercase tracking-widest">
+                SEPETİ ONAYLA (BAKIMDA)
+              </button>
 
               <div className="space-y-4 pt-6 border-t border-gray-50">
                 <div className="flex items-center gap-3 text-xs font-bold text-gray-400">
@@ -208,12 +208,12 @@ const CartPage: React.FC<CartPageProps> = ({ cart, removeFromCart, updateCartQua
           <span className="text-xs font-bold text-gray-400">Toplam</span>
           <span className="text-xl font-black text-brand tracking-tighter">{total.toLocaleString('tr-TR')} TL</span>
         </div>
-        <Link
-          to="/checkout"
-          className="flex-grow bg-brand text-white h-12 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-brand-hover transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95"
+        <button
+          onClick={() => alert('Sitemiz şu an güncelleme aşamasındadır. Lütfen daha sonra tekrar deneyiniz.')}
+          className="flex-grow bg-gray-300 text-white h-12 rounded-xl font-black text-sm uppercase tracking-widest cursor-not-allowed flex items-center justify-center gap-2 shadow-sm"
         >
-          Sepeti Onayla
-        </Link>
+          Sepeti Onayla (Bakımda)
+        </button>
       </div>
     </div>
   );
