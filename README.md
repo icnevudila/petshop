@@ -1,20 +1,27 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# PatiDükkan - Profesyonel Pet Shop E-Ticaret Platformu
 
-# Run and deploy your AI Studio app
+PatiDükkan, evcil dostlarınız için en kaliteli ürünleri sunan modern bir e-ticaret platformudur.
 
-This contains everything you need to run your app locally.
+## Özellikler
 
-View your app in AI Studio: https://ai.studio/apps/drive/1m1O3lUXD8DcIiPAQBb0sx67xpF6h5OP7
+* **Gelişmiş Ürün Filtreleme:** Kategori, marka ve fiyata göre arama.
+* **Hızlı ve Mobil Uyumlu Arayüz:** Vite ve React ile geliştirilmiş yüksek performanslı deneyim.
+* **Güvenli Sepet ve Ödeme:** Kullanıcı dostu sepet yönetimi.
+* **SEO Uyumlu:** Arama motorları için optimize edilmiş yapı.
 
-## Run Locally
+## Teknolojiler
 
-**Prerequisites:**  Node.js
+* React
+* TypeScript
+* Vite
+* Tailwind CSS
+* Supabase (Veritabanı)
 
+## Kurulum
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Projeyi yerel ortamda çalıştırmak için:
+
+```bash
+npm install
+npm run dev
+```
