@@ -1,5 +1,4 @@
-﻿
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useProducts } from '../ProductContext';
 import { Product } from '../types';
@@ -9,13 +8,13 @@ import SubCategoryStrip from '../components/SubCategoryStrip';
 import BrandMarquee from '../components/BrandMarquee';
 import FadeInSection from '../components/FadeInSection';
 import StoryNavigation from '../components/StoryNavigation';
+import Hero from '../components/Hero';
 import {
    ChevronLeft, ChevronRight, Zap, ArrowRight, ArrowLeft, Star, ShieldCheck,
    Truck, Headphones, Gift, Quote, Sparkles, Tag,
    Box, ShoppingBag, List, Heart, Loader2
 } from 'lucide-react';
 
-// Auto-scroll hook for horizontal container
 // Auto-scroll + Drag Scroll Hook
 interface ScrollOptions {
    autoScroll?: boolean;
@@ -213,12 +212,12 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
    const { products, campaigns, brands, homeFeatures, homeCategories, customerReviews, blogPosts } = useProducts();
 
    const scrollFlashRef = useRef<HTMLDivElement>(null);
-
-   const addToCartHandler = (e: React.MouseEvent, product: Product) => {
-      e.preventDefault();
-      e.stopPropagation();
-      addToCart(product);
-   };
+   const scrollBrandRef = useRef<HTMLDivElement>(null);
+   const scrollKittenRef = useRef<HTMLDivElement>(null);
+   const scrollNewRef = useRef<HTMLDivElement>(null);
+   const scrollFeaturedRef = useRef<HTMLDivElement>(null);
+   const scrollCategoryRef = useRef<HTMLDivElement>(null);
+   const [promoIndex, setPromoIndex] = useState(0);
 
    // Countdown Timer Component
    const CountdownTimer = () => {
@@ -255,40 +254,11 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
          </div>
       );
    };
-   const scrollBrandRef = useRef<HTMLDivElement>(null);
-   const scrollKittenRef = useRef<HTMLDivElement>(null);
-   const scrollNewRef = useRef<HTMLDivElement>(null);
-   const scrollFeaturedRef = useRef<HTMLDivElement>(null);
-   const scrollCategoryRef = useRef<HTMLDivElement>(null);
-
-   const [currentHeroSlide, setCurrentHeroSlide] = useState(0);
-   const [activeCategory, setActiveCategory] = useState(0);
-   const [promoIndex, setPromoIndex] = useState(0);
-   const heroCampaigns = campaigns.filter(c => c.location === 'slider');
-
-   const [heroLoaded, setHeroLoaded] = useState(false);
-
-   useEffect(() => {
-      // Preload the first hero image for instant LCP
-      if (heroCampaigns.length > 0) {
-         const img = new Image();
-         img.src = heroCampaigns[0].image_url;
-         img.onload = () => setHeroLoaded(true);
-      }
-   }, [heroCampaigns]);
-
-   useEffect(() => {
-      if (heroCampaigns.length === 0) return;
-      const timer = setInterval(() => { setCurrentHeroSlide((prev) => (prev + 1) % heroCampaigns.length); }, 5000);
-      return () => clearInterval(timer);
-   }, [heroCampaigns.length]);
 
    // Only keep the static category carousel hook here
    useDraggableScroll(scrollCategoryRef, { autoScroll: true, speed: 0.5 });
    // Re-add Flash Deals hook as it is an inline section
    useDraggableScroll(scrollFlashRef, { autoScroll: true, speed: 1.0 });
-
-
 
    useEffect(() => {
       const timer = setInterval(() => {
@@ -301,152 +271,13 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
       <div className="min-h-screen bg-white">
          <SEO title="Ana Sayfa" description="Türkiye'nin en seçkin pet ürünleri mağazası. Kedi, köpek, kuş ve balık ürünlerinde geniş seçenekler." />
 
-         {/* Mobile Story Navigation */}
-         <div className="pt-[155px] md:pt-[100px] md:hidden relative z-10">
+         {/* Story Navigation - Responsive */}
+         <div className="pt-[110px] md:pt-[100px] relative z-20 bg-white">
             <StoryNavigation />
          </div>
 
-         {/* 1. HERO SLIDER - Tam Ekran, Crossfade Geçişli */}
-
-         <section className="relative z-0 h-[50vh] min-h-[350px] md:h-screen md:min-h-[600px] md:max-h-[850px] md:mt-[100px] bg-gradient-to-br from-gray-900 to-gray-800 overflow-hidden group flex items-center justify-center">
-
-            {/* Loading Spinner */}
-            {!heroLoaded && (
-               <div className="absolute inset-0 z-20 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm">
-                  <Loader2 className="w-12 h-12 text-primary animate-spin" />
-               </div>
-            )}
-
-            {heroCampaigns.length > 0 && (<>
-               {/* Tüm slide'lar üst üste, sadece aktif olan görünür */}
-               {heroCampaigns.map((campaign, index) => (
-                  <Link
-                     key={campaign.id}
-                     to={campaign.target_url || '#'}
-                     className={`absolute inset-0 cursor-pointer block transition-all duration-1000 ease-in-out ${currentHeroSlide === index
-                        ? 'opacity-100 scale-100 blur-0 z-10'
-                        : 'opacity-0 scale-105 blur-sm z-0'
-                        }`}
-                  >
-                     {/* Arka plan - tam ekran görsel */}
-                     <div className="absolute inset-0">
-                        <img
-                           src={campaign.image_url}
-                           alt={campaign.title}
-                           className="w-full h-full object-cover md:object-cover object-center transition-transform duration-[2000ms] ease-out"
-                           style={{ transform: currentHeroSlide === index ? 'scale(1.05)' : 'scale(1)' }}
-                           loading={index === 0 ? "eager" : "lazy"}
-                           {...(index === 0 ? { fetchPriority: "high" as any } : {})}
-                           onLoad={() => {
-                              if (index === 0) setHeroLoaded(true);
-                           }}
-                        />
-                     </div>
-
-                     {/* Gradient overlay - daha hafif mobilde */}
-                     <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-black/80 via-black/50 to-transparent md:from-black/70 md:via-black/40" />
-
-                     {/* Metin içeriği - her slide için farklı */}
-                     <div className="absolute inset-0 flex items-end md:items-center pb-16 md:pb-0">
-                        <div className="container mx-auto px-4 md:px-16">
-                           <div className="max-w-2xl hero-content" key={currentHeroSlide}>
-                              {index === 0 && (
-                                 <>
-                                    <span className="inline-block bg-primary/90 text-white px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-3 md:mb-6">
-                                       Premium Köpek Serisi
-                                    </span>
-                                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] mb-3 md:mb-6 font-display">
-                                       Sadık Dostunuz<br />
-                                       <span className="text-primary">En İyisini</span> Hak Eder
-                                    </h1>
-                                    <p className="text-gray-300 text-lg md:text-xl font-medium mb-6 md:mb-8 max-w-lg">
-                                       Seçilmiş içerikler, dengeli protein oranı ve doğal desteklerle üst düzey bakım.
-                                    </p>
-                                    <div className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-3.5 md:px-8 md:py-4 rounded-xl font-bold text-sm md:text-sm uppercase tracking-wider transition-all shadow-xl hover:shadow-primary/30 flex items-center gap-2 w-max">
-                                       Keşfet <ArrowRight size={16} />
-                                    </div>
-                                 </>
-                              )}
-                              {index === 1 && (
-                                 <>
-                                    <span className="inline-block bg-primary/90 text-white px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-3 md:mb-6">
-                                       Özel Bakım Serisi
-                                    </span>
-                                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] mb-3 md:mb-6 font-display">
-                                       Güçlü Kaslar<br />
-                                       <span className="text-primary">Parlak Tüyler</span>
-                                    </h1>
-                                    <p className="text-gray-300 text-lg md:text-xl font-medium mb-6 md:mb-8 max-w-lg">
-                                       Omega 3-6, vitamin ve eklem desteğiyle aktif yaşamı güvenle destekleyin.
-                                    </p>
-                                    <div className="btn-smooth bg-primary hover:bg-orange-600 text-white px-8 py-3.5 md:px-8 md:py-4 rounded-xl font-bold text-sm md:text-sm uppercase tracking-wider transition-all shadow-xl flex items-center gap-2 w-max">
-                                       Keşfet <ArrowRight size={16} />
-                                    </div>
-                                 </>
-                              )}
-                              {index === 2 && (
-                                 <>
-                                    <span className="inline-block bg-primary/90 text-white px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-3 md:mb-6">
-                                       Günlük Rutin
-                                    </span>
-                                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] mb-3 md:mb-6 font-display">
-                                       Hassas Sindirim<br />
-                                       <span className="text-primary">Uzun Vadeli</span> Canlılık
-                                    </h1>
-                                    <p className="text-gray-300 text-lg md:text-xl font-medium mb-6 md:mb-8 max-w-lg">
-                                       Nazik içerikler ve premium tariflerle her gün doğru dengeyi sunun.
-                                    </p>
-                                    <div className="btn-smooth bg-primary hover:bg-orange-600 text-white px-5 py-2.5 md:px-8 md:py-4 rounded-xl font-bold text-xs md:text-sm uppercase tracking-wider transition-all shadow-xl flex items-center gap-2 inline-flex w-max">
-                                       Keşfet <ArrowRight size={16} />
-                                    </div>
-                                 </>
-                              )}
-                              {index > 2 && (
-                                 <>
-                                    <h1 className="text-2xl md:text-6xl font-black text-white leading-tight mb-3 md:mb-6 font-display">
-                                       {campaign.title}
-                                    </h1>
-                                    <div className="btn-smooth bg-primary hover:bg-orange-600 text-white px-5 py-2.5 md:px-8 md:py-4 rounded-xl font-bold text-xs md:text-sm uppercase tracking-wider transition-all inline-flex items-center gap-2 w-max">
-                                       Keşfet <ArrowRight size={16} />
-                                    </div>
-                                 </>
-                              )}
-                           </div>
-                        </div>
-                     </div>
-                  </Link>
-               ))}
-               {/* Sol ok */}
-               <button
-                  onClick={() => setCurrentHeroSlide(prev => (prev - 1 + heroCampaigns.length) % heroCampaigns.length)}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 hover:scale-110 z-20"
-                  aria-label="Önceki slide"
-               >
-                  <ChevronLeft size={28} />
-               </button>
-               {/* Sağ ok */}
-               <button
-                  onClick={() => setCurrentHeroSlide(prev => (prev + 1) % heroCampaigns.length)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 hover:scale-110 z-20"
-                  aria-label="Sonraki slide"
-               >
-                  <ChevronRight size={28} />
-               </button>
-               {/* Dots */}
-               <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
-                  {heroCampaigns.map((_, idx) => (
-                     <button
-                        key={idx}
-                        onClick={() => setCurrentHeroSlide(idx)}
-                        className={`h-3 rounded-full transition-all duration-300 ${currentHeroSlide === idx ? 'w-12 bg-primary' : 'w-3 bg-white/40 hover:bg-white/70'}`}
-                        aria-label={`Slide ${idx + 1}`}
-                     />
-                  ))}
-               </div>
-            </>)}
-         </section>
-
-
+         {/* 1. HERO SLIDER */}
+         <Hero campaigns={campaigns} />
 
          {/* Marka Şeridi (Petlebi Style) */}
          <BrandMarquee />
@@ -821,5 +652,3 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
 };
 
 export default HomePage;
-
-

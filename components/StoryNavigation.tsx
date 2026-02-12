@@ -14,18 +14,25 @@ const STORIES = [
 
 const StoryNavigation: React.FC = () => {
     return (
-        <div className="w-full bg-[#fcfcfc] py-4 md:hidden border-b border-gray-50 overflow-hidden">
-            <div className="flex gap-4 overflow-x-auto hide-scrollbar px-4 snap-x">
-                {STORIES.map((story) => (
-                    <Link key={story.id} to={story.link} className="flex flex-col items-center gap-2 flex-shrink-0 snap-center group cursor-pointer">
-                        <div className={`p-[2px] rounded-full ring-2 ${story.ringColor} ring-offset-2 transition-all group-hover:scale-105`}>
-                            <div className="w-16 h-16 rounded-full bg-white border border-gray-100 p-1.5 overflow-hidden">
-                                <img src={story.img} alt={story.name} className="w-full h-full object-cover rounded-full" />
+        <div className="w-full bg-white py-6 md:py-8 border-b border-gray-50 overflow-hidden">
+            <div className="container mx-auto px-4">
+                <div className="flex gap-4 md:gap-8 overflow-x-auto hide-scrollbar px-2 snap-x md:justify-center pb-2">
+                    {STORIES.map((story) => (
+                        <Link key={story.id} to={story.link} className="flex flex-col items-center gap-3 flex-shrink-0 snap-center group cursor-pointer relative">
+                            {/* Pulse Effect for Special Items */}
+                            {(story.name === 'İndirimler' || story.name === 'Yeni') && (
+                                <div className={`absolute inset-0 rounded-full ${story.ringColor.replace('ring-', 'bg-')}/30 animate-pulse-ring pointer-events-none transform scale-125`}></div>
+                            )}
+
+                            <div className={`p-[3px] rounded-full ring-2 ${story.ringColor} ring-offset-2 transition-all duration-300 group-hover:scale-110 group-hover:ring-offset-4 shadow-sm`}>
+                                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white border border-gray-100 p-1.5 overflow-hidden relative z-10">
+                                    <img src={story.img} alt={story.name} className="w-full h-full object-cover rounded-full transform transition-transform group-hover:scale-110" />
+                                </div>
                             </div>
-                        </div>
-                        <span className="text-[10px] font-black text-gray-700 truncate max-w-[70px] tracking-wide">{story.name}</span>
-                    </Link>
-                ))}
+                            <span className="text-[10px] md:text-xs font-bold text-gray-700 truncate max-w-[80px] tracking-wide group-hover:text-primary transition-colors">{story.name}</span>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
     );
