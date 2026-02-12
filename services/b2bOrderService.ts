@@ -1,5 +1,7 @@
 import { supabase } from '../supabaseClient';
 import { DealerOrder, DealerOrderItem, DealerOrderStatus } from '../types';
+import { NotificationService } from './notificationService';
+import { getDealerById } from './dealerService';
 
 interface CreateOrderItem {
     product_id: string;
@@ -19,10 +21,18 @@ export async function createDealerOrder(
     discountApplied: number,
     notes?: string
 ): Promise<DealerOrder> {
+    // 0. Validate Dealer and Min Order Amount
+    const dealer = await getDealerById(dealerId);
+    if (!dealer) throw new Error('Bayi bulunamadı');
+
     const totalPrice = items.reduce(
         (sum, item) => sum + item.discounted_unit_price * item.quantity,
         0
     );
+
+    if (dealer.min_order_amount > 0 && totalPrice < dealer.min_order_amount) {
+        throw new Error(`Minimum sipariş tutarı ₺${dealer.min_order_amount.toLocaleString('tr-TR')} olmalıdır.`);
+    }
 
     // 1. Siparişi oluştur
     const { data: order, error: orderError } = await supabase
@@ -60,6 +70,28 @@ export async function createDealerOrder(
     if (itemsError) {
         console.error('Error creating dealer order items:', itemsError);
         throw itemsError;
+    }
+
+    // 3. Notify
+    try {
+        // Need dealer's email. Since dealers -> profiles relation exists on user_id
+        const { data: dealerData } = await supabase
+            .from('dealers')
+            .select('*, profile:profiles(email)')
+            .eq('id', dealerId)
+            .single();
+
+        const email = (dealerData as any)?.profile?.email;
+        if (email) {
+            await NotificationService.sendOrderCreatedEmail(
+                order.id,
+                dealerData.company_name,
+                totalPrice,
+                email
+            );
+        }
+    } catch (e) {
+        console.error('Failed to send notification:', e);
     }
 
     return order as DealerOrder;
@@ -140,12 +172,34 @@ export async function updateDealerOrderStatus(orderId: string, status: DealerOrd
         .from('dealer_orders')
         .update({ status })
         .eq('id', orderId)
-        .select()
+        .select(`
+            *,
+            dealer:dealers(
+                *,
+                profile:profiles(email)
+            )
+        `)
         .single();
 
     if (error) {
         console.error('Error updating dealer order status:', error);
         throw error;
+    }
+
+    // Notify
+    try {
+        const dealer = (data as any)?.dealer;
+        const email = dealer?.profile?.email;
+        if (email && dealer) {
+            await NotificationService.sendOrderStatusChangedEmail(
+                data.id,
+                dealer.company_name,
+                email,
+                status
+            );
+        }
+    } catch (e) {
+        console.error('Failed to send notification:', e);
     }
 
     return data as DealerOrder;

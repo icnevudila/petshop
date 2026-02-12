@@ -1,5 +1,6 @@
 import { supabase } from '../supabaseClient';
 import { Dealer, DealerStatus } from '../types';
+import { NotificationService } from './notificationService';
 
 /**
  * Bayi başvurusu oluştur
@@ -13,6 +14,10 @@ export async function applyAsDealer(userId: string, data: {
     city: string;
     district: string;
 }) {
+    // 1. Get user email first
+    const { data: { user } } = await supabase.auth.getUser();
+    const email = user?.email || '';
+
     const { data: dealer, error } = await supabase
         .from('dealers')
         .insert({
@@ -26,6 +31,13 @@ export async function applyAsDealer(userId: string, data: {
     if (error) {
         console.error('Error applying as dealer:', error);
         throw error;
+    }
+
+    // 2. Notify Admin
+    try {
+        await NotificationService.sendDealerApplicationReceivedEmail(data.company_name, email);
+    } catch (e) {
+        console.error('Failed to send notification:', e);
     }
 
     return dealer as Dealer;
@@ -94,15 +106,15 @@ export async function updateDealerProfile(dealerId: string, updates: Partial<Dea
 export async function getAllDealers(): Promise<Dealer[]> {
     const { data, error } = await supabase
         .from('dealers')
-        .select('*')
+        .select(`
+            *,
+            profile:profiles(email)
+        `)
         .order('created_at', { ascending: false });
 
-    if (error) {
-        console.error('Error getting all dealers:', error);
-        throw error;
-    }
-
-    return (data || []) as Dealer[];
+    // Map profile email to dealer object if needed, or handle in UI
+    // For now returning raw data which includes joined profile
+    return (data || []) as any[];
 }
 
 /**
@@ -116,12 +128,27 @@ export async function updateDealerStatus(dealerId: string, status: DealerStatus,
         .from('dealers')
         .update(updates)
         .eq('id', dealerId)
-        .select()
+        .select(`
+            *,
+            profile:profiles(email)
+        `)
         .single();
 
     if (error) {
         console.error('Error updating dealer status:', error);
         throw error;
+    }
+
+    // Notify Dealer
+    if (status === 'approved' || status === 'rejected') {
+        try {
+            const email = (data as any).profile?.email;
+            if (email) {
+                await NotificationService.sendDealerApplicationStatusEmail(email, data.company_name, status);
+            }
+        } catch (e) {
+            console.error('Failed to send notification:', e);
+        }
     }
 
     return data as Dealer;
