@@ -68,7 +68,7 @@ const MobileFilterDrawer: React.FC<MobileFilterDrawerProps> = ({
     };
 
     const getTotalSelectedCount = () => {
-        return Object.values(selectedFilters).reduce((sum, arr) => sum + arr.length, 0);
+        return Object.values(selectedFilters).reduce((sum: number, arr: string[]) => sum + arr.length, 0);
     };
 
     return (

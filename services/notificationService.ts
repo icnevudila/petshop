@@ -10,7 +10,7 @@ export const sendOrderConfirmation = async (order: any, isB2B: boolean = false) 
     await new Promise(resolve => setTimeout(resolve, 500));
 
     console.groupCollapsed(`📧 [SIMULATION] Email Sent: Sipariş Onayı #${order.id}`);
-    console.log('To:', order.customerEmail || order.shipping_address); // B2B might not have direct email in order object sometimes
+    console.log('To:', order.customerEmail || order.shipping_address);
     console.log('Subject:', isB2B ? `Toptan Sipariş Alındı: #${order.id}` : `Siparişiniz Alındı: #${order.id}`);
     console.log('Body Preview:', `Sayın Müşterimiz, siparişiniz başarıyla alınmıştır. Toplam Tutar: ₺${order.totalPrice || order.total_price}`);
     console.groupEnd();
@@ -41,3 +41,31 @@ export const sendShippingUpdate = async (orderId: string, status: string, tracki
 
     return true;
 };
+
+/**
+ * NotificationService class wrapper - provides static methods for dealer service compatibility
+ */
+export class NotificationService {
+    static async sendDealerApplicationReceivedEmail(companyName: string, email: string) {
+        return sendDealerApplicationReceived({ company_name: companyName, user_id: email });
+    }
+
+    static async sendDealerApplicationStatusEmail(email: string, companyName: string, status: string) {
+        await new Promise(resolve => setTimeout(resolve, 300));
+        console.groupCollapsed(`📧 [SIMULATION] Email Sent: Bayi Başvuru Durumu`);
+        console.log('To:', email);
+        console.log('Company:', companyName);
+        console.log('Status:', status);
+        console.groupEnd();
+        return true;
+    }
+
+    static async sendOrderConfirmationEmail(order: any, isB2B: boolean = false) {
+        return sendOrderConfirmation(order, isB2B);
+    }
+
+    static async sendShippingUpdateEmail(orderId: string, status: string, trackingNumber?: string) {
+        return sendShippingUpdate(orderId, status, trackingNumber);
+    }
+}
+

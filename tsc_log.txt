@@ -1,0 +1,7 @@
+﻿components/MobileFilterDrawer.tsx(71,78): error TS2339: Property 'length' does not exist on type 'unknown'.
+components/MobileFilterDrawer.tsx(90,35): error TS2365: Operator '>' cannot be applied to types 'unknown' and 'number'.
+pages/AdminPage.tsx(49,33): error TS2339: Property 'setState' does not exist on type 'ErrorBoundary'.
+pages/AdminPage.tsx(57,17): error TS2339: Property 'props' does not exist on type 'ErrorBoundary'.
+pages/FAQPage.tsx(73,34): error TS2322: Type '{ key: number; question: string; answer: string; }' is not assignable to type '{ question: string; answer: string; }'.
+  Property 'key' does not exist on type '{ question: string; answer: string; }'.
+services/dealerService.ts(3,10): error TS2305: Module '"./notificationService"' has no exported member 'NotificationService'.
