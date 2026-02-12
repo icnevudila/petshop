@@ -98,7 +98,6 @@ const B2BCatalogPage: React.FC = () => {
     const totalCartItems = b2bCart.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
-    return (
         <B2BLayout>
             {loading ? (
                 <div className="min-h-[60vh] flex items-center justify-center">
