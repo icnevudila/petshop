@@ -1,5 +1,6 @@
 import { supabase } from '../supabaseClient';
 import { Order, CartEntry } from '../types';
+import { sendOrderConfirmation, sendShippingUpdate } from './notificationService';
 
 export interface CreateOrderData {
     userId?: string;
@@ -84,6 +85,17 @@ export async function createOrder(data: CreateOrderData): Promise<string> {
             console.warn('Stock decrement RPC not available');
         }
     }
+
+
+
+    // Send simulated email
+    // Don't await this, let it run in background
+    sendOrderConfirmation({
+        id: order.id,
+        customerEmail: data.customerEmail,
+        totalPrice: data.totalPrice,
+        shipping_address: data.shippingAddress
+    }).catch(console.error);
 
     return order.id;
 }
@@ -217,6 +229,9 @@ export async function updateOrderStatus(orderId: string, status: string): Promis
         console.error('Error updating order status:', error);
         throw error;
     }
+
+    // Send shipping update email if status changed
+    sendShippingUpdate(orderId, status).catch(console.error);
 }
 
 /**

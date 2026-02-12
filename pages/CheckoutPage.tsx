@@ -27,6 +27,31 @@ const CheckoutPage: React.FC = () => {
     // Payment Method: 'shopier' | 'havale'
     const [paymentMethod, setPaymentMethod] = useState<'shopier' | 'havale'>('shopier');
 
+    // Card State
+    const [cardData, setCardData] = useState({
+        cardHolder: '',
+        cardNumber: '',
+        expiry: '',
+        cvc: ''
+    });
+
+    const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        let formattedValue = value;
+
+        if (name === 'cardNumber') {
+            formattedValue = value.replace(/\D/g, '').substring(0, 16).replace(/(\d{4})/g, '$1 ').trim();
+        } else if (name === 'expiry') {
+            formattedValue = value.replace(/\D/g, '').substring(0, 4).replace(/(\d{2})(\d{1,2})/, '$1/$2');
+        } else if (name === 'cvc') {
+            formattedValue = value.replace(/\D/g, '').substring(0, 3);
+        } else if (name === 'cardHolder') {
+            formattedValue = value.toUpperCase();
+        }
+
+        setCardData(prev => ({ ...prev, [name]: formattedValue }));
+    };
+
     useEffect(() => {
         // Load cart from local storage or context if accessed via prop
         // Ideally we should pass cart prop or use a CartContext, but for now loading from localStorage/Supabase logic
@@ -65,10 +90,18 @@ const CheckoutPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         if (!currentUser) {
             alert('Sipariş vermek için lütfen giriş yapınız.');
             navigate('/giris');
             return;
+        }
+
+        if (paymentMethod === 'shopier') {
+            if (cardData.cardNumber.length < 19 || cardData.expiry.length < 5 || cardData.cvc.length < 3 || cardData.cardHolder.length < 3) {
+                alert('Lütfen geçerli kart bilgileri giriniz.');
+                return;
+            }
         }
 
         setLoading(true);
@@ -242,6 +275,66 @@ const CheckoutPage: React.FC = () => {
                                                     <p className="text-xs text-gray-500">Güvenli Ödeme</p>
                                                 </div>
                                             </div>
+                                            {paymentMethod === 'shopier' && (
+                                                <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100 animate-in fade-in slide-in-from-top-2">
+                                                    <div className="space-y-4">
+                                                        <div className="space-y-1">
+                                                            <label className="text-[10px] uppercase font-bold text-gray-400">Kart Üzerindeki İsim</label>
+                                                            <input
+                                                                type="text"
+                                                                name="cardHolder"
+                                                                value={cardData.cardHolder}
+                                                                onChange={handleCardChange}
+                                                                placeholder="AD SOYAD"
+                                                                className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold uppercase"
+                                                            />
+                                                        </div>
+                                                        <div className="space-y-1">
+                                                            <label className="text-[10px] uppercase font-bold text-gray-400">Kart Numarası</label>
+                                                            <div className="relative">
+                                                                <input
+                                                                    type="text"
+                                                                    name="cardNumber"
+                                                                    value={cardData.cardNumber}
+                                                                    onChange={handleCardChange}
+                                                                    placeholder="0000 0000 0000 0000"
+                                                                    className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 pl-10 text-sm font-bold"
+                                                                />
+                                                                <CreditCard size={16} className="absolute left-3 top-2.5 text-gray-400" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="grid grid-cols-2 gap-4">
+                                                            <div className="space-y-1">
+                                                                <label className="text-[10px] uppercase font-bold text-gray-400">Son Kullanma (Ay/Yıl)</label>
+                                                                <input
+                                                                    type="text"
+                                                                    name="expiry"
+                                                                    value={cardData.expiry}
+                                                                    onChange={handleCardChange}
+                                                                    placeholder="MM/YY"
+                                                                    className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"
+                                                                />
+                                                            </div>
+                                                            <div className="space-y-1">
+                                                                <label className="text-[10px] uppercase font-bold text-gray-400">CVC / CVV</label>
+                                                                <input
+                                                                    type="text"
+                                                                    name="cvc"
+                                                                    value={cardData.cvc}
+                                                                    onChange={handleCardChange}
+                                                                    placeholder="123"
+                                                                    className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center gap-2 pt-2">
+                                                            <div className="w-8"><img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" /></div>
+                                                            <div className="w-8"><img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" alt="Visa" /></div>
+                                                            <div className="w-8"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/Troy_logo.png" alt="Troy" onError={(e) => e.currentTarget.style.display = 'none'} /></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
 
                                         <div

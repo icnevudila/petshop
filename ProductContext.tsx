@@ -5,6 +5,7 @@ import { supabase } from './supabaseClient';
 import { PRODUCTS as INITIAL_PRODUCTS, CAMPAIGNS as INITIAL_CAMPAIGNS, BRANDS as INITIAL_BRANDS, CATEGORY_DATA as INITIAL_CATEGORIES, BLOG_POSTS as INITIAL_BLOG_POSTS } from './constants';
 import { getCampaigns, addCampaign as addCampaignService, updateCampaign as updateCampaignService, deleteCampaign as deleteCampaignService } from './services/campaignService';
 import { getBlogPosts, addBlogPost as addBlogPostService, updateBlogPost as updateBlogPostService, deleteBlogPost as deleteBlogPostService } from './services/blogService';
+import { getSiteSettings, updateSiteSettings as updateSiteSettingsService } from './services/settingsService';
 
 // Default values as fallback
 const DEFAULT_SITE_SETTINGS: SiteSettings = {
@@ -149,9 +150,10 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
                     { data: brandsData },
                     { data: categoriesData },
                     campaignsData,
-                    blogData
+                    blogData,
+                    siteSettingsData
                 ] = await Promise.all([
-                    pProducts, pBrands, pCategories, pCampaigns, pBlog
+                    pProducts, pBrands, pCategories, pCampaigns, pBlog, getSiteSettings()
                 ]);
 
                 // Update state only if data exists
@@ -170,7 +172,9 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
                 if (brandsData && brandsData.length > 0) setBrands(brandsData);
                 if (categoriesData && categoriesData.length > 0) setCategories(categoriesData);
                 if (campaignsData && campaignsData.length > 0) setCampaigns(campaignsData);
+                if (campaignsData && campaignsData.length > 0) setCampaigns(campaignsData);
                 if (blogData && blogData.length > 0) setBlogPosts(blogData);
+                if (siteSettingsData) setSiteSettings(siteSettingsData);
 
                 // Load local storage items
                 const loadFromStorage = (key: string, fallback: any) => {
@@ -287,10 +291,17 @@ export const ProductProvider: React.FC<ProductProviderProps> = ({ children }) =>
         catch (e) { console.error('Supabase blog delete failed:', e); }
     };
 
-    // SETTINGS (Local Storage)
+    // SETTINGS (Supabase)
     const updateSiteSettings = async (settings: SiteSettings) => {
-        setSiteSettings(settings);
-        persist('siteSettings', settings);
+        setSiteSettings(settings); // Optimistic update
+        try {
+            await updateSiteSettingsService(settings);
+            // Also persist to local storage as backup/cache if needed, but DB is primary
+            persist('siteSettings', settings);
+        } catch (e) {
+            console.error('Failed to update site settings in DB:', e);
+            // Revert or show error? For now just log
+        }
     };
 
     // HOME CONTENT (Local Storage)

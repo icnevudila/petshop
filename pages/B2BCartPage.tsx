@@ -7,7 +7,7 @@ import B2BLayout from '../components/B2BLayout';
 import { Dealer, B2BCartEntry } from '../types';
 import {
     ShoppingCart, Trash2, Plus, Minus, AlertCircle, CheckCircle2,
-    ArrowRight, Package, MapPin, FileText
+    ArrowRight, Package, MapPin, FileText, CreditCard, Banknote
 } from 'lucide-react';
 
 const B2BCartPage: React.FC = () => {
@@ -23,6 +23,25 @@ const B2BCartPage: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
+
+    // Payment State
+    const [paymentMethod, setPaymentMethod] = useState<'havale' | 'credit_card'>('havale');
+    const [cardData, setCardData] = useState({
+        cardHolder: '',
+        cardNumber: '',
+        expiry: '',
+        cvc: ''
+    });
+
+    const handleCardChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        let formattedValue = value;
+        if (name === 'cardNumber') formattedValue = value.replace(/\D/g, '').substring(0, 16).replace(/(\d{4})/g, '$1 ').trim();
+        else if (name === 'expiry') formattedValue = value.replace(/\D/g, '').substring(0, 4).replace(/(\d{2})(\d{1,2})/, '$1/$2');
+        else if (name === 'cvc') formattedValue = value.replace(/\D/g, '').substring(0, 3);
+        else if (name === 'cardHolder') formattedValue = value.toUpperCase();
+        setCardData(prev => ({ ...prev, [name]: formattedValue }));
+    };
 
     useEffect(() => {
         const loadDealer = async () => {
@@ -88,8 +107,20 @@ const B2BCartPage: React.FC = () => {
 
         if (!dealer) return;
 
+        if (paymentMethod === 'credit_card') {
+            if (cardData.cardNumber.length < 19 || cardData.expiry.length < 5 || cardData.cvc.length < 3 || cardData.cardHolder.length < 3) {
+                setError('Lütfen geçerli kart bilgileri giriniz.');
+                return;
+            }
+        }
+
         setIsSubmitting(true);
         try {
+            // Simulate Payment Delay
+            if (paymentMethod === 'credit_card') {
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            }
+
             await b2bOrderService.createDealerOrder(
                 dealer.id,
                 b2bCart.map(item => ({
@@ -101,7 +132,7 @@ const B2BCartPage: React.FC = () => {
                 })),
                 shippingAddress,
                 dealer.discount_rate,
-                orderNotes || undefined
+                `${orderNotes} [Ödeme: ${paymentMethod === 'credit_card' ? 'Kredi Kartı' : 'Havale/EFT'}]`
             );
             setSuccess(true);
             setB2bCart([]);
@@ -123,9 +154,18 @@ const B2BCartPage: React.FC = () => {
                         </div>
                         <h2 className="text-2xl font-bold text-secondary mb-4">Siparişiniz Alındı!</h2>
                         <p className="text-gray-500 mb-8 leading-relaxed">
-                            Toptan siparişiniz başarıyla oluşturuldu. Siparişiniz en kısa sürede
-                            incelenecek ve onaylandığında bilgilendirileceksiniz.
+                            {paymentMethod === 'havale'
+                                ? 'Toptan siparişiniz başarıyla oluşturuldu. Ödeme bilgileriniz e-posta adresinize gönderilmiştir. Ödeme sonrası dekont paylaşmayı unutmayınız.'
+                                : 'Kredi kartı ile ödemeniz başarıyla alındı. Siparişiniz hazırlanmaya başlanacaktır.'
+                            }
                         </p>
+                        {paymentMethod === 'havale' && (
+                            <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 mb-8 text-left">
+                                <p className="font-bold text-blue-800 mb-2">Banka Bilgileri:</p>
+                                <p className="text-sm text-blue-700">IBAN: TR12 3456 0000 0000 1234 5678 90</p>
+                                <p className="text-sm text-blue-700">Alıcı: PatiDükkan Ltd. Şti.</p>
+                            </div>
+                        )}
                         <div className="flex gap-3 justify-center">
                             <Link
                                 to="/bayi/siparisler"
@@ -303,6 +343,87 @@ const B2BCartPage: React.FC = () => {
                                     rows={2}
                                     className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none text-sm"
                                 />
+                            </div>
+
+                            {/* Payment Method Selection */}
+                            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+                                <h3 className="text-secondary font-bold flex items-center gap-2"><CreditCard size={16} /> Ödeme Yöntemi</h3>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <button
+                                        onClick={() => setPaymentMethod('havale')}
+                                        className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${paymentMethod === 'havale' ? 'border-primary bg-primary/5 text-primary' : 'border-gray-100 text-gray-500 hover:border-gray-200'}`}
+                                    >
+                                        <Banknote size={24} className="mb-2" />
+                                        <span className="font-bold text-sm">Havale / EFT</span>
+                                    </button>
+                                    <button
+                                        onClick={() => setPaymentMethod('credit_card')}
+                                        className={`flex flex-col items-center justify-center p-4 rounded-xl border-2 transition-all ${paymentMethod === 'credit_card' ? 'border-primary bg-primary/5 text-primary' : 'border-gray-100 text-gray-500 hover:border-gray-200'}`}
+                                    >
+                                        <CreditCard size={24} className="mb-2" />
+                                        <span className="font-bold text-sm">Kredi Kartı</span>
+                                    </button>
+                                </div>
+
+                                {paymentMethod === 'credit_card' && (
+                                    <div className="mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100 animate-in fade-in slide-in-from-top-2">
+                                        <div className="space-y-4">
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] uppercase font-bold text-gray-400">Kart Üzerindeki İsim</label>
+                                                <input
+                                                    type="text"
+                                                    name="cardHolder"
+                                                    value={cardData.cardHolder}
+                                                    onChange={handleCardChange}
+                                                    placeholder="AD SOYAD"
+                                                    className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold uppercase"
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <label className="text-[10px] uppercase font-bold text-gray-400">Kart Numarası</label>
+                                                <div className="relative">
+                                                    <input
+                                                        type="text"
+                                                        name="cardNumber"
+                                                        value={cardData.cardNumber}
+                                                        onChange={handleCardChange}
+                                                        placeholder="0000 0000 0000 0000"
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 pl-10 text-sm font-bold"
+                                                    />
+                                                    <CreditCard size={16} className="absolute left-3 top-2.5 text-gray-400" />
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="space-y-1">
+                                                    <label className="text-[10px] uppercase font-bold text-gray-400">Son Kullanma (Ay/Yıl)</label>
+                                                    <input
+                                                        type="text"
+                                                        name="expiry"
+                                                        value={cardData.expiry}
+                                                        onChange={handleCardChange}
+                                                        placeholder="MM/YY"
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"
+                                                    />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <label className="text-[10px] uppercase font-bold text-gray-400">CVC / CVV</label>
+                                                    <input
+                                                        type="text"
+                                                        name="cvc"
+                                                        value={cardData.cvc}
+                                                        onChange={handleCardChange}
+                                                        placeholder="123"
+                                                        className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm font-bold"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="flex items-center gap-2 pt-2 text-xs text-gray-400">
+                                                <span className="bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded font-bold">SANDBOX</span>
+                                                Güvenli Ödeme Simülasyonu
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {error && (

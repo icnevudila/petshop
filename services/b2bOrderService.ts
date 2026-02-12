@@ -1,6 +1,6 @@
 import { supabase } from '../supabaseClient';
 import { DealerOrder, DealerOrderItem, DealerOrderStatus } from '../types';
-import { NotificationService } from './notificationService';
+import { sendOrderConfirmation, sendShippingUpdate } from './notificationService';
 import { getDealerById } from './dealerService';
 
 interface CreateOrderItem {
@@ -83,12 +83,13 @@ export async function createDealerOrder(
 
         const email = (dealerData as any)?.profile?.email;
         if (email) {
-            await NotificationService.sendOrderCreatedEmail(
-                order.id,
-                dealerData.company_name,
-                totalPrice,
-                email
-            );
+            sendOrderConfirmation({
+                id: order.id,
+                shipping_address: shippingAddress,
+                totalPrice: totalPrice,
+                customerEmail: email,
+                items: items
+            }, true).catch(console.error);
         }
     } catch (e) {
         console.error('Failed to send notification:', e);
@@ -191,12 +192,10 @@ export async function updateDealerOrderStatus(orderId: string, status: DealerOrd
         const dealer = (data as any)?.dealer;
         const email = dealer?.profile?.email;
         if (email && dealer) {
-            await NotificationService.sendOrderStatusChangedEmail(
-                data.id,
-                dealer.company_name,
-                email,
+            sendShippingUpdate(
+                orderId,
                 status
-            );
+            ).catch(console.error);
         }
     } catch (e) {
         console.error('Failed to send notification:', e);
