@@ -70,7 +70,7 @@ const Hero: React.FC<HeroProps> = ({ campaigns }) => {
                                 <span className="inline-block bg-primary/90 text-white px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-3 md:mb-6 animate-fade-in-up">
                                     {index === 0 ? 'Premium Köpek Serisi' : index === 1 ? 'Özel Bakım Serisi' : 'Günlük Rutin'}
                                 </span>
-                                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] mb-3 md:mb-6 font-display animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+                                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-[0.9] mb-3 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
                                     {campaign.title}
                                 </h1>
                                 <p className="text-gray-300 text-lg md:text-xl font-medium mb-6 md:mb-8 max-w-lg animate-fade-in-up" style={{ animationDelay: '0.2s' }}>

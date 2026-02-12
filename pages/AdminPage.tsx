@@ -645,8 +645,8 @@ const AdminPage: React.FC = () => {
                     <div className="aspect-video bg-gray-100 relative">
                       <img src={campaign.image_url} alt={campaign.title} className="w-full h-full object-cover" />
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <button onClick={() => openEditModal('campaign', campaign)} className="p-2 bg-white rounded-lg text-blue-500"><Edit3 size={16} /></button>
-                        <button onClick={() => handleDelete('campaign', campaign.id)} className="p-2 bg-white rounded-lg text-red-500"><Trash2 size={16} /></button>
+                        <button onClick={() => openEditModal('campaign', campaign)} className="p-2 bg-white rounded-lg text-blue-500" title="Kampanyayı Düzenle"><Edit3 size={16} /></button>
+                        <button onClick={() => handleDelete('campaign', campaign.id)} className="p-2 bg-white rounded-lg text-red-500" title="Kampanyayı Sil"><Trash2 size={16} /></button>
                       </div>
                     </div>
                     <div className="p-4">
@@ -674,8 +674,8 @@ const AdminPage: React.FC = () => {
                     <div className="aspect-square bg-gray-50 rounded-lg flex items-center justify-center mb-3 relative overflow-hidden">
                       <img src={brand.logo_url} alt={brand.name} className="max-h-16 max-w-full object-contain" />
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <button onClick={() => openEditModal('brand', brand)} className="p-1.5 bg-white rounded-lg text-blue-500"><Edit3 size={14} /></button>
-                        <button onClick={() => handleDelete('brand', brand.id)} className="p-1.5 bg-white rounded-lg text-red-500"><Trash2 size={14} /></button>
+                        <button onClick={() => openEditModal('brand', brand)} className="p-1.5 bg-white rounded-lg text-blue-500" title="Markayı Düzenle"><Edit3 size={14} /></button>
+                        <button onClick={() => handleDelete('brand', brand.id)} className="p-1.5 bg-white rounded-lg text-red-500" title="Markayı Sil"><Trash2 size={14} /></button>
                       </div>
                     </div>
                     <p className="font-bold text-secondary text-sm text-center truncate">{brand.name}</p>
@@ -704,8 +704,8 @@ const AdminPage: React.FC = () => {
                         <span className="text-xs text-gray-400">/{parent.slug}</span>
                       </div>
                       <div className="flex gap-2">
-                        <button onClick={() => openEditModal('category', parent)} className="p-2 hover:bg-blue-50 rounded-lg text-blue-500"><Edit3 size={16} /></button>
-                        <button onClick={() => handleDelete('category', parent.id)} className="p-2 hover:bg-red-50 rounded-lg text-red-500"><Trash2 size={16} /></button>
+                        <button onClick={() => openEditModal('category', parent)} className="p-2 hover:bg-blue-50 rounded-lg text-blue-500" title="Kategoriyi Düzenle"><Edit3 size={16} /></button>
+                        <button onClick={() => handleDelete('category', parent.id)} className="p-2 hover:bg-red-50 rounded-lg text-red-500" title="Kategoriyi Sil"><Trash2 size={16} /></button>
                       </div>
                     </div>
                     <div className="pl-8">
@@ -717,8 +717,8 @@ const AdminPage: React.FC = () => {
                             <span className="text-xs text-gray-400">/{child.slug}</span>
                           </div>
                           <div className="flex gap-2">
-                            <button onClick={() => openEditModal('category', child)} className="p-1.5 hover:bg-blue-50 rounded-lg text-blue-500"><Edit3 size={14} /></button>
-                            <button onClick={() => handleDelete('category', child.id)} className="p-1.5 hover:bg-red-50 rounded-lg text-red-500"><Trash2 size={14} /></button>
+                            <button onClick={() => openEditModal('category', child)} className="p-1.5 hover:bg-blue-50 rounded-lg text-blue-500" title="Alt Kategoriyi Düzenle"><Edit3 size={14} /></button>
+                            <button onClick={() => handleDelete('category', child.id)} className="p-1.5 hover:bg-red-50 rounded-lg text-red-500" title="Alt Kategoriyi Sil"><Trash2 size={14} /></button>
                           </div>
                         </div>
                       ))}
@@ -744,8 +744,8 @@ const AdminPage: React.FC = () => {
                     <div className="aspect-[4/3] bg-gray-100 relative">
                       <img src={post.img} alt={post.title} className="w-full h-full object-cover" />
                       <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                        <button onClick={() => openEditModal('blog', post)} className="p-2 bg-white rounded-lg text-blue-500"><Edit3 size={16} /></button>
-                        <button onClick={() => handleDelete('blog', post.id)} className="p-2 bg-white rounded-lg text-red-500"><Trash2 size={16} /></button>
+                        <button onClick={() => openEditModal('blog', post)} className="p-2 bg-white rounded-lg text-blue-500" title="Blog Yazısını Düzenle"><Edit3 size={16} /></button>
+                        <button onClick={() => handleDelete('blog', post.id)} className="p-2 bg-white rounded-lg text-red-500" title="Blog Yazısını Sil"><Trash2 size={16} /></button>
                       </div>
                     </div>
                     <div className="p-4">
@@ -773,7 +773,7 @@ const AdminPage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {homeFeatures.map((feature, idx) => (
                     <div key={feature.id} className="border border-gray-100 rounded-xl p-4 relative group">
-                      <button onClick={() => updateHomeFeatures(homeFeatures.filter(f => f.id !== feature.id))} className="absolute top-2 right-2 p-1.5 bg-red-50 text-red-500 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={14} /></button>
+                      <button onClick={() => updateHomeFeatures(homeFeatures.filter(f => f.id !== feature.id))} className="absolute top-2 right-2 p-1.5 bg-red-50 text-red-500 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" title="Özelliği Sil"><Trash2 size={14} /></button>
                       <div className="mb-2">
                         <input type="text" value={feature.icon} onChange={(e) => {
                           const updated = [...homeFeatures];
@@ -785,12 +785,12 @@ const AdminPage: React.FC = () => {
                         const updated = [...homeFeatures];
                         updated[idx].title = e.target.value;
                         updateHomeFeatures(updated);
-                      }} className="w-full font-bold text-secondary mb-2 border-b border-transparent focus:border-primary outline-none" />
+                      }} className="w-full font-bold text-secondary mb-2 border-b border-transparent focus:border-primary outline-none" aria-label="Özellik başlığı" placeholder="Başlık" />
                       <input type="text" value={feature.description} onChange={(e) => {
                         const updated = [...homeFeatures];
                         updated[idx].description = e.target.value;
                         updateHomeFeatures(updated);
-                      }} className="w-full text-sm text-gray-500 border-b border-transparent focus:border-primary outline-none" />
+                      }} className="w-full text-sm text-gray-500 border-b border-transparent focus:border-primary outline-none" aria-label="Özellik açıklaması" placeholder="Açıklama" />
                     </div>
                   ))}
                 </div>
@@ -840,10 +840,10 @@ const AdminPage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {customerReviews.map((review, idx) => (
                     <div key={review.id} className="border border-gray-100 rounded-xl p-4 relative">
-                      <button onClick={() => deleteCustomerReview(review.id)} className="absolute top-2 right-2 p-1 hover:bg-red-50 rounded text-red-500"><X size={14} /></button>
-                      <input type="text" value={review.user} onChange={(e) => updateCustomerReview({ ...review, user: e.target.value })} className="w-full font-bold text-secondary text-sm mb-1 border-b border-transparent focus:border-primary outline-none" />
-                      <input type="text" value={review.pet} onChange={(e) => updateCustomerReview({ ...review, pet: e.target.value })} className="w-full text-xs text-gray-400 mb-2 border-b border-transparent focus:border-primary outline-none" placeholder="Pet ismi" />
-                      <textarea value={review.message} onChange={(e) => updateCustomerReview({ ...review, message: e.target.value })} className="w-full text-sm text-gray-600 border border-gray-200 rounded-lg px-3 py-2 resize-none h-20" />
+                      <button onClick={() => deleteCustomerReview(review.id)} className="absolute top-2 right-2 p-1 hover:bg-red-50 rounded text-red-500" title="Yorumu Sil"><X size={14} /></button>
+                      <input type="text" value={review.user} onChange={(e) => updateCustomerReview({ ...review, user: e.target.value })} className="w-full font-bold text-secondary text-sm mb-1 border-b border-transparent focus:border-primary outline-none" aria-label="Müşteri adı" placeholder="Müşteri adı" />
+                      <input type="text" value={review.pet} onChange={(e) => updateCustomerReview({ ...review, pet: e.target.value })} className="w-full text-xs text-gray-400 mb-2 border-b border-transparent focus:border-primary outline-none" aria-label="Pet ismi" placeholder="Pet ismi" />
+                      <textarea value={review.message} onChange={(e) => updateCustomerReview({ ...review, message: e.target.value })} className="w-full text-sm text-gray-600 border border-gray-200 rounded-lg px-3 py-2 resize-none h-20" aria-label="Yorum mesajı" placeholder="Yorum" />
                     </div>
                   ))}
                 </div>
@@ -921,7 +921,7 @@ const AdminPage: React.FC = () => {
                         <h3 className="text-lg font-bold text-secondary">Sipariş Detayı</h3>
                         <span className="text-xs text-gray-400 font-mono">#{selectedOrder.id}</span>
                       </div>
-                      <button onClick={() => setSelectedOrder(null)} className="p-2 hover:bg-gray-100 rounded-lg">
+                      <button onClick={() => setSelectedOrder(null)} className="p-2 hover:bg-gray-100 rounded-lg" title="Kapat">
                         <X size={18} />
                       </button>
                     </div>
@@ -999,35 +999,35 @@ const AdminPage: React.FC = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">Site Adı</label>
-                    <input type="text" value={settingsForm.siteName} onChange={(e) => setSettingsForm({ ...settingsForm, siteName: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    <input type="text" value={settingsForm.siteName} onChange={(e) => setSettingsForm({ ...settingsForm, siteName: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" aria-label="Site adı" placeholder="Site adı" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">Logo URL</label>
-                    <input type="text" value={settingsForm.logoUrl} onChange={(e) => setSettingsForm({ ...settingsForm, logoUrl: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    <input type="text" value={settingsForm.logoUrl} onChange={(e) => setSettingsForm({ ...settingsForm, logoUrl: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" aria-label="Logo URL" placeholder="https://..." />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">Telefon</label>
-                    <input type="text" value={settingsForm.phone} onChange={(e) => setSettingsForm({ ...settingsForm, phone: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    <input type="text" value={settingsForm.phone} onChange={(e) => setSettingsForm({ ...settingsForm, phone: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" aria-label="Telefon" placeholder="0212 555 0000" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">E-posta</label>
-                    <input type="text" value={settingsForm.email} onChange={(e) => setSettingsForm({ ...settingsForm, email: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    <input type="text" value={settingsForm.email} onChange={(e) => setSettingsForm({ ...settingsForm, email: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" aria-label="E-posta" placeholder="info@patidukkan.com" />
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-sm font-bold text-gray-700 mb-2">Adres</label>
-                    <input type="text" value={settingsForm.address} onChange={(e) => setSettingsForm({ ...settingsForm, address: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    <input type="text" value={settingsForm.address} onChange={(e) => setSettingsForm({ ...settingsForm, address: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" aria-label="Adres" placeholder="Firma adresi" />
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-sm font-bold text-gray-700 mb-2">Üst Bar Mesajı</label>
-                    <input type="text" value={settingsForm.topBarMessage} onChange={(e) => setSettingsForm({ ...settingsForm, topBarMessage: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    <input type="text" value={settingsForm.topBarMessage} onChange={(e) => setSettingsForm({ ...settingsForm, topBarMessage: e.target.value })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" aria-label="Üst bar mesajı" placeholder="Üst bar mesajı" />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">Facebook</label>
-                    <input type="text" value={settingsForm.socialLinks.facebook} onChange={(e) => setSettingsForm({ ...settingsForm, socialLinks: { ...settingsForm.socialLinks, facebook: e.target.value } })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    <input type="text" value={settingsForm.socialLinks.facebook} onChange={(e) => setSettingsForm({ ...settingsForm, socialLinks: { ...settingsForm.socialLinks, facebook: e.target.value } })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" aria-label="Facebook linki" placeholder="https://facebook.com/..." />
                   </div>
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-2">Instagram</label>
-                    <input type="text" value={settingsForm.socialLinks.instagram} onChange={(e) => setSettingsForm({ ...settingsForm, socialLinks: { ...settingsForm.socialLinks, instagram: e.target.value } })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" />
+                    <input type="text" value={settingsForm.socialLinks.instagram} onChange={(e) => setSettingsForm({ ...settingsForm, socialLinks: { ...settingsForm.socialLinks, instagram: e.target.value } })} className="w-full px-4 py-3 border border-gray-200 rounded-xl" aria-label="Instagram linki" placeholder="https://instagram.com/..." />
                   </div>
                 </div>
                 <button onClick={handleSaveSettings} className="mt-6 flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-primary-hover transition-all">
@@ -1046,7 +1046,7 @@ const AdminPage: React.FC = () => {
                     <h3 className="text-xl font-black text-secondary">
                       {editingItem ? 'Düzenle' : 'Yeni Ekle'}
                     </h3>
-                    <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-lg"><X size={20} /></button>
+                    <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-lg" title="Kapat"><X size={20} /></button>
                   </div>
                   <div className="p-6 space-y-4">
                     {modalType === 'product' && (

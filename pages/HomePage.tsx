@@ -271,11 +271,6 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
       <div className="min-h-screen bg-white">
          <SEO title="Ana Sayfa" description="Türkiye'nin en seçkin pet ürünleri mağazası. Kedi, köpek, kuş ve balık ürünlerinde geniş seçenekler." />
 
-         {/* Story Navigation - Responsive */}
-         <div className="pt-[110px] md:pt-[100px] relative z-20 bg-white">
-            <StoryNavigation />
-         </div>
-
          {/* 1. HERO SLIDER */}
          <Hero campaigns={campaigns} />
 

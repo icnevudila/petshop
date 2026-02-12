@@ -118,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
    }, [cartCount]);
 
    return (
-      <header className={`w-full z-[1002] transition-all duration-300 ${isScrolled ? 'absolute top-0 lg:fixed shadow-md' : 'absolute top-0 lg:fixed'}`}>
+      <header className={`w-full z-[1002] transition-all duration-300 ${isScrolled ? 'absolute top-0 shadow-md' : 'absolute top-0'}`}>
          {/* Top Announcement Bar */}
          <AnnouncementBar />
 
@@ -347,9 +347,9 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                   <Link to="/iletisim" className="flex items-center gap-2 py-4 px-4 text-sm font-bold text-gray-600 hover:text-brand transition-all">
                      <Phone size={16} /> İletişim
                   </Link>
-                   <Link to="/bayi/giris" className="flex items-center gap-2 py-3 px-3 text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-all ml-2">
-                      <Building2 size={14} /> Bayi Girişi
-                   </Link>
+                  <Link to="/bayi/giris" className="flex items-center gap-2 py-3 px-3 text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-all ml-2">
+                     <Building2 size={14} /> Bayi Girişi
+                  </Link>
                </div>
             </div>
          </div>
@@ -396,9 +396,9 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                         <BookOpen size={18} /> Blog
                      </Link>
                      <Link to="/iletisim" className="flex items-center gap-3 text-sm font-bold text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>
-                     <Link to="/bayi/giris" className="flex items-center gap-3 text-sm font-bold text-emerald-600" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Building2 size={18} /> Bayi Girişi
-                     </Link>
+                        <Link to="/bayi/giris" className="flex items-center gap-3 text-sm font-bold text-emerald-600" onClick={() => setIsMobileMenuOpen(false)}>
+                           <Building2 size={18} /> Bayi Girişi
+                        </Link>
                         <Phone size={18} /> İletişim
                      </Link>
                   </div>
