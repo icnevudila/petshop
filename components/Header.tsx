@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ShoppingCart, Heart, User, Menu, X, ChevronDown, Phone, MapPin, Loader2, Cat, Dog, Bird, ArrowRight, Info, BookOpen, Waves, Rabbit } from 'lucide-react';
+import { Search, ShoppingCart, Heart, User, Menu, X, ChevronDown, Phone, MapPin, Loader2, Cat, Dog, Bird, ArrowRight, Info, BookOpen, Waves, Rabbit, Building2 } from 'lucide-react';
 import AnnouncementBar from './AnnouncementBar';
 
 import { NAV_DATA } from '../constants';
@@ -347,6 +347,9 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                   <Link to="/iletisim" className="flex items-center gap-2 py-4 px-4 text-sm font-bold text-gray-600 hover:text-brand transition-all">
                      <Phone size={16} /> İletişim
                   </Link>
+                   <Link to="/bayi/giris" className="flex items-center gap-2 py-3 px-3 text-xs font-bold text-emerald-600 hover:text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-all ml-2">
+                      <Building2 size={14} /> Bayi Girişi
+                   </Link>
                </div>
             </div>
          </div>

@@ -21,6 +21,12 @@ import ReturnPolicyPage from './pages/ReturnPolicyPage';
 import FAQPage from './pages/FAQPage';
 import OrderTrackingPage from './pages/OrderTrackingPage';
 import CheckoutPage from './pages/CheckoutPage';
+import B2BLoginPage from './pages/B2BLoginPage';
+import B2BRegisterPage from './pages/B2BRegisterPage';
+import B2BDashboardPage from './pages/B2BDashboardPage';
+import B2BCatalogPage from './pages/B2BCatalogPage';
+import B2BOrdersPage from './pages/B2BOrdersPage';
+import B2BCartPage from './pages/B2BCartPage';
 import CartModal from './components/CartModal';
 import QuickViewModal from './components/QuickViewModal';
 import ChatBot from './components/ChatBot';
@@ -256,6 +262,7 @@ const AppContent: React.FC = () => {
         {/* Hide Header on Admin Pages */}
         <Routes>
           <Route path="/admin" element={null} />
+          <Route path="/bayi/*" element={null} />
           <Route path="*" element={<Header cartCount={cartCount} wishlistCount={wishlist.length} />} />
         </Routes>
 
@@ -316,10 +323,20 @@ const AppContent: React.FC = () => {
             <Route path="/sss" element={<FAQPage />} />
             <Route path="/siparis-takibi" element={<OrderTrackingPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
+            {/* B2B Bayi Portal Routes */}
+            <Route path="/bayi/giris" element={<B2BLoginPage />} />
+            <Route path="/bayi/basvuru" element={<B2BRegisterPage />} />
+            <Route path="/bayi" element={<B2BDashboardPage />} />
+            <Route path="/bayi/katalog" element={<B2BCatalogPage />} />
+            <Route path="/bayi/siparisler" element={<B2BOrdersPage />} />
+            <Route path="/bayi/sepet" element={<B2BCartPage />} />
           </Routes>
         </main>
 
-        <Footer />
+        <Routes>
+          <Route path="/bayi/*" element={null} />
+          <Route path="*" element={<Footer />} />
+        </Routes>
 
         <CartModal
           isOpen={isCartModalOpen}
@@ -339,10 +356,15 @@ const AppContent: React.FC = () => {
 
         <MobileBottomNav cartCount={cartCount} wishlistCount={wishlist.length} />
 
-        {/* ChatBot - Desktop Only */}
-        <div className="hidden md:block">
-          <ChatBot />
-        </div>
+        {/* ChatBot - Desktop Only (hidden on B2B) */}
+        <Routes>
+          <Route path="/bayi/*" element={null} />
+          <Route path="*" element={
+            <div className="hidden md:block">
+              <ChatBot />
+            </div>
+          } />
+        </Routes>
       </div>
     </HashRouter>
   );

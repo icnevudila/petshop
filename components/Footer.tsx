@@ -90,6 +90,7 @@ const Footer: React.FC = () => {
                 <li><Link to="/iletisim" className="hover:text-primary">İletişim</Link></li>
                 <li><Link to="/blog" className="hover:text-primary">Blog</Link></li>
                 <li><Link to="/sss" className="hover:text-primary">SSS</Link></li>
+                <li><Link to="/bayi/giris" className="hover:text-primary">Bayi Portalı</Link></li>
               </ul>
             </div>
 

@@ -121,3 +121,58 @@ export interface CartEntry {
   product_id: string;
   quantity: number;
 }
+
+// B2B Dealer Types
+export type DealerStatus = 'pending' | 'approved' | 'rejected' | 'suspended';
+export type DealerOrderStatus = 'Beklemede' | 'Onaylandı' | 'Hazırlanıyor' | 'Kargolandı' | 'Teslim Edildi' | 'İptal Edildi';
+
+export interface Dealer {
+  id: string;
+  user_id: string;
+  company_name: string;
+  tax_number: string;
+  tax_office: string;
+  company_address: string;
+  company_phone: string;
+  city: string;
+  district: string;
+  discount_rate: number;
+  min_order_amount: number;
+  status: DealerStatus;
+  notes?: string;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface DealerOrder {
+  id: string;
+  dealer_id: string;
+  status: DealerOrderStatus;
+  total_price: number;
+  discount_applied: number;
+  shipping_address: string;
+  notes?: string;
+  created_at: string;
+  updated_at?: string;
+  items?: DealerOrderItem[];
+  dealer?: Dealer;
+}
+
+export interface DealerOrderItem {
+  id: string;
+  order_id: string;
+  product_id: string;
+  product_name: string;
+  quantity: number;
+  unit_price: number;
+  discounted_unit_price: number;
+}
+
+export interface B2BCartEntry {
+  product_id: string;
+  product_name: string;
+  quantity: number;
+  unit_price: number;
+  discounted_unit_price: number;
+  images?: string[];
+}

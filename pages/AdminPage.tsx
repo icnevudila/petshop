@@ -4,8 +4,9 @@ import ProductCard from '../components/ProductCard';
 import {
   LayoutDashboard, Package, Plus, Search, Edit3, Trash2,
   X, Save, ChevronDown, Settings, Star, Upload,
-  Image, Tag, Folder, FileText, Home, Check, ShoppingBag, ShieldCheck, ArrowRight
+  Image, Tag, Folder, FileText, Home, Check, ShoppingBag, ShieldCheck, ArrowRight, Building2
 } from 'lucide-react';
+import AdminDealersTab from '../components/AdminDealersTab';
 import { Product, Campaign, Brand, Category, BlogPost, SiteSettings } from '../types';
 
 // Mock Data for Orders (until integrated with backend)
@@ -14,7 +15,7 @@ const MOCK_ORDERS = [
   { id: 'ORD-1002', customer_name: 'Ayşe Demir', customer_email: 'ayse@example.com', customer_phone: '0544 444 44 44', total_price: 1250, status: 'Hazırlanıyor', address_info: 'Çankaya, Ankara', created_at: '2024-01-16' },
 ];
 
-type TabType = 'dashboard' | 'products' | 'campaigns' | 'brands' | 'categories' | 'blog' | 'homepage' | 'settings' | 'orders';
+type TabType = 'dashboard' | 'products' | 'campaigns' | 'brands' | 'categories' | 'blog' | 'homepage' | 'settings' | 'orders' | 'dealers';
 
 // Simple Error Boundary to catch render errors in tabs
 interface ErrorBoundaryProps {
@@ -161,6 +162,7 @@ const AdminPage: React.FC = () => {
     { id: 'blog', label: 'Blog', icon: FileText },
     { id: 'homepage', label: 'Anasayfa', icon: Home },
     { id: 'orders', label: 'Siparişler', icon: ShoppingBag },
+    { id: 'dealers', label: 'Bayiler', icon: Building2 },
     { id: 'settings', label: 'Ayarlar', icon: Settings },
   ];
 
@@ -799,6 +801,9 @@ const AdminPage: React.FC = () => {
               </div>
             </div>
           )}
+
+          {/* Dealers (B2B) Tab */}
+          {activeTab === 'dealers' && <AdminDealersTab />}
 
           {/* Settings Tab */}
           {activeTab === 'settings' && (
