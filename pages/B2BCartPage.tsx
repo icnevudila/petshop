@@ -118,24 +118,24 @@ const B2BCartPage: React.FC = () => {
             <B2BLayout>
                 <div className="flex items-center justify-center min-h-[60vh]">
                     <div className="text-center max-w-md">
-                        <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <CheckCircle2 size={40} className="text-emerald-400" />
+                        <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <CheckCircle2 size={40} className="text-green-500" />
                         </div>
-                        <h2 className="text-2xl font-bold text-white mb-4">Siparişiniz Alındı!</h2>
-                        <p className="text-slate-400 mb-8 leading-relaxed">
+                        <h2 className="text-2xl font-bold text-secondary mb-4">Siparişiniz Alındı!</h2>
+                        <p className="text-gray-500 mb-8 leading-relaxed">
                             Toptan siparişiniz başarıyla oluşturuldu. Siparişiniz en kısa sürede
                             incelenecek ve onaylandığında bilgilendirileceksiniz.
                         </p>
                         <div className="flex gap-3 justify-center">
                             <Link
                                 to="/bayi/siparisler"
-                                className="bg-emerald-500 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-emerald-600 transition-all"
+                                className="bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-primary-hover transition-all shadow-lg shadow-primary/20"
                             >
                                 Siparişlerimi Gör
                             </Link>
                             <Link
                                 to="/bayi/katalog"
-                                className="bg-slate-700 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-slate-600 transition-all"
+                                className="bg-gray-100 text-secondary px-6 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 transition-all"
                             >
                                 Kataloga Dön
                             </Link>
@@ -152,13 +152,13 @@ const B2BCartPage: React.FC = () => {
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold text-white">Toptan Sipariş Sepeti</h1>
-                        <p className="text-slate-400 text-sm mt-1">{b2bCart.length} ürün</p>
+                        <h1 className="text-2xl font-bold text-secondary">Toptan Sipariş Sepeti</h1>
+                        <p className="text-gray-400 text-sm mt-1">{b2bCart.length} ürün</p>
                     </div>
                     {b2bCart.length > 0 && (
                         <button
                             onClick={clearCart}
-                            className="text-red-400 text-sm font-medium hover:text-red-300 transition-all flex items-center gap-1"
+                            className="text-red-500 text-sm font-medium hover:text-red-600 transition-all flex items-center gap-1"
                         >
                             <Trash2 size={14} /> Sepeti Temizle
                         </button>
@@ -166,12 +166,12 @@ const B2BCartPage: React.FC = () => {
                 </div>
 
                 {b2bCart.length === 0 ? (
-                    <div className="text-center py-16 bg-slate-800/50 rounded-2xl border border-slate-700/50">
-                        <ShoppingCart size={48} className="text-slate-600 mx-auto mb-4" />
-                        <p className="text-slate-400 mb-4">Sepetiniz boş</p>
+                    <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+                        <ShoppingCart size={48} className="text-gray-200 mx-auto mb-4" />
+                        <p className="text-gray-400 mb-4">Sepetiniz boş</p>
                         <Link
                             to="/bayi/katalog"
-                            className="inline-flex items-center gap-2 bg-emerald-500 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-emerald-600 transition-all"
+                            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-primary-hover transition-all shadow-lg shadow-primary/20"
                         >
                             Ürün Kataloğu <ArrowRight size={16} />
                         </Link>
@@ -183,7 +183,7 @@ const B2BCartPage: React.FC = () => {
                             {b2bCart.map(item => (
                                 <div
                                     key={item.product_id}
-                                    className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-4 flex items-center gap-4"
+                                    className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4"
                                 >
                                     <img
                                         src={item.images?.[0] || 'https://via.placeholder.com/80x80?text=Ürün'}
@@ -192,13 +192,13 @@ const B2BCartPage: React.FC = () => {
                                         onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/80x80?text=Ürün'; }}
                                     />
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-white font-medium text-sm truncate">{item.product_name}</h3>
+                                        <h3 className="text-secondary font-medium text-sm truncate">{item.product_name}</h3>
                                         <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-emerald-400 font-bold text-sm">
+                                            <span className="text-primary font-bold text-sm">
                                                 ₺{item.discounted_unit_price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                                             </span>
                                             {item.unit_price !== item.discounted_unit_price && (
-                                                <span className="text-slate-500 text-xs line-through">
+                                                <span className="text-gray-400 text-xs line-through">
                                                     ₺{item.unit_price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                                                 </span>
                                             )}
@@ -208,7 +208,8 @@ const B2BCartPage: React.FC = () => {
                                     <div className="flex items-center gap-2 flex-shrink-0">
                                         <button
                                             onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-                                            className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center text-slate-300 hover:bg-red-500/20 hover:text-red-400 transition-all"
+                                            className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-red-500 transition-all"
+                                            aria-label="Adet azalt"
                                         >
                                             <Minus size={14} />
                                         </button>
@@ -216,26 +217,29 @@ const B2BCartPage: React.FC = () => {
                                             type="number"
                                             value={item.quantity}
                                             onChange={(e) => updateQuantity(item.product_id, parseInt(e.target.value) || 0)}
-                                            className="w-16 text-center bg-slate-700/50 border border-slate-600/50 rounded-lg py-1.5 text-white font-bold text-sm"
+                                            className="w-16 text-center bg-gray-50 border border-gray-200 rounded-lg py-1.5 text-secondary font-bold text-sm"
                                             min="0"
+                                            aria-label="Ürün adedi"
                                         />
                                         <button
                                             onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
-                                            className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all"
+                                            className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all"
+                                            aria-label="Adet artır"
                                         >
                                             <Plus size={14} />
                                         </button>
                                     </div>
 
                                     <div className="text-right flex-shrink-0 w-28">
-                                        <p className="text-white font-bold text-sm">
+                                        <p className="text-secondary font-bold text-sm">
                                             ₺{(item.discounted_unit_price * item.quantity).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                                         </p>
                                     </div>
 
                                     <button
                                         onClick={() => removeItem(item.product_id)}
-                                        className="p-2 text-slate-500 hover:text-red-400 transition-all flex-shrink-0"
+                                        className="p-2 text-gray-400 hover:text-red-500 transition-all flex-shrink-0"
+                                        aria-label="Ürünü kaldır"
                                     >
                                         <Trash2 size={16} />
                                     </button>
@@ -246,28 +250,28 @@ const B2BCartPage: React.FC = () => {
                         {/* Order Summary */}
                         <div className="space-y-4">
                             {/* Pricing */}
-                            <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 space-y-4">
-                                <h3 className="text-white font-bold text-lg">Sipariş Özeti</h3>
+                            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+                                <h3 className="text-secondary font-bold text-lg">Sipariş Özeti</h3>
 
                                 <div className="space-y-3">
                                     <div className="flex justify-between text-sm">
-                                        <span className="text-slate-400">Ara Toplam</span>
-                                        <span className="text-white">₺{subtotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                                        <span className="text-gray-400">Ara Toplam</span>
+                                        <span className="text-secondary">₺{subtotal.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
                                     </div>
                                     {totalDiscount > 0 && (
                                         <div className="flex justify-between text-sm">
-                                            <span className="text-emerald-400">Bayi İskontosu (%{dealer?.discount_rate})</span>
-                                            <span className="text-emerald-400">-₺{totalDiscount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                                            <span className="text-primary">Bayi İskontosu (%{dealer?.discount_rate})</span>
+                                            <span className="text-primary">-₺{totalDiscount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
                                         </div>
                                     )}
-                                    <div className="border-t border-slate-700/50 pt-3 flex justify-between">
-                                        <span className="text-white font-bold">Toplam</span>
-                                        <span className="text-emerald-400 font-bold text-xl">₺{total.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
+                                    <div className="border-t border-gray-100 pt-3 flex justify-between">
+                                        <span className="text-secondary font-bold">Toplam</span>
+                                        <span className="text-primary font-bold text-xl">₺{total.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</span>
                                     </div>
                                 </div>
 
                                 {minOrderAmount > 0 && !meetsMinOrder && (
-                                    <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-amber-400 text-xs">
+                                    <div className="bg-amber-50 border border-amber-100 rounded-xl p-3 text-amber-700 text-xs">
                                         <AlertCircle size={14} className="inline mr-1" />
                                         Minimum sipariş tutarı: ₺{minOrderAmount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                                         <div className="mt-1">
@@ -278,31 +282,31 @@ const B2BCartPage: React.FC = () => {
                             </div>
 
                             {/* Shipping Address */}
-                            <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 space-y-4">
-                                <h3 className="text-white font-bold flex items-center gap-2"><MapPin size={16} /> Teslimat Adresi</h3>
+                            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+                                <h3 className="text-secondary font-bold flex items-center gap-2"><MapPin size={16} /> Teslimat Adresi</h3>
                                 <textarea
                                     value={shippingAddress}
                                     onChange={(e) => setShippingAddress(e.target.value)}
                                     placeholder="Teslimat adresi..."
                                     rows={3}
-                                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all resize-none text-sm"
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none text-sm"
                                 />
                             </div>
 
                             {/* Order Notes */}
-                            <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50 p-6 space-y-4">
-                                <h3 className="text-white font-bold flex items-center gap-2"><FileText size={16} /> Sipariş Notu</h3>
+                            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+                                <h3 className="text-secondary font-bold flex items-center gap-2"><FileText size={16} /> Sipariş Notu</h3>
                                 <textarea
                                     value={orderNotes}
                                     onChange={(e) => setOrderNotes(e.target.value)}
                                     placeholder="Opsiyonel sipariş notu..."
                                     rows={2}
-                                    className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all resize-none text-sm"
+                                    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-secondary placeholder-gray-400 focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none text-sm"
                                 />
                             </div>
 
                             {error && (
-                                <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
+                                <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
                                     <AlertCircle size={16} /> {error}
                                 </div>
                             )}
@@ -311,12 +315,12 @@ const B2BCartPage: React.FC = () => {
                             <button
                                 onClick={handleSubmitOrder}
                                 disabled={isSubmitting || b2bCart.length === 0 || !meetsMinOrder}
-                                className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:from-emerald-600 hover:to-emerald-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full bg-primary text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-primary-hover transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {isSubmitting ? 'Sipariş Oluşturuluyor...' : 'Siparişi Oluştur'} <ArrowRight size={18} />
                             </button>
 
-                            <p className="text-slate-500 text-xs text-center">
+                            <p className="text-gray-400 text-xs text-center">
                                 Siparişiniz onaylandıktan sonra ödeme bilgileri tarafınıza iletilecektir.
                             </p>
                         </div>

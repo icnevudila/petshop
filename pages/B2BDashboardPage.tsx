@@ -39,68 +39,68 @@ const B2BDashboardPage: React.FC = () => {
     const pendingOrders = recentOrders.filter(o => o.status === 'Beklemede').length;
 
     const statusColors: Record<string, string> = {
-        'Beklemede': 'bg-amber-500/20 text-amber-400',
-        'Onaylandı': 'bg-blue-500/20 text-blue-400',
-        'Hazırlanıyor': 'bg-indigo-500/20 text-indigo-400',
-        'Kargolandı': 'bg-purple-500/20 text-purple-400',
-        'Teslim Edildi': 'bg-emerald-500/20 text-emerald-400',
-        'İptal Edildi': 'bg-red-500/20 text-red-400',
+        'Beklemede': 'bg-amber-100 text-amber-700',
+        'Onaylandı': 'bg-blue-100 text-blue-700',
+        'Hazırlanıyor': 'bg-indigo-100 text-indigo-700',
+        'Kargolandı': 'bg-purple-100 text-purple-700',
+        'Teslim Edildi': 'bg-green-100 text-green-700',
+        'İptal Edildi': 'bg-red-100 text-red-700',
     };
 
     return (
         <B2BLayout>
             <div className="space-y-8">
                 {/* Welcome Header */}
-                <div className="bg-gradient-to-r from-emerald-500/10 to-emerald-600/5 rounded-2xl p-6 lg:p-8 border border-emerald-500/20">
-                    <h1 className="text-2xl lg:text-3xl font-bold text-white mb-2">
+                <div className="bg-gradient-to-r from-primary/10 to-orange-50 rounded-2xl p-6 lg:p-8 border border-primary/10">
+                    <h1 className="text-2xl lg:text-3xl font-bold text-secondary mb-2">
                         Hoş Geldiniz, {dealer?.company_name || 'Bayi'} 👋
                     </h1>
-                    <p className="text-slate-400">
+                    <p className="text-gray-500">
                         Toptan alışveriş portalınızdan siparişlerinizi yönetin
                     </p>
                 </div>
 
                 {/* Stats Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center">
-                                <DollarSign size={24} className="text-emerald-400" />
+                            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                                <DollarSign size={24} className="text-primary" />
                             </div>
-                            <TrendingUp size={16} className="text-emerald-400" />
+                            <TrendingUp size={16} className="text-primary" />
                         </div>
-                        <p className="text-slate-400 text-sm">Toplam Sipariş Tutarı</p>
-                        <p className="text-2xl font-bold text-white mt-1">₺{totalSpent.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</p>
+                        <p className="text-gray-400 text-sm">Toplam Sipariş Tutarı</p>
+                        <p className="text-2xl font-bold text-secondary mt-1">₺{totalSpent.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</p>
                     </div>
 
-                    <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
-                                <ClipboardList size={24} className="text-blue-400" />
+                            <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
+                                <ClipboardList size={24} className="text-blue-500" />
                             </div>
                         </div>
-                        <p className="text-slate-400 text-sm">Toplam Sipariş</p>
-                        <p className="text-2xl font-bold text-white mt-1">{recentOrders.length}</p>
+                        <p className="text-gray-400 text-sm">Toplam Sipariş</p>
+                        <p className="text-2xl font-bold text-secondary mt-1">{recentOrders.length}</p>
                     </div>
 
-                    <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center">
-                                <Calendar size={24} className="text-amber-400" />
+                            <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center">
+                                <Calendar size={24} className="text-amber-500" />
                             </div>
                         </div>
-                        <p className="text-slate-400 text-sm">Bekleyen Sipariş</p>
-                        <p className="text-2xl font-bold text-white mt-1">{pendingOrders}</p>
+                        <p className="text-gray-400 text-sm">Bekleyen Sipariş</p>
+                        <p className="text-2xl font-bold text-secondary mt-1">{pendingOrders}</p>
                     </div>
 
-                    <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50">
+                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center">
-                                <Package size={24} className="text-purple-400" />
+                            <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center">
+                                <Package size={24} className="text-purple-500" />
                             </div>
                         </div>
-                        <p className="text-slate-400 text-sm">İskonto Oranı</p>
-                        <p className="text-2xl font-bold text-white mt-1">%{dealer?.discount_rate || 0}</p>
+                        <p className="text-gray-400 text-sm">İskonto Oranı</p>
+                        <p className="text-2xl font-bold text-secondary mt-1">%{dealer?.discount_rate || 0}</p>
                     </div>
                 </div>
 
@@ -108,42 +108,42 @@ const B2BDashboardPage: React.FC = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Link
                         to="/bayi/katalog"
-                        className="bg-gradient-to-r from-emerald-500/10 to-emerald-600/5 rounded-2xl p-6 border border-emerald-500/20 hover:border-emerald-500/40 transition-all group flex items-center justify-between"
+                        className="bg-gradient-to-r from-primary/10 to-orange-50 rounded-2xl p-6 border border-primary/10 hover:border-primary/30 transition-all group flex items-center justify-between"
                     >
                         <div>
-                            <h3 className="text-white font-bold text-lg">Ürün Kataloğu</h3>
-                            <p className="text-slate-400 text-sm mt-1">Toptan fiyatlarla alışveriş yapın</p>
+                            <h3 className="text-secondary font-bold text-lg">Ürün Kataloğu</h3>
+                            <p className="text-gray-400 text-sm mt-1">Toptan fiyatlarla alışveriş yapın</p>
                         </div>
-                        <ArrowRight size={20} className="text-emerald-400 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight size={20} className="text-primary group-hover:translate-x-1 transition-transform" />
                     </Link>
 
                     <Link
                         to="/bayi/siparisler"
-                        className="bg-gradient-to-r from-blue-500/10 to-blue-600/5 rounded-2xl p-6 border border-blue-500/20 hover:border-blue-500/40 transition-all group flex items-center justify-between"
+                        className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100 hover:border-blue-200 transition-all group flex items-center justify-between"
                     >
                         <div>
-                            <h3 className="text-white font-bold text-lg">Siparişlerim</h3>
-                            <p className="text-slate-400 text-sm mt-1">Tüm siparişlerinizi görüntüleyin</p>
+                            <h3 className="text-secondary font-bold text-lg">Siparişlerim</h3>
+                            <p className="text-gray-400 text-sm mt-1">Tüm siparişlerinizi görüntüleyin</p>
                         </div>
-                        <ArrowRight size={20} className="text-blue-400 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight size={20} className="text-blue-500 group-hover:translate-x-1 transition-transform" />
                     </Link>
                 </div>
 
                 {/* Recent Orders */}
-                <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700/50">
-                    <div className="p-6 border-b border-slate-700/50 flex items-center justify-between">
-                        <h2 className="text-lg font-bold text-white">Son Siparişler</h2>
-                        <Link to="/bayi/siparisler" className="text-emerald-400 text-sm font-medium hover:text-emerald-300 transition-all">
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
+                    <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+                        <h2 className="text-lg font-bold text-secondary">Son Siparişler</h2>
+                        <Link to="/bayi/siparisler" className="text-primary text-sm font-medium hover:underline transition-all">
                             Tümünü Gör →
                         </Link>
                     </div>
                     {recentOrders.length === 0 ? (
                         <div className="p-12 text-center">
-                            <ShoppingCart size={48} className="text-slate-600 mx-auto mb-4" />
-                            <p className="text-slate-400">Henüz sipariş bulunmuyor</p>
+                            <ShoppingCart size={48} className="text-gray-200 mx-auto mb-4" />
+                            <p className="text-gray-400">Henüz sipariş bulunmuyor</p>
                             <Link
                                 to="/bayi/katalog"
-                                className="inline-flex items-center gap-2 mt-4 text-emerald-400 text-sm font-medium hover:text-emerald-300"
+                                className="inline-flex items-center gap-2 mt-4 text-primary text-sm font-medium hover:underline"
                             >
                                 Kataloga Git <ArrowRight size={16} />
                             </Link>
@@ -152,25 +152,25 @@ const B2BDashboardPage: React.FC = () => {
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
-                                    <tr className="text-left text-slate-400 text-xs uppercase tracking-wider">
+                                    <tr className="text-left text-gray-400 text-xs uppercase tracking-wider">
                                         <th className="px-6 py-3">Sipariş No</th>
                                         <th className="px-6 py-3">Tarih</th>
                                         <th className="px-6 py-3">Tutar</th>
                                         <th className="px-6 py-3">Durum</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-slate-700/50">
+                                <tbody className="divide-y divide-gray-50">
                                     {recentOrders.map(order => (
-                                        <tr key={order.id} className="hover:bg-slate-700/20 transition-all">
-                                            <td className="px-6 py-4 text-white text-sm font-mono">#{order.id.slice(0, 8)}</td>
-                                            <td className="px-6 py-4 text-slate-400 text-sm">
+                                        <tr key={order.id} className="hover:bg-gray-50/50 transition-all">
+                                            <td className="px-6 py-4 text-secondary text-sm font-mono">#{order.id.slice(0, 8)}</td>
+                                            <td className="px-6 py-4 text-gray-400 text-sm">
                                                 {new Date(order.created_at).toLocaleDateString('tr-TR')}
                                             </td>
-                                            <td className="px-6 py-4 text-white text-sm font-semibold">
+                                            <td className="px-6 py-4 text-secondary text-sm font-semibold">
                                                 ₺{order.total_price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                                             </td>
                                             <td className="px-6 py-4">
-                                                <span className={`px-3 py-1 rounded-full text-xs font-bold ${statusColors[order.status] || 'bg-slate-500/20 text-slate-400'}`}>
+                                                <span className={`px-3 py-1 rounded-full text-xs font-bold ${statusColors[order.status] || 'bg-gray-100 text-gray-600'}`}>
                                                     {order.status}
                                                 </span>
                                             </td>

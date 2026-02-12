@@ -5,7 +5,7 @@ import * as dealerService from '../services/dealerService';
 import { Dealer } from '../types';
 import {
     LayoutDashboard, Package, ShoppingCart, ClipboardList,
-    User, LogOut, Menu, X, Building2, ChevronRight
+    User, LogOut, Menu, X, Building2, ChevronRight, Cat
 } from 'lucide-react';
 
 interface B2BLayoutProps {
@@ -65,34 +65,34 @@ const B2BLayout: React.FC<B2BLayoutProps> = ({ children }) => {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-emerald-400/30 border-t-emerald-400 rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-slate-400 font-medium">Yükleniyor...</p>
+                    <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-500 font-medium">Yükleniyor...</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div className="min-h-screen bg-gray-50">
             {/* Top Header */}
-            <header className="bg-slate-800/80 backdrop-blur-xl border-b border-slate-700/50 sticky top-0 z-50">
+            <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
                 <div className="flex items-center justify-between px-4 lg:px-8 h-16">
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => setSidebarOpen(!sidebarOpen)}
-                            className="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-700/50 transition-all"
+                            className="lg:hidden p-2 text-gray-400 hover:text-secondary rounded-lg hover:bg-gray-50 transition-all"
                         >
                             {sidebarOpen ? <X size={22} /> : <Menu size={22} />}
                         </button>
                         <Link to="/bayi" className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center shadow-lg shadow-primary/20">
                                 <Building2 size={22} className="text-white" />
                             </div>
                             <div className="hidden sm:block">
-                                <span className="text-white font-bold text-lg">PatiDükkan</span>
-                                <span className="text-emerald-400 text-xs font-bold ml-2 bg-emerald-400/10 px-2 py-0.5 rounded-full">B2B</span>
+                                <span className="text-secondary font-bold text-lg">PatiDükkan</span>
+                                <span className="text-primary text-xs font-bold ml-2 bg-primary/10 px-2 py-0.5 rounded-full">B2B</span>
                             </div>
                         </Link>
                     </div>
@@ -101,17 +101,17 @@ const B2BLayout: React.FC<B2BLayoutProps> = ({ children }) => {
                         {dealer && (
                             <div className="hidden md:flex items-center gap-3">
                                 <div className="text-right">
-                                    <p className="text-white text-sm font-semibold">{dealer.company_name}</p>
-                                    <p className="text-emerald-400 text-xs">İskonto: %{dealer.discount_rate}</p>
+                                    <p className="text-secondary text-sm font-semibold">{dealer.company_name}</p>
+                                    <p className="text-primary text-xs font-bold">İskonto: %{dealer.discount_rate}</p>
                                 </div>
-                                <div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center">
-                                    <User size={18} className="text-slate-300" />
+                                <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                                    <User size={18} className="text-gray-500" />
                                 </div>
                             </div>
                         )}
                         <button
                             onClick={handleLogout}
-                            className="p-2 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-700/50 transition-all"
+                            className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-gray-50 transition-all"
                             title="Çıkış Yap"
                         >
                             <LogOut size={20} />
@@ -123,7 +123,7 @@ const B2BLayout: React.FC<B2BLayoutProps> = ({ children }) => {
             <div className="flex">
                 {/* Sidebar */}
                 <aside className={`
-          fixed lg:static inset-y-0 left-0 z-40 w-64 bg-slate-800/50 backdrop-blur-xl border-r border-slate-700/50
+          fixed lg:static inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-100 shadow-sm
           transform transition-transform duration-300 ease-in-out lg:transform-none pt-16 lg:pt-0
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}>
@@ -136,8 +136,8 @@ const B2BLayout: React.FC<B2BLayoutProps> = ({ children }) => {
                                 className={`
                   flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all
                   ${isActive(path)
-                                        ? 'bg-emerald-500/15 text-emerald-400 shadow-lg shadow-emerald-500/5'
-                                        : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+                                        ? 'bg-primary/10 text-primary shadow-sm'
+                                        : 'text-gray-500 hover:text-secondary hover:bg-gray-50'
                                     }
                 `}
                             >
@@ -150,13 +150,13 @@ const B2BLayout: React.FC<B2BLayoutProps> = ({ children }) => {
 
                     {/* Dealer Info Card */}
                     {dealer && (
-                        <div className="mx-4 mt-6 p-4 bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 rounded-xl border border-emerald-500/20">
-                            <p className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">Bayi Bilgileri</p>
-                            <p className="text-white text-sm font-semibold">{dealer.company_name}</p>
-                            <p className="text-slate-400 text-xs mt-1">{dealer.city} / {dealer.district}</p>
+                        <div className="mx-4 mt-6 p-4 bg-primary/5 rounded-xl border border-primary/10">
+                            <p className="text-primary text-xs font-bold uppercase tracking-wider mb-2">Bayi Bilgileri</p>
+                            <p className="text-secondary text-sm font-semibold">{dealer.company_name}</p>
+                            <p className="text-gray-400 text-xs mt-1">{dealer.city} / {dealer.district}</p>
                             <div className="mt-3 flex items-center justify-between">
-                                <span className="text-slate-400 text-xs">İskonto</span>
-                                <span className="text-emerald-400 font-bold text-sm">%{dealer.discount_rate}</span>
+                                <span className="text-gray-400 text-xs">İskonto</span>
+                                <span className="text-primary font-bold text-sm">%{dealer.discount_rate}</span>
                             </div>
                         </div>
                     )}
@@ -165,7 +165,7 @@ const B2BLayout: React.FC<B2BLayoutProps> = ({ children }) => {
                     <div className="mx-4 mt-4">
                         <Link
                             to="/"
-                            className="flex items-center gap-2 text-slate-500 hover:text-slate-300 text-xs font-medium transition-all px-4 py-2"
+                            className="flex items-center gap-2 text-gray-400 hover:text-gray-600 text-xs font-medium transition-all px-4 py-2"
                         >
                             ← Ana Siteye Dön
                         </Link>
@@ -175,7 +175,7 @@ const B2BLayout: React.FC<B2BLayoutProps> = ({ children }) => {
                 {/* Sidebar Overlay on mobile */}
                 {sidebarOpen && (
                     <div
-                        className="fixed inset-0 bg-black/60 z-30 lg:hidden backdrop-blur-sm"
+                        className="fixed inset-0 bg-black/40 z-30 lg:hidden backdrop-blur-sm"
                         onClick={() => setSidebarOpen(false)}
                     />
                 )}

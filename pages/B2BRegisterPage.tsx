@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import * as dealerService from '../services/dealerService';
 import {
     Building2, User, Mail, Lock, Eye, EyeOff, Phone, MapPin,
-    FileText, ArrowRight, CheckCircle2, AlertCircle
+    FileText, ArrowRight, CheckCircle2, AlertCircle, Cat, Dog
 } from 'lucide-react';
 
 const CITIES = [
@@ -125,35 +125,35 @@ const B2BRegisterPage: React.FC = () => {
 
     if (success) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4">
+            <div className="min-h-screen bg-white pt-36 pb-12 flex items-center justify-center px-4">
                 <div className="w-full max-w-md text-center">
-                    <div className="w-20 h-20 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <CheckCircle2 size={40} className="text-emerald-400" />
+                    <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <CheckCircle2 size={40} className="text-green-500" />
                     </div>
-                    <h2 className="text-2xl font-bold text-white mb-4">Başvurunuz Alındı!</h2>
-                    <p className="text-slate-400 mb-8 leading-relaxed">
+                    <h2 className="text-2xl font-bold text-secondary mb-4">Başvurunuz Alındı!</h2>
+                    <p className="text-gray-500 mb-8 leading-relaxed">
                         Bayi başvurunuz başarıyla oluşturuldu. Başvurunuz en kısa sürede
                         incelenecek ve onaylandığında e-posta ile bilgilendirileceksiniz.
                     </p>
-                    <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50 mb-8">
+                    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm mb-8">
                         <div className="space-y-3 text-left">
                             <div className="flex justify-between">
-                                <span className="text-slate-400 text-sm">Firma</span>
-                                <span className="text-white text-sm font-medium">{formData.company_name}</span>
+                                <span className="text-gray-400 text-sm">Firma</span>
+                                <span className="text-secondary text-sm font-medium">{formData.company_name}</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="text-slate-400 text-sm">Vergi No</span>
-                                <span className="text-white text-sm font-medium">{formData.tax_number}</span>
+                                <span className="text-gray-400 text-sm">Vergi No</span>
+                                <span className="text-secondary text-sm font-medium">{formData.tax_number}</span>
                             </div>
                             <div className="flex justify-between">
-                                <span className="text-slate-400 text-sm">Durum</span>
-                                <span className="text-amber-400 text-sm font-medium">İnceleniyor</span>
+                                <span className="text-gray-400 text-sm">Durum</span>
+                                <span className="text-amber-500 text-sm font-medium">İnceleniyor</span>
                             </div>
                         </div>
                     </div>
                     <Link
                         to="/bayi/giris"
-                        className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-3 rounded-xl font-bold hover:from-emerald-600 hover:to-emerald-700 transition-all"
+                        className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-primary-hover transition-all shadow-lg shadow-primary/20"
                     >
                         Bayi Girişine Dön <ArrowRight size={18} />
                     </Link>
@@ -163,40 +163,38 @@ const B2BRegisterPage: React.FC = () => {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center px-4 py-12">
+        <div className="min-h-screen bg-white pt-36 pb-12 flex items-center justify-center px-4">
             <div className="w-full max-w-lg">
                 {/* Logo */}
                 <div className="text-center mb-8">
-                    <Link to="/" className="inline-flex items-center gap-3">
-                        <div className="w-14 h-14 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-emerald-500/30">
-                            <Building2 className="text-white" size={32} />
+                    <Link to="/" className="inline-flex items-center gap-2">
+                        <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center">
+                            <Building2 className="text-white" size={28} />
                         </div>
-                        <div>
-                            <span className="text-2xl font-black text-white">PatiDükkan</span>
-                            <span className="text-emerald-400 text-xs font-bold ml-2 bg-emerald-400/10 px-2 py-1 rounded-full">B2B</span>
-                        </div>
+                        <span className="text-2xl font-black text-secondary">PatiDükkan</span>
+                        <span className="text-primary text-xs font-bold bg-primary/10 px-2 py-1 rounded-full">B2B</span>
                     </Link>
-                    <h1 className="text-2xl font-bold text-white mt-8">Bayi Başvurusu</h1>
-                    <p className="text-slate-400 mt-2">Toptan satış ağımıza katılın</p>
+                    <h1 className="text-2xl font-bold text-secondary mt-6">Bayi Başvurusu</h1>
+                    <p className="text-gray-500 mt-2">Toptan satış ağımıza katılın</p>
                 </div>
 
                 {/* Progress Steps */}
                 <div className="flex items-center justify-center gap-4 mb-8">
-                    <div className={`flex items-center gap-2 ${step >= 1 ? 'text-emerald-400' : 'text-slate-500'}`}>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-slate-400'}`}>1</div>
+                    <div className={`flex items-center gap-2 ${step >= 1 ? 'text-primary' : 'text-gray-400'}`}>
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 1 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>1</div>
                         <span className="text-sm font-medium hidden sm:block">Kişisel Bilgiler</span>
                     </div>
-                    <div className={`w-12 h-0.5 ${step >= 2 ? 'bg-emerald-500' : 'bg-slate-700'}`} />
-                    <div className={`flex items-center gap-2 ${step >= 2 ? 'text-emerald-400' : 'text-slate-500'}`}>
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-slate-400'}`}>2</div>
+                    <div className={`w-12 h-0.5 ${step >= 2 ? 'bg-primary' : 'bg-gray-200'}`} />
+                    <div className={`flex items-center gap-2 ${step >= 2 ? 'text-primary' : 'text-gray-400'}`}>
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${step >= 2 ? 'bg-primary text-white' : 'bg-gray-100 text-gray-400'}`}>2</div>
                         <span className="text-sm font-medium hidden sm:block">Firma Bilgileri</span>
                     </div>
                 </div>
 
                 {/* Form Card */}
-                <div className="bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/20 p-8 border border-slate-700/50">
+                <div className="bg-white rounded-3xl shadow-xl shadow-gray-200/50 p-8 border border-gray-100">
                     {error && (
-                        <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 mb-6">
+                        <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 mb-6">
                             <AlertCircle size={16} /> {error}
                         </div>
                     )}
@@ -205,48 +203,49 @@ const B2BRegisterPage: React.FC = () => {
                         {step === 1 && (
                             <div className="space-y-5">
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-300 mb-2">Ad Soyad *</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Ad Soyad *</label>
                                     <div className="relative">
-                                        <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                                        <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                                         <input
                                             type="text"
                                             value={formData.fullName}
                                             onChange={(e) => updateField('fullName', e.target.value)}
                                             placeholder="Adınız Soyadınız"
-                                            className="w-full pl-12 pr-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                                            className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-300 mb-2">E-posta Adresi *</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">E-posta Adresi *</label>
                                     <div className="relative">
-                                        <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                                        <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                                         <input
                                             type="email"
                                             value={formData.email}
                                             onChange={(e) => updateField('email', e.target.value)}
                                             placeholder="bayi@firma.com"
-                                            className="w-full pl-12 pr-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                                            className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-300 mb-2">Şifre *</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Şifre *</label>
                                     <div className="relative">
-                                        <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                                        <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                                         <input
                                             type={showPassword ? 'text' : 'password'}
                                             value={formData.password}
                                             onChange={(e) => updateField('password', e.target.value)}
                                             placeholder="En az 6 karakter"
-                                            className="w-full pl-12 pr-12 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                                            className="w-full pl-12 pr-12 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                                         />
                                         <button
                                             type="button"
                                             onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                            aria-label={showPassword ? 'Şifreyi gizle' : 'Şifreyi göster'}
                                         >
                                             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                         </button>
@@ -254,15 +253,15 @@ const B2BRegisterPage: React.FC = () => {
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-300 mb-2">Telefon *</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Telefon *</label>
                                     <div className="relative">
-                                        <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                                        <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                                         <input
                                             type="tel"
                                             value={formData.phone}
                                             onChange={(e) => updateField('phone', e.target.value)}
                                             placeholder="0555 555 55 55"
-                                            className="w-full pl-12 pr-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                                            className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                                         />
                                     </div>
                                 </div>
@@ -270,7 +269,7 @@ const B2BRegisterPage: React.FC = () => {
                                 <button
                                     type="button"
                                     onClick={handleNext}
-                                    className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:from-emerald-600 hover:to-emerald-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
+                                    className="w-full bg-primary text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-primary-hover transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
                                 >
                                     Devam Et <ArrowRight size={18} />
                                 </button>
@@ -280,52 +279,53 @@ const B2BRegisterPage: React.FC = () => {
                         {step === 2 && (
                             <div className="space-y-5">
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-300 mb-2">Firma Adı *</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Firma Adı *</label>
                                     <div className="relative">
-                                        <Building2 size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                                        <Building2 size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                                         <input
                                             type="text"
                                             value={formData.company_name}
                                             onChange={(e) => updateField('company_name', e.target.value)}
                                             placeholder="Firma Ünvanı"
-                                            className="w-full pl-12 pr-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                                            className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                                         />
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-300 mb-2">Vergi No *</label>
+                                        <label className="block text-sm font-bold text-gray-700 mb-2">Vergi No *</label>
                                         <div className="relative">
-                                            <FileText size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                                            <FileText size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                                             <input
                                                 type="text"
                                                 value={formData.tax_number}
                                                 onChange={(e) => updateField('tax_number', e.target.value)}
                                                 placeholder="1234567890"
-                                                className="w-full pl-12 pr-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                                                className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                                             />
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-300 mb-2">Vergi Dairesi *</label>
+                                        <label className="block text-sm font-bold text-gray-700 mb-2">Vergi Dairesi *</label>
                                         <input
                                             type="text"
                                             value={formData.tax_office}
                                             onChange={(e) => updateField('tax_office', e.target.value)}
                                             placeholder="Vergi Dairesi"
-                                            className="w-full px-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                                            className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                                         />
                                     </div>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-300 mb-2">İl *</label>
+                                        <label className="block text-sm font-bold text-gray-700 mb-2">İl *</label>
                                         <select
                                             value={formData.city}
                                             onChange={(e) => updateField('city', e.target.value)}
-                                            className="w-full px-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all appearance-none"
+                                            className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none"
+                                            aria-label="İl seçimi"
                                         >
                                             <option value="">İl Seçin</option>
                                             {CITIES.map(city => (
@@ -334,41 +334,41 @@ const B2BRegisterPage: React.FC = () => {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-bold text-slate-300 mb-2">İlçe</label>
+                                        <label className="block text-sm font-bold text-gray-700 mb-2">İlçe</label>
                                         <input
                                             type="text"
                                             value={formData.district}
                                             onChange={(e) => updateField('district', e.target.value)}
                                             placeholder="İlçe"
-                                            className="w-full px-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                                            className="w-full px-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-300 mb-2">Firma Adresi *</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Firma Adresi *</label>
                                     <div className="relative">
-                                        <MapPin size={18} className="absolute left-4 top-4 text-slate-500" />
+                                        <MapPin size={18} className="absolute left-4 top-4 text-gray-400" />
                                         <textarea
                                             value={formData.company_address}
                                             onChange={(e) => updateField('company_address', e.target.value)}
                                             placeholder="Tam adres"
                                             rows={3}
-                                            className="w-full pl-12 pr-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all resize-none"
+                                            className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
                                         />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-bold text-slate-300 mb-2">Firma Telefonu</label>
+                                    <label className="block text-sm font-bold text-gray-700 mb-2">Firma Telefonu</label>
                                     <div className="relative">
-                                        <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
+                                        <Phone size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
                                         <input
                                             type="tel"
                                             value={formData.company_phone}
                                             onChange={(e) => updateField('company_phone', e.target.value)}
                                             placeholder="0212 555 55 55"
-                                            className="w-full pl-12 pr-4 py-4 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all"
+                                            className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all"
                                         />
                                     </div>
                                 </div>
@@ -377,14 +377,14 @@ const B2BRegisterPage: React.FC = () => {
                                     <button
                                         type="button"
                                         onClick={() => { setStep(1); setError(''); }}
-                                        className="flex-1 bg-slate-700/50 text-slate-300 py-4 rounded-xl font-bold text-sm hover:bg-slate-700 transition-all"
+                                        className="flex-1 bg-gray-100 text-gray-600 py-4 rounded-xl font-bold text-sm hover:bg-gray-200 transition-all"
                                     >
                                         ← Geri
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={isSubmitting}
-                                        className="flex-[2] bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:from-emerald-600 hover:to-emerald-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 disabled:opacity-70"
+                                        className="flex-[2] bg-primary text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:bg-primary-hover transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 disabled:opacity-70"
                                     >
                                         {isSubmitting ? 'Başvuru Yapılıyor...' : 'Başvuruyu Gönder'} <ArrowRight size={18} />
                                     </button>
@@ -393,20 +393,28 @@ const B2BRegisterPage: React.FC = () => {
                         )}
                     </form>
 
-                    <div className="mt-6 pt-6 border-t border-slate-700/50 text-center">
-                        <p className="text-slate-400 text-sm">
+                    <div className="mt-6 pt-6 border-t border-gray-100 text-center">
+                        <p className="text-gray-500 text-sm">
                             Zaten bayi misiniz?{' '}
-                            <Link to="/bayi/giris" className="font-bold text-emerald-400 hover:text-emerald-300 transition-all">
+                            <Link to="/bayi/giris" className="font-bold text-primary hover:underline">
                                 Giriş Yap
                             </Link>
                         </p>
                     </div>
                 </div>
 
+                {/* Back to main site */}
                 <div className="mt-6 text-center">
-                    <Link to="/" className="text-slate-500 hover:text-slate-300 text-sm transition-all">
+                    <Link to="/" className="text-gray-400 hover:text-gray-600 text-sm transition-all">
                         ← Ana Siteye Dön
                     </Link>
+                </div>
+
+                {/* Footer decorative elements */}
+                <div className="mt-8 flex justify-center gap-4 opacity-30">
+                    <Building2 size={24} className="text-primary" />
+                    <Cat size={24} className="text-primary" />
+                    <Dog size={24} className="text-primary" />
                 </div>
             </div>
         </div>
