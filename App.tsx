@@ -338,23 +338,28 @@ const AppContent: React.FC = () => {
           <Route path="*" element={<Footer />} />
         </Routes>
 
-        <CartModal
-          isOpen={isCartModalOpen}
-          onClose={() => setIsCartModalOpen(false)}
-          lastProduct={lastAddedProduct}
-          onAddToCart={addToCart}
-        />
-
-        <QuickViewModal
-          product={quickViewProduct}
-          onClose={() => setQuickViewProduct(null)}
-          onAddToCart={addToCart}
-          toggleWishlist={toggleWishlist}
-          isWishlisted={quickViewProduct ? wishlist.includes(quickViewProduct.id) : false}
-        />
-
-
-        <MobileBottomNav cartCount={cartCount} wishlistCount={wishlist.length} />
+        {/* Hide main site modals and mobile nav on B2B pages */}
+        <Routes>
+          <Route path="/bayi/*" element={null} />
+          <Route path="*" element={
+            <>
+              <CartModal
+                isOpen={isCartModalOpen}
+                onClose={() => setIsCartModalOpen(false)}
+                lastProduct={lastAddedProduct}
+                onAddToCart={addToCart}
+              />
+              <QuickViewModal
+                product={quickViewProduct}
+                onClose={() => setQuickViewProduct(null)}
+                onAddToCart={addToCart}
+                toggleWishlist={toggleWishlist}
+                isWishlisted={quickViewProduct ? wishlist.includes(quickViewProduct.id) : false}
+              />
+              <MobileBottomNav cartCount={cartCount} wishlistCount={wishlist.length} />
+            </>
+          } />
+        </Routes>
 
         {/* ChatBot - Desktop Only (hidden on B2B) */}
         <Routes>

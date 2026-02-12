@@ -131,6 +131,7 @@ const B2BCatalogPage: React.FC = () => {
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
                             className="px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all appearance-none min-w-[180px]"
+                            aria-label="Kategori filtresi"
                         >
                             <option value="">Tüm Kategoriler</option>
                             {categories.map(cat => (
@@ -141,6 +142,7 @@ const B2BCatalogPage: React.FC = () => {
                             value={selectedBrand}
                             onChange={(e) => setSelectedBrand(e.target.value)}
                             className="px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-xl text-white focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500/50 transition-all appearance-none min-w-[180px]"
+                            aria-label="Marka filtresi"
                         >
                             <option value="">Tüm Markalar</option>
                             {brands.map(brand => (
@@ -151,12 +153,14 @@ const B2BCatalogPage: React.FC = () => {
                             <button
                                 onClick={() => setViewMode('grid')}
                                 className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-emerald-500 text-white' : 'text-slate-400 hover:text-white'}`}
+                                aria-label="Grid görünümü"
                             >
                                 <Grid size={18} />
                             </button>
                             <button
                                 onClick={() => setViewMode('list')}
                                 className={`p-2 rounded-lg transition-all ${viewMode === 'list' ? 'bg-emerald-500 text-white' : 'text-slate-400 hover:text-white'}`}
+                                aria-label="Liste görünümü"
                             >
                                 <List size={18} />
                             </button>
@@ -219,6 +223,7 @@ const B2BCatalogPage: React.FC = () => {
                                                 <button
                                                     onClick={() => updateB2BCartQty(product.id, cartQty - 1)}
                                                     className="w-10 h-10 bg-slate-700 rounded-xl flex items-center justify-center text-slate-300 hover:bg-red-500/20 hover:text-red-400 transition-all"
+                                                    aria-label="Adet azalt"
                                                 >
                                                     <Minus size={16} />
                                                 </button>
@@ -228,10 +233,12 @@ const B2BCatalogPage: React.FC = () => {
                                                     onChange={(e) => updateB2BCartQty(product.id, parseInt(e.target.value) || 0)}
                                                     className="flex-1 text-center bg-slate-700/50 border border-slate-600/50 rounded-xl py-2 text-white font-bold text-sm"
                                                     min="0"
+                                                    aria-label="Ürün adedi"
                                                 />
                                                 <button
                                                     onClick={() => updateB2BCartQty(product.id, cartQty + 1)}
                                                     className="w-10 h-10 bg-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all"
+                                                    aria-label="Adet artır"
                                                 >
                                                     <Plus size={16} />
                                                 </button>
@@ -279,6 +286,7 @@ const B2BCatalogPage: React.FC = () => {
                                             <button
                                                 onClick={() => updateB2BCartQty(product.id, cartQty - 1)}
                                                 className="w-8 h-8 bg-slate-700 rounded-lg flex items-center justify-center text-slate-300 hover:bg-red-500/20 hover:text-red-400 transition-all"
+                                                aria-label="Adet azalt"
                                             >
                                                 <Minus size={14} />
                                             </button>
@@ -289,6 +297,7 @@ const B2BCatalogPage: React.FC = () => {
                                         <button
                                             onClick={() => addToB2BCart(product)}
                                             className="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all"
+                                            aria-label="Sepete ekle"
                                         >
                                             <Plus size={14} />
                                         </button>

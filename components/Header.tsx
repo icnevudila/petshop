@@ -396,6 +396,9 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                         <BookOpen size={18} /> Blog
                      </Link>
                      <Link to="/iletisim" className="flex items-center gap-3 text-sm font-bold text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>
+                     <Link to="/bayi/giris" className="flex items-center gap-3 text-sm font-bold text-emerald-600" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Building2 size={18} /> Bayi Girişi
+                     </Link>
                         <Phone size={18} /> İletişim
                      </Link>
                   </div>
