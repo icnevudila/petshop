@@ -223,66 +223,74 @@ const B2BCartPage: React.FC = () => {
                             {b2bCart.map(item => (
                                 <div
                                     key={item.product_id}
-                                    className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center gap-4"
+                                    className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4"
                                 >
-                                    <img
-                                        src={item.images?.[0] || 'https://via.placeholder.com/80x80?text=Ürün'}
-                                        alt={item.product_name}
-                                        className="w-20 h-20 object-cover rounded-xl flex-shrink-0"
-                                        onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/80x80?text=Ürün'; }}
-                                    />
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="text-secondary font-medium text-sm truncate">{item.product_name}</h3>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            <span className="text-primary font-bold text-sm">
-                                                ₺{item.discounted_unit_price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                                            </span>
-                                            {item.unit_price !== item.discounted_unit_price && (
-                                                <span className="text-gray-400 text-xs line-through">
-                                                    ₺{item.unit_price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                                    {/* Product Info */}
+                                    <div className="flex items-center gap-4 w-full sm:w-auto flex-1">
+                                        <img
+                                            src={item.images?.[0] || 'https://via.placeholder.com/80x80?text=Ürün'}
+                                            alt={item.product_name}
+                                            className="w-20 h-20 object-cover rounded-xl flex-shrink-0 bg-gray-50"
+                                            onError={(e) => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/80x80?text=Ürün'; }}
+                                        />
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="text-secondary font-medium text-sm truncate">{item.product_name}</h3>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <span className="text-primary font-bold text-sm">
+                                                    ₺{item.discounted_unit_price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
                                                 </span>
-                                            )}
+                                                {item.unit_price !== item.discounted_unit_price && (
+                                                    <span className="text-gray-400 text-xs line-through">
+                                                        ₺{item.unit_price.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2 flex-shrink-0">
-                                        <button
-                                            onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-                                            className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-red-500 transition-all"
-                                            aria-label="Adet azalt"
-                                        >
-                                            <Minus size={14} />
-                                        </button>
-                                        <input
-                                            type="number"
-                                            value={item.quantity}
-                                            onChange={(e) => updateQuantity(item.product_id, parseInt(e.target.value) || 0)}
-                                            className="w-16 text-center bg-gray-50 border border-gray-200 rounded-lg py-1.5 text-secondary font-bold text-sm"
-                                            min="0"
-                                            aria-label="Ürün adedi"
-                                        />
-                                        <button
-                                            onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
-                                            className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all"
-                                            aria-label="Adet artır"
-                                        >
-                                            <Plus size={14} />
-                                        </button>
-                                    </div>
+                                    {/* Actions & Total */}
+                                    <div className="flex items-center justify-between w-full sm:w-auto gap-4 border-t border-gray-100 pt-3 sm:border-0 sm:pt-0">
+                                        <div className="flex items-center gap-2 flex-shrink-0">
+                                            <button
+                                                onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
+                                                className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-gray-500 hover:bg-red-50 hover:text-red-500 transition-all"
+                                                aria-label="Adet azalt"
+                                            >
+                                                <Minus size={14} />
+                                            </button>
+                                            <input
+                                                type="number"
+                                                value={item.quantity}
+                                                onChange={(e) => updateQuantity(item.product_id, parseInt(e.target.value) || 0)}
+                                                className="w-12 text-center bg-gray-50 border border-gray-200 rounded-lg py-1.5 text-secondary font-bold text-sm"
+                                                min="0"
+                                                aria-label="Ürün adedi"
+                                            />
+                                            <button
+                                                onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
+                                                className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all"
+                                                aria-label="Adet artır"
+                                            >
+                                                <Plus size={14} />
+                                            </button>
+                                        </div>
 
-                                    <div className="text-right flex-shrink-0 w-28">
-                                        <p className="text-secondary font-bold text-sm">
-                                            ₺{(item.discounted_unit_price * item.quantity).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
-                                        </p>
-                                    </div>
+                                        <div className="flex items-center gap-4">
+                                            <div className="text-right flex-shrink-0 w-24">
+                                                <p className="text-secondary font-bold text-sm">
+                                                    ₺{(item.discounted_unit_price * item.quantity).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}
+                                                </p>
+                                            </div>
 
-                                    <button
-                                        onClick={() => removeItem(item.product_id)}
-                                        className="p-2 text-gray-400 hover:text-red-500 transition-all flex-shrink-0"
-                                        aria-label="Ürünü kaldır"
-                                    >
-                                        <Trash2 size={16} />
-                                    </button>
+                                            <button
+                                                onClick={() => removeItem(item.product_id)}
+                                                className="p-2 text-gray-400 hover:text-red-500 transition-all flex-shrink-0"
+                                                aria-label="Ürünü kaldır"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
                         </div>
