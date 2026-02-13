@@ -29,21 +29,26 @@ const B2BCatalogPage: React.FC = () => {
 
     useEffect(() => {
         const loadDealer = async () => {
+            console.log('B2BCatalogPage: Checking Auth', { currentUser });
             if (!currentUser) {
+                console.log('B2BCatalogPage: No user, setting isGuest=true');
                 setIsGuest(true);
                 setLoading(false);
                 return;
             }
             try {
                 const d = await dealerService.getDealerByUserId(currentUser.id);
+                console.log('B2BCatalogPage: Dealer check', d);
                 if (!d || d.status !== 'approved') {
+                    console.log('B2BCatalogPage: Not a dealer, setting isGuest=true');
                     setIsGuest(true);
                 } else {
+                    console.log('B2BCatalogPage: Dealer approved');
                     setDealer(d);
                 }
             } catch (e) {
-                setIsGuest(true);
                 console.error('Error loading dealer:', e);
+                setIsGuest(true);
             } finally {
                 setLoading(false);
             }
