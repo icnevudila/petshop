@@ -8,7 +8,7 @@ interface AuthContextType {
     loading: boolean;
     signInWithGoogle: () => Promise<void>;
     login: (email: string, password: string) => Promise<void>;
-    signup: (email: string, password: string, name: string) => Promise<void>;
+    signup: (email: string, password: string, name: string) => Promise<{ user: User | null; session: Session | null } | undefined>;
     logout: () => Promise<void>;
 }
 
@@ -75,7 +75,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
             if (error) throw error;
 
-            // Note: Trigger in database.sql handles profile creation automatically
+            return data;
         } catch (error) {
             console.error("Error signing up:", error);
             throw error;

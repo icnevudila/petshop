@@ -89,15 +89,11 @@ const B2BRegisterPage: React.FC = () => {
         setIsSubmitting(true);
         try {
             // 1. Create user account
-            await signup(formData.email, formData.password, formData.fullName);
+            const authData = await signup(formData.email, formData.password, formData.fullName);
 
-            // Wait briefly for the user to be created
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            if (!authData?.user) throw new Error('Kullanıcı oluşturulamadı');
 
-            // 2. Get the created user (they're now logged in via auth state change)
-            const { data: { user } } = await (await import('../supabaseClient')).supabase.auth.getUser();
-
-            if (!user) throw new Error('Kullanıcı oluşturulamadı');
+            const user = authData.user;
 
             // 3. Apply as dealer
             await dealerService.applyAsDealer(user.id, {
