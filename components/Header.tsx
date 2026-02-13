@@ -208,7 +208,7 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                               <p className="text-xs text-gray-400 font-bold">Hoşgeldin,</p>
                               <p className="text-sm font-bold text-secondary truncate">{currentUser.displayName || currentUser.email}</p>
                            </div>
-                           <Link to="/hesabim" className="block px-4 py-2text-sm font-medium text-gray-600 hover:text-brand hover:bg-gray-50 rounded-lg transition-colors">Hesabım</Link>
+                           <Link to="/hesabim" className="block px-4 py-2 text-sm font-medium text-gray-600 hover:text-brand hover:bg-gray-50 rounded-lg transition-colors">Hesabım</Link>
                            <Link to="/admin" className="block px-4 py-2 text-sm font-medium text-gray-600 hover:text-brand hover:bg-gray-50 rounded-lg transition-colors">Admin Paneli</Link>
                            <button
                               onClick={() => logout()}
@@ -396,10 +396,10 @@ const Header: React.FC<HeaderProps> = ({ cartCount, wishlistCount }) => {
                         <BookOpen size={18} /> Blog
                      </Link>
                      <Link to="/iletisim" className="flex items-center gap-3 text-sm font-bold text-gray-700" onClick={() => setIsMobileMenuOpen(false)}>
-                        <Link to="/bayi/giris" className="flex items-center gap-3 text-sm font-bold text-emerald-600" onClick={() => setIsMobileMenuOpen(false)}>
-                           <Building2 size={18} /> Bayi Girişi
-                        </Link>
                         <Phone size={18} /> İletişim
+                     </Link>
+                     <Link to="/bayi/giris" className="flex items-center gap-3 text-sm font-bold text-emerald-600" onClick={() => setIsMobileMenuOpen(false)}>
+                        <Building2 size={18} /> Bayi Girişi
                      </Link>
                   </div>
 

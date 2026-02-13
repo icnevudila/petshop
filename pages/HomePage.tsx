@@ -378,7 +378,7 @@ const HomePage: React.FC<HomePageProps> = ({ addToCart, toggleWishlist, wishlist
             {/* Scrolling Products */}
             <div className="relative group">
                <div ref={scrollFlashRef} className="flex gap-6 overflow-x-auto pb-8 hide-scrollbar snap-x -mx-4 px-4 scroll-smooth">
-                  {products.filter(p => p.discounted_price).slice(0, 20).map((p, i) => (
+                  {(products.filter(p => p.discounted_price).length > 0 ? products.filter(p => p.discounted_price) : products).slice(0, 20).map((p, i) => (
                      <div key={i} className="flex-shrink-0 w-[180px] md:w-[280px] snap-center transform hover:-translate-y-2 transition-transform duration-300">
                         <div className="bg-white rounded-3xl p-4 border-2 border-red-50 shadow-xl shadow-red-100/50 hover:border-red-500/30 transition-all h-full relative overflow-hidden group/card">
                            {/* Discount Badge Removed - Handled by ProductCard */}
