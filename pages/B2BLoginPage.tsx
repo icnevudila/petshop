@@ -1,214 +1,118 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Home, Building2, FileText, CheckCircle } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Building2, Package, Check, Home } from 'lucide-react';
 import * as dealerService from '../services/dealerService';
 
 const B2BLoginPage: React.FC = () => {
     const { login, currentUser } = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
+    const [formData, setFormData] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
-    const [statusMessage, setStatusMessage] = useState<{ type: 'info' | 'error' | 'success', text: string } | null>(null);
+    const [statusMessage, setStatusMessage] = useState<{ type: string, text: string } | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        const checkDealerStatus = async () => {
+        const check = async () => {
             if (currentUser) {
-                try {
-                    const dealer = await dealerService.getDealerByUserId(currentUser.id);
-                    if (dealer) {
-                        if (dealer.status === 'approved') {
-                            navigate('/bayi');
-                        } else if (dealer.status === 'pending') {
-                            setStatusMessage({
-                                type: 'info',
-                                text: 'Bayi başvurunuz değerlendirme aşamasındadır. Onaylandığında bilgilendirileceksiniz.'
-                            });
-                        } else if (dealer.status === 'rejected') {
-                            setStatusMessage({
-                                type: 'error',
-                                text: 'Bayi başvurunuz onaylanmadı. Detaylı bilgi için bizimle iletişime geçebilirsiniz.'
-                            });
-                        }
-                    } else {
-                        // User exists but not a dealer
-                        setStatusMessage({
-                            type: 'info',
-                            text: 'Bu hesap bir bayi hesabı değildir.'
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error checking dealer status:', error);
-                }
+                const d = await dealerService.getDealerByUserId(currentUser.id);
+                if (d?.status === 'approved') navigate('/bayi');
+                else if (d) setStatusMessage({ type: 'info', text: 'Başvurunuz inceleniyor.' });
+                else setStatusMessage({ type: 'info', text: 'Bayi kaydınız bulunamadı.' });
             }
         };
-
-        checkDealerStatus();
+        check();
     }, [currentUser, navigate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        setStatusMessage(null);
-
-        if (!formData.email || !formData.password) {
-            setError('Lütfen tüm alanları doldurun');
-            return;
-        }
-
+        if (!formData.email || !formData.password) { setError('Lütfen tüm alanları doldurun'); return; }
         setIsSubmitting(true);
-        try {
-            await login(formData.email, formData.password);
-            // Navigation handled by useEffect
-        } catch (err: any) {
-            if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-                setError('E-posta veya şifre hatalı.');
-            } else if (err.code === 'auth/too-many-requests') {
-                setError('Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin.');
-            } else {
-                setError('Giriş başarısız oldu: ' + (err.message || 'Lütfen tekrar deneyin.'));
-            }
-            setIsSubmitting(false);
-        }
+        try { await login(formData.email, formData.password); }
+        catch (err: any) { setError('Giriş başarısız.'); }
+        finally { setIsSubmitting(false); }
     };
 
     return (
-        <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#334155]">
-            {/* Animated Background Blobs - Darker mood for B2B */}
-            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#FF7A30]/10 rounded-full blur-[120px] animate-pulse"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#38BDF8]/10 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '5s' }}></div>
+        <div className="min-h-screen flex flex-col lg:flex-row bg-slate-900">
+            {/* Left Side - Professional Blue/Dark Section */}
+            <div className="lg:w-1/2 bg-[#0F172A] relative overflow-hidden flex flex-col items-center justify-center p-12 text-center text-white border-r border-slate-800">
+                {/* Background Grid */}
+                <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(#334155 1px, transparent 1px), linear-gradient(90deg, #334155 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
 
-            {/* Grid Pattern */}
-            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(#FFF 1px, transparent 1px), linear-gradient(90deg, #FFF 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
-
-            <div className="relative z-10 w-full max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20 px-6">
-
-                {/* Left Side: Dealer Benefits / Hero */}
-                <div className="text-center lg:text-left max-w-lg">
-                    <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 mb-6">
-                        <Building2 className="text-[#FF7A30]" size={20} />
-                        <span className="text-white/90 font-bold text-sm tracking-wide">KURUMSAL BAYİ PORTALI</span>
+                <div className="relative z-10 flex flex-col items-center max-w-lg">
+                    <div className="bg-slate-800/50 p-4 rounded-2xl border border-slate-700 mb-8 backdrop-blur-sm">
+                        <Building2 size={64} className="text-[#38BDF8]" />
                     </div>
 
-                    <h1 className="text-5xl lg:text-6xl font-black text-white mb-6 leading-tight drop-shadow-2xl">
-                        İşinizi Büyütün <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF7A30] to-[#FFB347]">Karlı Alışveriş</span>
+                    <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 text-white">
+                        Kurumsal Bayi Portalı
                     </h1>
-
-                    <p className="text-slate-400 text-lg mb-8 leading-relaxed">
-                        PatiDükkan bayisi olun, %40'a varan toptan indirimlerden,
-                        ertesi gün kargo avantajından ve özel kampanyalardan yararlanın.
+                    <p className="text-slate-400 text-lg font-medium mb-8 leading-relaxed">
+                        Toptan alışverişin en karlı adresi. <br />
+                        Bayilere özel fiyatlar, hızlı kargo ve geniş ürün yelpazesi.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <Link to="/bayi/katalog" className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-4 rounded-xl font-bold transition-all border border-white/10 backdrop-blur-sm group">
-                            <FileText size={20} className="text-[#FF7A30] group-hover:scale-110 transition-transform" />
-                            Kataloğu İncele
-                        </Link>
-                        <Link to="/bayi/basvuru" className="flex items-center justify-center gap-2 bg-[#FF7A30] hover:bg-[#ff6b1a] text-white px-6 py-4 rounded-xl font-bold shadow-lg shadow-orange-900/30 transition-all">
-                            Bayi Başvurusu Yap <ArrowRight size={20} />
-                        </Link>
+                    <div className="grid grid-cols-2 gap-4 w-full text-left">
+                        {['%40 İskonto', 'Hızlı Teslimat', 'Toptan Fiyat', 'Özel Müşteri Tem.'].map((t, i) => (
+                            <div key={i} className="flex items-center gap-3 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                                <Check size={16} className="text-[#38BDF8]" />
+                                <span className="font-bold text-sm text-slate-200">{t}</span>
+                            </div>
+                        ))}
                     </div>
 
-                    <div className="mt-12 grid grid-cols-2 gap-4">
-                        <div className="flex items-center gap-3 text-slate-300 font-medium">
-                            <CheckCircle size={18} className="text-emerald-500" /> Binlerce Ürün
-                        </div>
-                        <div className="flex items-center gap-3 text-slate-300 font-medium">
-                            <CheckCircle size={18} className="text-emerald-500" /> Hızlı Kargo
-                        </div>
-                        <div className="flex items-center gap-3 text-slate-300 font-medium">
-                            <CheckCircle size={18} className="text-emerald-500" /> 7/24 Destek
-                        </div>
-                        <div className="flex items-center gap-3 text-slate-300 font-medium">
-                            <CheckCircle size={18} className="text-emerald-500" /> Kolay Ödeme
-                        </div>
-                    </div>
+                    <Link to="/bayi/katalog" className="mt-8 flex items-center gap-2 text-[#38BDF8] font-bold hover:text-white transition-colors">
+                        <Package size={20} />
+                        Kataloğu Görüntüle
+                    </Link>
                 </div>
+            </div>
 
-                {/* Right Side: Glass Login Card */}
-                <div className="bg-[#1E293B]/80 backdrop-blur-xl rounded-[2rem] shadow-2xl p-8 lg:p-10 w-full max-w-md border border-white/5 relative">
-                    {/* Decorative Top Border */}
-                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7A30] to-[#FFB347]"></div>
+            {/* Right Side - Form Section (Dark Mode) */}
+            <div className="lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-24 bg-[#1E293B] relative">
+                <Link to="/" className="absolute top-8 right-8 p-3 text-slate-500 hover:text-white hover:bg-slate-800 rounded-full transition-all">
+                    <Home size={24} />
+                </Link>
 
-                    <div className="flex justify-center mb-8">
-                        <img src="/logo_animated.svg" alt="PatiDükkan Logo" className="h-12 w-auto brightness-200 contrast-0 grayscale opacity-80" />
+                <div className="w-full max-w-md space-y-8">
+                    <div>
+                        <h2 className="text-3xl font-black text-white tracking-tight">Bayi Girişi</h2>
+                        <p className="text-slate-400 mt-2 font-medium">Kurumsal hesap bilgilerinizi giriniz.</p>
                     </div>
 
-                    <h2 className="text-2xl font-bold text-white mb-1 text-center">Bayi Girişi</h2>
-                    <p className="text-slate-400 text-sm text-center mb-8">Kurumsal hesabınıza giriş yapın</p>
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {statusMessage && <div className="bg-blue-500/10 text-blue-400 px-4 py-3 rounded-xl text-sm font-bold border border-blue-500/20">{statusMessage.text}</div>}
+                        {error && <div className="bg-red-500/10 text-red-400 px-4 py-3 rounded-xl text-sm font-bold border border-red-500/20">{error}</div>}
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
-                        {statusMessage && (
-                            <div className={`px-4 py-3 rounded-xl text-sm font-bold text-center border ${statusMessage.type === 'error' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
-                                    statusMessage.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
-                                        'bg-blue-500/10 text-blue-400 border-blue-500/20'
-                                }`}>
-                                {statusMessage.text}
-                            </div>
-                        )}
-
-                        {error && (
-                            <div className="bg-red-500/10 text-red-400 px-4 py-3 rounded-xl text-sm font-bold text-center border border-red-500/20">
-                                {error}
-                            </div>
-                        )}
-
-                        <div className="space-y-1">
-                            <label className="text-xs font-bold text-slate-400 uppercase ml-1">E-Posta</label>
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-slate-400 uppercase ml-1">Bayi E-Posta</label>
                             <div className="relative group">
-                                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#FF7A30] transition-colors" />
-                                <input
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full pl-11 pr-4 py-4 bg-[#0F172A] border-2 border-slate-700/50 focus:border-[#FF7A30] rounded-xl outline-none font-medium text-white transition-all placeholder-slate-600"
-                                    placeholder="bayi@patidukkan.com"
-                                />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#38BDF8] transition-colors" size={20} />
+                                <input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="w-full pl-12 pr-4 py-4 bg-[#0F172A] border-2 border-slate-700 focus:border-[#38BDF8] rounded-xl outline-none font-bold text-white transition-all placeholder-slate-600" placeholder="bayi@patidukkan.com" />
                             </div>
                         </div>
 
-                        <div className="space-y-1">
-                            <div className="flex justify-between items-center ml-1">
-                                <label className="text-xs font-bold text-slate-400 uppercase">Şifre</label>
-                            </div>
+                        <div className="space-y-2">
+                            <label className="text-xs font-bold text-slate-400 uppercase ml-1">Şifre</label>
                             <div className="relative group">
-                                <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#FF7A30] transition-colors" />
-                                <input
-                                    type={showPassword ? 'text' : 'password'}
-                                    value={formData.password}
-                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full pl-11 pr-11 py-4 bg-[#0F172A] border-2 border-slate-700/50 focus:border-[#FF7A30] rounded-xl outline-none font-medium text-white transition-all placeholder-slate-600"
-                                    placeholder="••••••••"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-1"
-                                >
-                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#38BDF8] transition-colors" size={20} />
+                                <input type={showPassword ? 'text' : 'password'} value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} className="w-full pl-12 pr-12 py-4 bg-[#0F172A] border-2 border-slate-700 focus:border-[#38BDF8] rounded-xl outline-none font-bold text-white transition-all placeholder-slate-600" placeholder="••••••••" />
+                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white">
+                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                 </button>
                             </div>
                         </div>
 
-                        <button
-                            type="submit"
-                            disabled={isSubmitting}
-                            className="w-full bg-gradient-to-r from-[#FF7A30] to-[#FF5500] hover:from-[#e66a26] hover:to-[#e64d00] text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-orange-900/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 mt-2"
-                        >
-                            {isSubmitting ? 'Giriş Yapılıyor...' : <>Giriş Yap <ArrowRight strokeWidth={3} size={20} /></>}
+                        <button type="submit" disabled={isSubmitting} className="w-full bg-[#38BDF8] hover:bg-[#0EA5E9] text-white py-4 rounded-xl font-black text-lg shadow-lg shadow-sky-900/40 hover:shadow-sky-900/60 hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
+                            {isSubmitting ? '...' : <>Giriş Yap <ArrowRight strokeWidth={3} size={20} /></>}
                         </button>
                     </form>
 
-                    <div className="mt-8 pt-6 border-t border-slate-700/50 text-center">
-                        <Link to="/" className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors">
-                            ← Ana Siteye Dön
-                        </Link>
+                    <div className="text-center mt-6 pt-6 border-t border-slate-800">
+                        <Link to="/bayi/basvuru" className="text-[#38BDF8] hover:text-white text-sm font-bold hover:underline">Bayi Başvurusu Yap</Link>
                     </div>
                 </div>
             </div>
