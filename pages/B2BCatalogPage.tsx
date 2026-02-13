@@ -7,7 +7,8 @@ import B2BLayout from '../components/B2BLayout';
 import { Dealer, Product, B2BCartEntry } from '../types';
 import {
     Search, Filter, ShoppingCart, Plus, Minus, Package, Grid, List,
-    ChevronDown, Check, X, Building2, LogIn, ArrowRight
+    ChevronDown, Check, X, Building2, LogIn, ArrowRight,
+    Phone, User, Lock, MapPin, Mail
 } from 'lucide-react';
 
 const B2BCatalogPage: React.FC = () => {
@@ -419,77 +420,211 @@ const B2BCatalogPage: React.FC = () => {
         );
     }
 
-    // If guest mode, render with a simple layout instead of B2BLayout
-    if (isGuest) {
-        return (
-            <div className="min-h-screen bg-gray-50">
-                {/* Guest Header */}
-                {/* Guest Header */}
-                <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm/50 backdrop-blur-xl bg-white/90">
-                    <div className="flex items-center justify-between px-4 lg:px-8 h-20">
-                        {/* Logo & Nav */}
-                        <div className="flex items-center gap-12">
-                            <Link to="/bayi/giris" className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-lg shadow-slate-200">
-                                    <Building2 size={22} className="text-[#38BDF8]" />
-                                </div>
-                                <div className="hidden sm:block leading-tight">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-slate-900 font-black text-xl tracking-tight">PatiDükkan</span>
-                                        <span className="text-[#38BDF8] text-[10px] font-bold bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">B2B</span>
-                                    </div>
-                                    <span className="text-gray-400 text-[10px] font-bold tracking-wider uppercase block">Kurumsal Satış</span>
-                                </div>
-                            </Link>
-
-                            {/* B2B Navigation Tabs */}
-                            <nav className="hidden lg:flex items-center gap-1 bg-gray-50/50 p-1 rounded-xl border border-gray-100">
-                                <Link to="/bayi/katalog" className="px-4 py-2 bg-white text-slate-900 rounded-lg text-sm font-bold shadow-sm border border-gray-100">
-                                    Katalog
-                                </Link>
-                                <button className="px-4 py-2 text-gray-500 hover:text-slate-900 rounded-lg text-sm font-bold hover:bg-white transition-all">
-                                    Avantajlar
-                                </button>
-                                <button className="px-4 py-2 text-gray-500 hover:text-slate-900 rounded-lg text-sm font-bold hover:bg-white transition-all">
-                                    Nasıl Çalışır?
-                                </button>
-                                <button className="px-4 py-2 text-gray-500 hover:text-slate-900 rounded-lg text-sm font-bold hover:bg-white transition-all">
-                                    İletişim
-                                </button>
-                            </nav>
-                        </div>
-
-                        {/* Actions */}
-                        <div className="flex items-center gap-3">
-                            <Link
-                                to="/"
-                                className="text-gray-400 hover:text-gray-600 text-sm font-bold px-3 py-2 transition-colors hidden sm:inline"
-                            >
-                                Ana Site
-                            </Link>
-                            <div className="h-6 w-px bg-gray-200 hidden sm:block"></div>
-                            <Link
-                                to="/bayi/giris"
-                                className="text-slate-700 hover:text-[#0F172A] px-4 py-2.5 rounded-xl font-bold text-sm transition-all"
-                            >
-                                Bayi Girişi
-                            </Link>
-                            <Link
-                                to="/bayi/basvuru"
-                                className="flex items-center gap-2 bg-[#0F172A] text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20"
-                            >
-                                Partner Ol <ArrowRight size={16} />
-                            </Link>
-                        </div>
-                    </div>
-                </header>
-
-                <main className="p-4 lg:p-8 max-w-7xl mx-auto">
-                    {catalogContent}
-                </main>
+    <div className="min-h-screen bg-gray-50 font-sans">
+        {/* 1. Top Bar - Corporate Info */}
+        <div className="bg-[#0F172A] text-white py-2 px-4 border-b border-gray-800">
+            <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center text-xs font-medium text-gray-400 gap-2">
+                <div className="flex items-center gap-6">
+                    <span className="flex items-center gap-1.5"><Building2 size={12} className="text-[#FF7A30]" /> Kurumsal Bayi Portalı</span>
+                    <span className="hidden sm:flex items-center gap-1.5"><Phone size={12} className="text-[#FF7A30]" /> 0850 123 45 67</span>
+                </div>
+                <div className="flex items-center gap-4">
+                    <Link to="/iletisim" className="hover:text-white transition-colors">Bize Ulaşın</Link>
+                    <Link to="/sss" className="hover:text-white transition-colors">S.S.S.</Link>
+                    <span className="text-gray-600">|</span>
+                    <span className="text-[#FF7A30] font-bold">Toptan Satış</span>
+                </div>
             </div>
-        );
-    }
+        </div>
+
+        {/* 2. Main Header - Sticky */}
+        <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-lg shadow-gray-100/50">
+            <div className="max-w-7xl mx-auto px-4 lg:px-8 h-20 flex items-center justify-between gap-8">
+                {/* Logo */}
+                <Link to="/bayi/giris" className="flex items-center gap-3 flex-shrink-0">
+                    <div className="w-12 h-12 bg-[#FF7A30] rounded-xl flex items-center justify-center shadow-lg shadow-orange-200">
+                        <Building2 size={24} className="text-white" />
+                    </div>
+                    <div className="leading-tight">
+                        <h1 className="text-2xl font-black text-gray-900 tracking-tight">PatiDükkan</h1>
+                        <span className="text-[#FF7A30] text-[11px] font-bold uppercase tracking-widest bg-orange-50 px-2 py-0.5 rounded-full inline-block">B2B Portalı</span>
+                    </div>
+                </Link>
+
+                {/* Search Bar - Desktop */}
+                <div className="hidden lg:flex flex-1 max-w-xl relative group">
+                    <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                        <Search size={18} className="text-gray-400 group-focus-within:text-[#FF7A30] transition-colors" />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Barkod, Ürün Adı veya Stok Kodu ile arayın..."
+                        className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-100 rounded-xl focus:bg-white focus:border-[#FF7A30] outline-none font-medium text-gray-600 transition-all placeholder-gray-400"
+                    />
+                    <button className="absolute right-2 top-2 bottom-2 bg-[#FF7A30] hover:bg-[#E6621F] text-white px-4 rounded-lg font-bold text-sm transition-colors">
+                        Ara
+                    </button>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-3 flex-shrink-0">
+                    <Link to="/bayi/giris" className="hidden sm:flex flex-col items-end text-right px-2">
+                        <span className="text-xs text-gray-400 font-medium">Bayi Girişi</span>
+                        <span className="text-sm font-bold text-gray-900">Hesabım</span>
+                    </Link>
+                    <Link to="/bayi/giris" className="w-10 h-10 bg-gray-50 hover:bg-orange-50 text-gray-600 hover:text-[#FF7A30] rounded-xl flex items-center justify-center transition-all border border-gray-100">
+                        <User size={20} />
+                    </Link>
+                    <Link to="/bayi/basvuru" className="bg-[#0F172A] hover:bg-slate-800 text-white px-5 py-3 rounded-xl font-bold text-sm shadow-xl shadow-slate-900/10 flex items-center gap-2 transition-all transform hover:-translate-y-0.5">
+                        Bayi Ol <ArrowRight size={16} />
+                    </Link>
+                </div>
+            </div>
+
+            {/* Navigation Categories - Desktop */}
+            <div className="border-t border-gray-100 hidden lg:block">
+                <div className="max-w-7xl mx-auto px-4 flex items-center gap-8 h-12 text-sm font-bold text-gray-600">
+                    <button className="flex items-center gap-2 text-[#FF7A30] hover:bg-orange-50 px-3 py-1.5 rounded-lg transition-colors">
+                        <Grid size={16} /> Tüm Kategoriler
+                    </button>
+                    <Link to="/bayi/katalog" className="hover:text-[#FF7A30] transition-colors">Kedi Mamaları</Link>
+                    <Link to="/bayi/katalog" className="hover:text-[#FF7A30] transition-colors">Köpek Mamaları</Link>
+                    <Link to="/bayi/katalog" className="hover:text-[#FF7A30] transition-colors">Kum & Hijyen</Link>
+                    <Link to="/bayi/katalog" className="hover:text-[#FF7A30] transition-colors">Aksesuarlar</Link>
+                    <Link to="/bayi/katalog" className="hover:text-[#FF7A30] transition-colors">Veteriner Ürünleri</Link>
+                    <div className="flex-grow"></div>
+                    <Link to="/bayi/giris" className="text-gray-400 hover:text-[#FF7A30] flex items-center gap-1">
+                        <Lock size={14} /> Fiyatları Görmek İçin Giriş Yapın
+                    </Link>
+                </div>
+            </div>
+        </header>
+
+        {/* 3. Hero Section - Value Propositions */}
+        <div className="bg-white border-b border-gray-100 overflow-hidden relative">
+            <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
+                <Package size={400} />
+            </div>
+            <div className="max-w-7xl mx-auto px-4 py-12 lg:py-16 relative z-10">
+                <div className="max-w-2xl">
+                    <div className="inline-flex items-center gap-2 bg-orange-50 border border-orange-100 text-[#FF7A30] px-3 py-1 rounded-full text-xs font-bold mb-6">
+                        <span className="w-2 h-2 rounded-full bg-[#FF7A30]"></span>
+                        Sadece Kurumsal Müşteriler İçin
+                    </div>
+                    <h2 className="text-4xl lg:text-5xl font-black text-gray-900 leading-tight mb-6">
+                        Pet Shop ve Veterinerler İçin <br />
+                        <span className="text-[#FF7A30]">Toptan Tedarik</span> Merkezi
+                    </h2>
+                    <p className="text-lg text-gray-500 mb-8 max-w-lg leading-relaxed font-medium">
+                        En iyi markalar, avantajlı iskontolar ve aynı gün kargo imkanı ile işletmenizin tüm ihtiyaçlarını karşılıyoruz.
+                    </p>
+                    <div className="flex flex-wrap gap-4">
+                        <Link to="/bayi/basvuru" className="px-8 py-4 bg-[#FF7A30] hover:bg-[#E6621F] text-white rounded-2xl font-bold text-lg shadow-xl shadow-orange-200 hover:shadow-2xl transition-all transform hover:-translate-y-1 inline-flex items-center gap-2">
+                            Hemen Başvur <ArrowRight size={20} />
+                        </Link>
+                        <Link to="/bayi/giris" className="px-8 py-4 bg-white border-2 border-gray-100 text-gray-700 hover:border-gray-300 hover:bg-gray-50 rounded-2xl font-bold text-lg transition-all">
+                            Giriş Yap
+                        </Link>
+                    </div>
+                </div>
+            </div>
+
+            {/* Features Strip */}
+            <div className="bg-gray-50 border-t border-gray-100">
+                <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+                    {[
+                        { icon: Building2, title: "Kurumsal Faturalı", desc: "Resmi işletme faturalı satış" },
+                        { icon: Package, title: "Hızlı Teslimat", desc: "Stoktan aynı gün kargo" },
+                        { icon: Check, title: "Orijinal Ürün", desc: "%100 Distribütör garantili" },
+                        { icon: Lock, title: "Güvenli Ödeme", desc: "3D Secure ve Havale/EFT" }
+                    ].map((f, i) => (
+                        <div key={i} className="flex items-center gap-4 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
+                            <div className="w-10 h-10 bg-orange-50 rounded-lg flex items-center justify-center text-[#FF7A30]">
+                                <f.icon size={20} />
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-gray-900 text-sm">{f.title}</h4>
+                                <p className="text-xs text-gray-400">{f.desc}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+
+        {/* 4. Products Preview */}
+        <main className="max-w-7xl mx-auto px-4 py-12">
+            <div className="flex items-center justify-between mb-8">
+                <div>
+                    <h3 className="text-2xl font-black text-gray-900">Öne Çıkan Ürünler</h3>
+                    <p className="text-gray-500 text-sm mt-1">Giriş yaparak toptan fiyatları görebilirsiniz.</p>
+                </div>
+                <div className="flex gap-2">
+                    {/* Filters could go here */}
+                    <button className="px-4 py-2 bg-white border border-gray-200 rounded-lg text-sm font-bold text-gray-600 hover:bg-gray-50 flex items-center gap-2">
+                        <Filter size={16} /> Filtrele
+                    </button>
+                </div>
+            </div>
+
+            {catalogContent}
+
+            <div className="mt-12 text-center bg-[#0F172A] rounded-2xl p-12 relative overflow-hidden">
+                <div className="relative z-10">
+                    <h3 className="text-3xl font-black text-white mb-4">Tüm Avantajlardan Yararlanmak İçin</h3>
+                    <p className="text-slate-400 mb-8 max-w-xl mx-auto text-lg">
+                        Bayilik başvurunuzu yapın, özel fiyat listemize ve kampanyalı ürünlerimize anında erişim sağlayın.
+                    </p>
+                    <Link to="/bayi/basvuru" className="inline-block bg-[#38BDF8] hover:bg-[#0EA5E9] text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg shadow-sky-900/30 transition-all transform hover:scale-105">
+                        Ücretsiz Bayi Olun
+                    </Link>
+                </div>
+                <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at center, #1E293B 2px, transparent 2px)', backgroundSize: '24px 24px' }}></div>
+            </div>
+        </main>
+
+        {/* 5. Footer */}
+        <footer className="bg-white border-t border-gray-200 py-12 mt-12">
+            <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div className="flex items-center gap-2 mb-6">
+                        <div className="w-8 h-8 bg-[#FF7A30] rounded-lg flex items-center justify-center text-white"><Building2 size={16} /></div>
+                        <span className="font-black text-xl text-gray-900">PatiDükkan <span className="text-[#FF7A30]">B2B</span></span>
+                    </div>
+                    <p className="text-sm text-gray-500 leading-relaxed mb-6">
+                        Türkiye'nin lider pet shop tedarik platformu. İşletmeniz için en iyi ürünleri en iyi fiyatlarla sunuyoruz.
+                    </p>
+                </div>
+                <div>
+                    <h4 className="font-bold text-gray-900 mb-4">Hızlı Erişim</h4>
+                    <ul className="space-y-2 text-sm text-gray-500">
+                        <li><Link to="/bayi/giris" className="hover:text-[#FF7A30]">Bayi Girişi</Link></li>
+                        <li><Link to="/bayi/basvuru" className="hover:text-[#FF7A30]">Bayi Başvurusu</Link></li>
+                        <li><Link to="/bayi/katalog" className="hover:text-[#FF7A30]">Ürün Kataloğu</Link></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 className="font-bold text-gray-900 mb-4">Kategoriler</h4>
+                    <ul className="space-y-2 text-sm text-gray-500">
+                        <li><a href="#" className="hover:text-[#FF7A30]">Kedi Mamaları</a></li>
+                        <li><a href="#" className="hover:text-[#FF7A30]">Köpek Mamaları</a></li>
+                        <li><a href="#" className="hover:text-[#FF7A30]">Kedi Kumu</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 className="font-bold text-gray-900 mb-4">İletişim</h4>
+                    <ul className="space-y-2 text-sm text-gray-500">
+                        <li className="flex items-center gap-2"><Phone size={14} className="text-[#FF7A30]" /> 0850 123 45 67</li>
+                        <li className="flex items-center gap-2"><Mail size={14} className="text-[#FF7A30]" /> bayi@patidukkan.com</li>
+                        <li className="flex items-center gap-2"><MapPin size={14} className="text-[#FF7A30]" /> İstanbul, Türkiye</li>
+                    </ul>
+                </div>
+            </div>
+            <div className="max-w-7xl mx-auto px-4 mt-12 pt-8 border-t border-gray-100 text-center text-xs text-gray-400 font-medium">
+                &copy; 2026 PatiDükkan B2B Portalı. Tüm hakları saklıdır.
+            </div>
+        </footer>
+    </div>
 
     // Logged in dealer view with B2BLayout
     return (
