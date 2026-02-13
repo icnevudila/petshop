@@ -66,19 +66,13 @@ const B2BLoginPage: React.FC = () => {
                         ))}
                     </div>
 
-                    <button
-                        type="button"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            // Force navigation using window location for HashRouter
-                            window.location.hash = '#/bayi/katalog';
-                        }}
+                    <a
+                        href="#/bayi/katalog"
                         className="mt-8 flex items-center gap-2 text-white font-bold hover:text-orange-100 transition-colors bg-white/10 px-6 py-3 rounded-xl border border-white/20 hover:bg-white/20 cursor-pointer z-50 relative pointer-events-auto"
                     >
                         <Package size={20} />
                         Kataloğu Görüntüle
-                    </button>
+                    </a>
                 </div>
             </div>
 
