@@ -398,6 +398,17 @@ const B2BCatalogPage: React.FC = () => {
         </div>
     );
 
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="text-gray-500 font-medium">Katalog Yükleniyor...</p>
+                </div>
+            </div>
+        );
+    }
+
     // If guest mode, render with a simple layout instead of B2BLayout
     if (isGuest) {
         return (
@@ -432,14 +443,7 @@ const B2BCatalogPage: React.FC = () => {
                 </header>
 
                 <main className="p-4 lg:p-8 max-w-7xl mx-auto">
-                    {loading ? (
-                        <div className="min-h-[60vh] flex items-center justify-center">
-                            <div className="text-center">
-                                <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
-                                <p className="text-gray-500 font-medium">Katalog Yükleniyor...</p>
-                            </div>
-                        </div>
-                    ) : catalogContent}
+                    {catalogContent}
                 </main>
             </div>
         );
@@ -448,14 +452,7 @@ const B2BCatalogPage: React.FC = () => {
     // Logged in dealer view with B2BLayout
     return (
         <B2BLayout>
-            {loading ? (
-                <div className="min-h-[60vh] flex items-center justify-center">
-                    <div className="text-center">
-                        <div className="w-16 h-16 border-4 border-primary/30 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
-                        <p className="text-gray-500 font-medium">Katalog Yükleniyor...</p>
-                    </div>
-                </div>
-            ) : catalogContent}
+            {catalogContent}
         </B2BLayout>
     );
 };

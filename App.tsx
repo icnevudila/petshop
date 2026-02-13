@@ -263,6 +263,9 @@ const AppContent: React.FC = () => {
         <Routes>
           <Route path="/admin" element={null} />
           <Route path="/bayi/*" element={null} />
+          <Route path="/giris" element={null} />
+          <Route path="/kayit" element={null} />
+          <Route path="/sifremi-unuttum" element={null} />
           <Route path="*" element={<Header cartCount={cartCount} wishlistCount={wishlist.length} />} />
         </Routes>
 
@@ -335,6 +338,9 @@ const AppContent: React.FC = () => {
 
         <Routes>
           <Route path="/bayi/*" element={null} />
+          <Route path="/giris" element={null} />
+          <Route path="/kayit" element={null} />
+          <Route path="/sifremi-unuttum" element={null} />
           <Route path="*" element={<Footer />} />
         </Routes>
 

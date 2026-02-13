@@ -1,50 +1,60 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Home, Building2, FileText, CheckCircle } from 'lucide-react';
 import * as dealerService from '../services/dealerService';
-import {
-    Mail, Lock, Eye, EyeOff, ArrowRight, Building2, AlertCircle,
-    Clock, ShoppingBag, TrendingUp, Package, Truck, Star, Shield, Percent
-} from 'lucide-react';
 
 const B2BLoginPage: React.FC = () => {
     const { login, currentUser } = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
-    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
     const [error, setError] = useState('');
-    const [info, setInfo] = useState('');
+    const [statusMessage, setStatusMessage] = useState<{ type: 'info' | 'error' | 'success', text: string } | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const checkDealerStatus = async () => {
-            if (!currentUser) return;
-            try {
-                const dealer = await dealerService.getDealerByUserId(currentUser.id);
-                if (!dealer) {
-                    setInfo('Bu hesap bir bayi hesabı değil. Bayi başvurusu yapabilirsiniz.');
-                    return;
+            if (currentUser) {
+                try {
+                    const dealer = await dealerService.getDealerByUserId(currentUser.id);
+                    if (dealer) {
+                        if (dealer.status === 'approved') {
+                            navigate('/bayi');
+                        } else if (dealer.status === 'pending') {
+                            setStatusMessage({
+                                type: 'info',
+                                text: 'Bayi başvurunuz değerlendirme aşamasındadır. Onaylandığında bilgilendirileceksiniz.'
+                            });
+                        } else if (dealer.status === 'rejected') {
+                            setStatusMessage({
+                                type: 'error',
+                                text: 'Bayi başvurunuz onaylanmadı. Detaylı bilgi için bizimle iletişime geçebilirsiniz.'
+                            });
+                        }
+                    } else {
+                        // User exists but not a dealer
+                        setStatusMessage({
+                            type: 'info',
+                            text: 'Bu hesap bir bayi hesabı değildir.'
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error checking dealer status:', error);
                 }
-                if (dealer.status === 'approved') {
-                    navigate('/bayi');
-                } else if (dealer.status === 'pending') {
-                    setInfo('Bayi başvurunuz inceleniyor. Onaylandığında giriş yapabilirsiniz.');
-                } else if (dealer.status === 'rejected') {
-                    setError('Bayi başvurunuz reddedilmiştir. Detaylar için iletişime geçin.');
-                } else if (dealer.status === 'suspended') {
-                    setError('Bayi hesabınız askıya alınmıştır. Detaylar için iletişime geçin.');
-                }
-            } catch {
-                // Not a dealer
             }
         };
+
         checkDealerStatus();
     }, [currentUser, navigate]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-        setInfo('');
+        setStatusMessage(null);
 
         if (!formData.email || !formData.password) {
             setError('Lütfen tüm alanları doldurun');
@@ -54,210 +64,152 @@ const B2BLoginPage: React.FC = () => {
         setIsSubmitting(true);
         try {
             await login(formData.email, formData.password);
+            // Navigation handled by useEffect
         } catch (err: any) {
-            if (err.message?.includes('Invalid login')) {
+            if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
                 setError('E-posta veya şifre hatalı.');
+            } else if (err.code === 'auth/too-many-requests') {
+                setError('Çok fazla başarısız deneme. Lütfen daha sonra tekrar deneyin.');
             } else {
-                setError('Giriş başarısız: ' + (err.message || 'Lütfen tekrar deneyin.'));
+                setError('Giriş başarısız oldu: ' + (err.message || 'Lütfen tekrar deneyin.'));
             }
-        } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Background decorations */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="absolute -top-32 -right-32 w-80 h-80 bg-gradient-to-br from-orange-200/30 to-amber-200/30 rounded-full blur-3xl"></div>
-                <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-gradient-to-tr from-orange-300/20 to-yellow-200/20 rounded-full blur-3xl"></div>
-            </div>
+        <div className="min-h-screen relative flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#334155]">
+            {/* Animated Background Blobs - Darker mood for B2B */}
+            <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#FF7A30]/10 rounded-full blur-[120px] animate-pulse"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#38BDF8]/10 rounded-full blur-[120px] animate-pulse" style={{ animationDuration: '5s' }}></div>
 
-            <div className="relative z-10 w-full max-w-5xl">
-                {/* Main Card */}
-                <div className="bg-white rounded-3xl shadow-2xl shadow-orange-100/60 overflow-hidden border border-orange-100/50">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[700px]">
+            {/* Grid Pattern */}
+            <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'linear-gradient(#FFF 1px, transparent 1px), linear-gradient(90deg, #FFF 1px, transparent 1px)', backgroundSize: '50px 50px' }}></div>
 
-                        {/* Left Side - Image */}
-                        <div className="hidden lg:block relative overflow-hidden">
-                            <img
-                                src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=1000&fit=crop"
-                                alt="Pet shop wholesale"
-                                className="w-full h-full object-cover"
-                            />
-                            {/* Gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-orange-900/20"></div>
+            <div className="relative z-10 w-full max-w-6xl flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20 px-6">
 
-                            {/* Content overlay */}
-                            <div className="absolute bottom-0 left-0 right-0 p-8">
-                                <div className="mb-6">
-                                    <div className="flex items-center gap-2 mb-4">
-                                        <span className="inline-block bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-lg">B2B Portal</span>
-                                    </div>
-                                    <h2 className="text-3xl font-black text-white leading-tight mb-2">Toptan Alışverişte<br />Ayrıcalıklı Fiyatlar</h2>
-                                    <p className="text-white/80 text-sm max-w-xs">Türkiye'nin en geniş pet ürünleri toptan ağına katılın ve özel avantajlardan yararlanın.</p>
-                                </div>
+                {/* Left Side: Dealer Benefits / Hero */}
+                <div className="text-center lg:text-left max-w-lg">
+                    <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 mb-6">
+                        <Building2 className="text-[#FF7A30]" size={20} />
+                        <span className="text-white/90 font-bold text-sm tracking-wide">KURUMSAL BAYİ PORTALI</span>
+                    </div>
 
-                                {/* Stats / Feature badges */}
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <Percent size={14} className="text-orange-300" />
-                                            <span className="text-white/60 text-xs font-medium">İskonto Oranı</span>
-                                        </div>
-                                        <p className="text-white font-black text-lg">%15-40</p>
-                                    </div>
-                                    <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <Truck size={14} className="text-orange-300" />
-                                            <span className="text-white/60 text-xs font-medium">Teslimat</span>
-                                        </div>
-                                        <p className="text-white font-black text-lg">1-3 Gün</p>
-                                    </div>
-                                    <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <Package size={14} className="text-orange-300" />
-                                            <span className="text-white/60 text-xs font-medium">Ürün Çeşidi</span>
-                                        </div>
-                                        <p className="text-white font-black text-lg">2000+</p>
-                                    </div>
-                                    <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/10">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <Star size={14} className="text-orange-300" />
-                                            <span className="text-white/60 text-xs font-medium">Memnuniyet</span>
-                                        </div>
-                                        <p className="text-white font-black text-lg">%98</p>
-                                    </div>
-                                </div>
-                            </div>
+                    <h1 className="text-5xl lg:text-6xl font-black text-white mb-6 leading-tight drop-shadow-2xl">
+                        İşinizi Büyütün <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF7A30] to-[#FFB347]">Karlı Alışveriş</span>
+                    </h1>
+
+                    <p className="text-slate-400 text-lg mb-8 leading-relaxed">
+                        PatiDükkan bayisi olun, %40'a varan toptan indirimlerden,
+                        ertesi gün kargo avantajından ve özel kampanyalardan yararlanın.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <Link to="/bayi/katalog" className="flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-4 rounded-xl font-bold transition-all border border-white/10 backdrop-blur-sm group">
+                            <FileText size={20} className="text-[#FF7A30] group-hover:scale-110 transition-transform" />
+                            Kataloğu İncele
+                        </Link>
+                        <Link to="/bayi/basvuru" className="flex items-center justify-center gap-2 bg-[#FF7A30] hover:bg-[#ff6b1a] text-white px-6 py-4 rounded-xl font-bold shadow-lg shadow-orange-900/30 transition-all">
+                            Bayi Başvurusu Yap <ArrowRight size={20} />
+                        </Link>
+                    </div>
+
+                    <div className="mt-12 grid grid-cols-2 gap-4">
+                        <div className="flex items-center gap-3 text-slate-300 font-medium">
+                            <CheckCircle size={18} className="text-emerald-500" /> Binlerce Ürün
                         </div>
-
-                        {/* Right Side - Login Form */}
-                        <div className="p-8 lg:p-10 flex flex-col justify-center relative">
-                            {/* Top accent bar */}
-                            <div className="absolute top-0 right-0 left-0 lg:left-0 h-1 bg-gradient-to-r from-orange-400 via-amber-400 to-orange-500"></div>
-
-                            {/* Logo */}
-                            <div className="text-center mb-8">
-                                <Link to="/" className="inline-flex items-center gap-3 mb-6 group">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-200 group-hover:shadow-xl transition-all group-hover:scale-105">
-                                        <Building2 className="text-white" size={26} />
-                                    </div>
-                                    <div>
-                                        <span className="text-xl font-black text-gray-900">PatiDükkan</span>
-                                        <span className="text-white text-[10px] font-black ml-2 bg-gradient-to-r from-orange-500 to-amber-500 px-2 py-0.5 rounded-full uppercase tracking-wider">B2B</span>
-                                    </div>
-                                </Link>
-                                <h1 className="text-2xl font-black text-gray-900">Bayi Girişi</h1>
-                                <p className="text-gray-500 text-sm mt-1">Toptan alışveriş portalına hoş geldiniz</p>
-                            </div>
-
-                            {/* Form */}
-                            <form onSubmit={handleSubmit} className="space-y-4">
-                                {error && (
-                                    <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 border border-red-100">
-                                        <AlertCircle size={16} /> {error}
-                                    </div>
-                                )}
-
-                                {info && (
-                                    <div className="bg-amber-50 text-amber-700 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 border border-amber-100">
-                                        <Clock size={16} /> {info}
-                                    </div>
-                                )}
-
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2">E-posta Adresi</label>
-                                    <div className="relative">
-                                        <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-orange-400" />
-                                        <input
-                                            type="email"
-                                            value={formData.email}
-                                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                            placeholder="bayi@firma.com"
-                                            className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all bg-gray-50/50 text-gray-900"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-bold text-gray-700 mb-2">Şifre</label>
-                                    <div className="relative">
-                                        <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-orange-400" />
-                                        <input
-                                            type={showPassword ? 'text' : 'password'}
-                                            value={formData.password}
-                                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                            placeholder="••••••••"
-                                            className="w-full pl-12 pr-12 py-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all bg-gray-50/50 text-gray-900"
-                                        />
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowPassword(!showPassword)}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-orange-500 transition-colors"
-                                            aria-label={showPassword ? 'Şifreyi gizle' : 'Şifreyi göster'}
-                                        >
-                                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="w-full bg-gradient-to-r from-orange-500 to-amber-500 text-white py-4 rounded-xl font-bold text-sm uppercase tracking-wider hover:from-orange-600 hover:to-amber-600 transition-all flex items-center justify-center gap-2 shadow-lg shadow-orange-200/50 disabled:opacity-70 hover:shadow-xl"
-                                >
-                                    {isSubmitting ? (
-                                        <span className="flex items-center gap-2">
-                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                                            Giriş Yapılıyor...
-                                        </span>
-                                    ) : (
-                                        <>Bayi Girişi <ArrowRight size={18} /></>
-                                    )}
-                                </button>
-                            </form>
-
-                            {/* Catalog access */}
-                            <div className="mt-6 p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl border border-orange-100">
-                                <div className="flex flex-col sm:flex-row items-center gap-3">
-                                    <div className="flex-1 text-center sm:text-left">
-                                        <p className="text-gray-800 font-bold text-sm">Kataloğumuzu inceleyin</p>
-                                        <p className="text-gray-500 text-xs">Giriş yapmadan ürünlerimize göz atın</p>
-                                    </div>
-                                    <Link
-                                        to="/bayi/katalog"
-                                        className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-5 py-2.5 rounded-xl font-bold text-xs hover:shadow-lg transition-all shadow-md whitespace-nowrap"
-                                    >
-                                        <ShoppingBag size={14} />
-                                        Kataloğu Gör
-                                    </Link>
-                                </div>
-                            </div>
-
-                            <div className="mt-6 pt-6 border-t border-gray-100 text-center space-y-3">
-                                <p className="text-gray-600">
-                                    Bayi hesabınız yok mu?{' '}
-                                    <Link to="/bayi/basvuru" className="font-bold text-orange-500 hover:text-orange-600 hover:underline transition-colors">
-                                        Bayi Başvurusu Yap
-                                    </Link>
-                                </p>
-                                <p className="text-gray-400 text-sm">
-                                    Bireysel müşteriyseniz{' '}
-                                    <Link to="/giris" className="text-gray-500 hover:text-orange-500 transition-colors underline">
-                                        buradan giriş yapın
-                                    </Link>
-                                </p>
-                            </div>
+                        <div className="flex items-center gap-3 text-slate-300 font-medium">
+                            <CheckCircle size={18} className="text-emerald-500" /> Hızlı Kargo
+                        </div>
+                        <div className="flex items-center gap-3 text-slate-300 font-medium">
+                            <CheckCircle size={18} className="text-emerald-500" /> 7/24 Destek
+                        </div>
+                        <div className="flex items-center gap-3 text-slate-300 font-medium">
+                            <CheckCircle size={18} className="text-emerald-500" /> Kolay Ödeme
                         </div>
                     </div>
                 </div>
 
-                {/* Back to main site */}
-                <div className="mt-6 text-center">
-                    <Link to="/" className="text-gray-400 hover:text-orange-500 text-sm transition-colors font-medium">
-                        ← Ana Siteye Dön
-                    </Link>
+                {/* Right Side: Glass Login Card */}
+                <div className="bg-[#1E293B]/80 backdrop-blur-xl rounded-[2rem] shadow-2xl p-8 lg:p-10 w-full max-w-md border border-white/5 relative">
+                    {/* Decorative Top Border */}
+                    <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7A30] to-[#FFB347]"></div>
+
+                    <div className="flex justify-center mb-8">
+                        <img src="/logo_animated.svg" alt="PatiDükkan Logo" className="h-12 w-auto brightness-200 contrast-0 grayscale opacity-80" />
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-white mb-1 text-center">Bayi Girişi</h2>
+                    <p className="text-slate-400 text-sm text-center mb-8">Kurumsal hesabınıza giriş yapın</p>
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        {statusMessage && (
+                            <div className={`px-4 py-3 rounded-xl text-sm font-bold text-center border ${statusMessage.type === 'error' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
+                                    statusMessage.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' :
+                                        'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                }`}>
+                                {statusMessage.text}
+                            </div>
+                        )}
+
+                        {error && (
+                            <div className="bg-red-500/10 text-red-400 px-4 py-3 rounded-xl text-sm font-bold text-center border border-red-500/20">
+                                {error}
+                            </div>
+                        )}
+
+                        <div className="space-y-1">
+                            <label className="text-xs font-bold text-slate-400 uppercase ml-1">E-Posta</label>
+                            <div className="relative group">
+                                <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#FF7A30] transition-colors" />
+                                <input
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    className="w-full pl-11 pr-4 py-4 bg-[#0F172A] border-2 border-slate-700/50 focus:border-[#FF7A30] rounded-xl outline-none font-medium text-white transition-all placeholder-slate-600"
+                                    placeholder="bayi@patidukkan.com"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-1">
+                            <div className="flex justify-between items-center ml-1">
+                                <label className="text-xs font-bold text-slate-400 uppercase">Şifre</label>
+                            </div>
+                            <div className="relative group">
+                                <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-[#FF7A30] transition-colors" />
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    value={formData.password}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    className="w-full pl-11 pr-11 py-4 bg-[#0F172A] border-2 border-slate-700/50 focus:border-[#FF7A30] rounded-xl outline-none font-medium text-white transition-all placeholder-slate-600"
+                                    placeholder="••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 p-1"
+                                >
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full bg-gradient-to-r from-[#FF7A30] to-[#FF5500] hover:from-[#e66a26] hover:to-[#e64d00] text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-orange-900/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 mt-2"
+                        >
+                            {isSubmitting ? 'Giriş Yapılıyor...' : <>Giriş Yap <ArrowRight strokeWidth={3} size={20} /></>}
+                        </button>
+                    </form>
+
+                    <div className="mt-8 pt-6 border-t border-slate-700/50 text-center">
+                        <Link to="/" className="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors">
+                            ← Ana Siteye Dön
+                        </Link>
+                    </div>
                 </div>
             </div>
         </div>
