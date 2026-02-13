@@ -47,16 +47,11 @@ const B2BLoginPage: React.FC = () => {
                 </div>
 
                 <div className="relative z-10 flex flex-col items-center max-w-lg">
-                    <div className="bg-white/20 p-6 rounded-2xl border border-white/30 mb-8 backdrop-blur-sm shadow-xl">
-                        <div className="flex flex-col items-center">
-                            <h1 className="text-3xl font-black text-white tracking-tight mb-0">PatiDükkan</h1>
-                            <span className="text-[10px] font-bold text-[#FF7A30] bg-white px-3 py-0.5 rounded-full uppercase tracking-widest shadow-sm mt-1">B2B Portalı</span>
-                        </div>
-                    </div>
+                    <img src="/logo_animated.svg" alt="PatiDükkan B2B" className="h-24 md:h-32 mb-8 brightness-0 invert drop-shadow-lg" />
 
-                    <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4 text-white">
+                    <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 text-white">
                         Kurumsal Giriş
-                    </h2>
+                    </h1>
                     <p className="text-orange-100 text-lg font-medium mb-8 leading-relaxed">
                         Toptan alışverişin en karlı adresi. <br />
                         Bayilere özel fiyatlar, hızlı kargo ve geniş ürün yelpazesi.
@@ -71,10 +66,17 @@ const B2BLoginPage: React.FC = () => {
                         ))}
                     </div>
 
-                    <Link to="/bayi/katalog" className="mt-8 flex items-center gap-2 text-white font-bold hover:text-orange-100 transition-colors bg-white/10 px-6 py-3 rounded-xl border border-white/20 hover:bg-white/20">
+                    <button
+                        type="button"
+                        onClick={() => {
+                            console.log('Navigating to catalog...');
+                            navigate('/bayi/katalog');
+                        }}
+                        className="mt-8 flex items-center gap-2 text-white font-bold hover:text-orange-100 transition-colors bg-white/10 px-6 py-3 rounded-xl border border-white/20 hover:bg-white/20 cursor-pointer z-50 relative"
+                    >
                         <Package size={20} />
                         Kataloğu Görüntüle
-                    </Link>
+                    </button>
                 </div>
             </div>
 
