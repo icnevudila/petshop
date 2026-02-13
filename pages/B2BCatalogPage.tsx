@@ -113,23 +113,33 @@ const B2BCatalogPage: React.FC = () => {
         <div className="space-y-6">
             {/* Guest Banner */}
             {isGuest && (
-                <div className="bg-gradient-to-r from-orange-500 to-amber-500 rounded-2xl p-5 shadow-lg flex flex-col sm:flex-row items-center gap-4">
-                    <div className="flex-1 text-center sm:text-left">
-                        <h3 className="text-white font-bold text-lg">Toptan Fiyatlarla Alışveriş Yapın</h3>
-                        <p className="text-white/80 text-sm mt-1">Bayi olarak giriş yapın ve %15-40 arası özel indirimlerden yararlanın</p>
+                <div className="bg-[#0F172A] rounded-2xl p-6 sm:p-8 shadow-xl shadow-slate-900/10 relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6 border border-slate-800">
+                    {/* Background Pattern */}
+                    <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'linear-gradient(#1E293B 1px, transparent 1px), linear-gradient(90deg, #1E293B 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#38BDF8] rounded-full filter blur-[100px] opacity-10 pointer-events-none"></div>
+
+                    <div className="relative z-10 flex-1 text-center sm:text-left">
+                        <div className="inline-flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full px-3 py-1 mb-3">
+                            <span className="w-2 h-2 rounded-full bg-[#38BDF8] animate-pulse"></span>
+                            <span className="text-[#38BDF8] text-xs font-bold uppercase tracking-wider">Kurumsal Fırsatlar</span>
+                        </div>
+                        <h3 className="text-white font-black text-2xl sm:text-3xl tracking-tight mb-2">Toptan Fiyatlarla Alışveriş Yapın</h3>
+                        <p className="text-slate-400 text-base max-w-xl leading-relaxed">
+                            Onaylı bayi hesabınızla giriş yapın, <span className="text-white font-bold">%15-40 arası</span> özel iskontolardan ve <span className="text-white font-bold">vadeli ödeme</span> seçeneklerinden yararlanın.
+                        </p>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="relative z-10 flex gap-3 flex-shrink-0">
                         <Link
                             to="/bayi/giris"
-                            className="flex items-center gap-2 bg-white text-orange-600 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-orange-50 transition-all shadow-md whitespace-nowrap"
+                            className="flex items-center gap-2 bg-slate-800 text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-slate-700 transition-all border border-slate-700"
                         >
-                            <LogIn size={16} /> Bayi Girişi
+                            <LogIn size={18} /> Giriş Yap
                         </Link>
                         <Link
                             to="/bayi/basvuru"
-                            className="flex items-center gap-2 bg-white/20 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-white/30 transition-all border border-white/30 whitespace-nowrap"
+                            className="flex items-center gap-2 bg-[#38BDF8] text-[#0F172A] px-6 py-3 rounded-xl font-black text-sm hover:bg-[#0EA5E9] transition-all shadow-lg shadow-sky-500/20"
                         >
-                            Başvuru Yap <ArrowRight size={16} />
+                            Hemen Başvur <ArrowRight size={18} />
                         </Link>
                     </div>
                 </div>
@@ -414,29 +424,61 @@ const B2BCatalogPage: React.FC = () => {
         return (
             <div className="min-h-screen bg-gray-50">
                 {/* Guest Header */}
-                <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
-                    <div className="flex items-center justify-between px-4 lg:px-8 h-16">
-                        <Link to="/bayi/giris" className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-200">
-                                <Building2 size={22} className="text-white" />
-                            </div>
-                            <div className="hidden sm:block">
-                                <span className="text-gray-900 font-bold text-lg">PatiDükkan</span>
-                                <span className="text-white text-[10px] font-bold ml-2 bg-gradient-to-r from-orange-500 to-amber-500 px-2 py-0.5 rounded-full">B2B</span>
-                            </div>
-                        </Link>
+                {/* Guest Header */}
+                <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm/50 backdrop-blur-xl bg-white/90">
+                    <div className="flex items-center justify-between px-4 lg:px-8 h-20">
+                        {/* Logo & Nav */}
+                        <div className="flex items-center gap-12">
+                            <Link to="/bayi/giris" className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-[#0F172A] rounded-xl flex items-center justify-center shadow-lg shadow-slate-200">
+                                    <Building2 size={22} className="text-[#38BDF8]" />
+                                </div>
+                                <div className="hidden sm:block leading-tight">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-slate-900 font-black text-xl tracking-tight">PatiDükkan</span>
+                                        <span className="text-[#38BDF8] text-[10px] font-bold bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">B2B</span>
+                                    </div>
+                                    <span className="text-gray-400 text-[10px] font-bold tracking-wider uppercase block">Kurumsal Satış</span>
+                                </div>
+                            </Link>
+
+                            {/* B2B Navigation Tabs */}
+                            <nav className="hidden lg:flex items-center gap-1 bg-gray-50/50 p-1 rounded-xl border border-gray-100">
+                                <Link to="/bayi/katalog" className="px-4 py-2 bg-white text-slate-900 rounded-lg text-sm font-bold shadow-sm border border-gray-100">
+                                    Katalog
+                                </Link>
+                                <button className="px-4 py-2 text-gray-500 hover:text-slate-900 rounded-lg text-sm font-bold hover:bg-white transition-all">
+                                    Avantajlar
+                                </button>
+                                <button className="px-4 py-2 text-gray-500 hover:text-slate-900 rounded-lg text-sm font-bold hover:bg-white transition-all">
+                                    Nasıl Çalışır?
+                                </button>
+                                <button className="px-4 py-2 text-gray-500 hover:text-slate-900 rounded-lg text-sm font-bold hover:bg-white transition-all">
+                                    İletişim
+                                </button>
+                            </nav>
+                        </div>
+
+                        {/* Actions */}
                         <div className="flex items-center gap-3">
                             <Link
-                                to="/bayi/giris"
-                                className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:shadow-lg transition-all shadow-md"
+                                to="/"
+                                className="text-gray-400 hover:text-gray-600 text-sm font-bold px-3 py-2 transition-colors hidden sm:inline"
                             >
-                                <LogIn size={16} /> Bayi Girişi
+                                Ana Site
+                            </Link>
+                            <div className="h-6 w-px bg-gray-200 hidden sm:block"></div>
+                            <Link
+                                to="/bayi/giris"
+                                className="text-slate-700 hover:text-[#0F172A] px-4 py-2.5 rounded-xl font-bold text-sm transition-all"
+                            >
+                                Bayi Girişi
                             </Link>
                             <Link
-                                to="/"
-                                className="text-gray-400 hover:text-gray-600 text-sm font-medium transition-colors hidden sm:inline"
+                                to="/bayi/basvuru"
+                                className="flex items-center gap-2 bg-[#0F172A] text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-slate-800 transition-all shadow-lg shadow-slate-900/20"
                             >
-                                ← Ana Site
+                                Partner Ol <ArrowRight size={16} />
                             </Link>
                         </div>
                     </div>
