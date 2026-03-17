@@ -32,6 +32,7 @@ import QuickViewModal from './components/QuickViewModal';
 import ChatBot from './components/ChatBot';
 import MobileBottomNav from './components/MobileBottomNav';
 import SplashScreen from './components/SplashScreen';
+import DeactivatedPage from './pages/DeactivatedPage';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProductProvider } from './ProductContext';
 import { HelmetProvider } from 'react-helmet-async';
@@ -249,6 +250,8 @@ const AppContent: React.FC = () => {
   const handleOpenQuickView = (product: Product) => {
     setQuickViewProduct(product);
   };
+
+  return <DeactivatedPage />;
 
   return (
     <HashRouter>
